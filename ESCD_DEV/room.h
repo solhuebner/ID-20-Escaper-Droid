@@ -73,6 +73,7 @@ void buildRoom(byte roomNumber, byte currentlevel)
   }
 }
 
+
 byte translateXYToTilePlayer(int x, int y)
 {
   byte a = 4 - (player.x / 12);
@@ -81,10 +82,39 @@ byte translateXYToTilePlayer(int x, int y)
   return (a + b) + (5 * b);
 }
 
+
+/*
 byte translateXYToTile(int x, int y)
 {
   return ((2 * ((x / 12) - 4)) + (3 * (((y) - 14) / 6)));
 }
+*/
+
+
+#define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
+
+/*
+uint8_t isoFromXY(uint8_t x, uint8_t y) {
+  uint16_t x45 = (uint16_t)x * 181;
+  uint16_t y45 = (uint16_t)y * 362;
+  x = (((y45 - x45) >> 8) - 03) / 17;
+  y = (((y45 + x45) >> 8) - 85) / 17;
+  return y * 5 + x;
+}
+*/
+
+uint8_t isoFromXY(uint8_t x, uint8_t y) {
+  uint16_t x45 = (uint16_t)x * 170;
+  uint16_t y45 = (uint16_t)y * 341;
+  x = (((y45 - x45) >> 8) - 03) >> 4;
+  y = (((y45 + x45) >> 8) - 81) >> 4;
+  return y * 5 + x;
+}
+
+bool isoCollide(uint8_t ax, uint8_t ay, uint8_t bx, uint8_t by, uint8_t max) {
+  return (DIFF(ax, bx) + DIFF(ay, by)) < max;
+}
+
 
 int translateTileToX (byte currentTile)
 {
@@ -298,17 +328,21 @@ void updateRoom()
 void checkOrderOfObjects(byte roomNumber, byte currentlevel)
 {
   memset(itemsOrder, 0, sizeof(itemsOrder));
+  // check what tile the player is on (so that we can determine what order things need to be displayed)
   itemsOrder[translateXYToTilePlayer(player.x, player.y)] = 10;  //player
+
+  // check what tile the 2 enemies and the object are on (so that we can determine what order things need to be displayed)
   for (byte x = 0; x < 3; x++)
   {
     itemsOrder[translateXYToTile(enemy[x].x, enemy[x].y)] = x+2;    //enemy0
   }
+
+  // check what tile the 5 floor special tiles are on (so that we can determine what order things need to be displayed)
   for (byte x = 3; x < 8; x++)
   {
     byte order = (pgm_read_byte(&levels[currentlevel - 1][6 + x + (13 * roomNumber)])) >> 3;
     itemsOrder[order] = x+2;
   }
-
 }
 
 void updateHUD()
