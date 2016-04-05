@@ -1,7 +1,7 @@
 #ifndef ENEMIES_H
 #define ENEMIES_H
 
-#include "enemies_bitmaps.h"
+#include "globals.h"
 #include "room.h"
 
 

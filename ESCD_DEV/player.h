@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "player_bitmaps.h"
+#include "globals.h"
 
 
 //define facing directions

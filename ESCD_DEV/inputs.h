@@ -1,16 +1,11 @@
 #ifndef INPUTS_H
 #define INPUTS_H
 
-//define game states (on main menu)
-#define STATE_GAME_PLAYING       8
-#define STATE_GAME_PAUSE         9
-#define STATE_GAME_OVER          10
-
 #define ENEMIE                   0
 #define PLAYER                   1
 
 
-#include "Arglib.h"
+#include "globals.h"
 #include "player.h"
 #include "collision.h"
 

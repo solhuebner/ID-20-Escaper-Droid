@@ -1,10 +1,8 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include "Arglib.h"
-#include "room_bitmaps.h"
+#include "globals.h"
 #include "levels.h"
-#include "numbers_bitmaps.h"
 #include "player.h"
 #include "enemies.h"
 
