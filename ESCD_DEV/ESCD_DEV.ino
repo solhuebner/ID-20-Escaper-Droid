@@ -62,7 +62,7 @@ void setup()
   gameState = STATE_MENU_INTRO;
   gameState = STATE_MENU_MAIN;
   menuSelection = STATE_MENU_PLAY;
-  Serial.begin(9600);
+  //Serial.begin(9600);
 }
 
 void loop() {
@@ -141,7 +141,8 @@ void loop() {
       checkOrderOfObjects(currentRoom, level);
       updateRoom();
       updateHUD();
-      //Serial.println(translateXYToTilePlayer(player.x, player.y));
+      //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
+      //Serial.println(tileFromXY(enemy[0].x, enemy[0].y));
       break;
     case STATE_GAME_OVER:
       arduboy.drawBitmap(0, 0, gameOverBitmap, 128, 64, WHITE);
