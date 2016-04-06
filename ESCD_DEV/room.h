@@ -202,7 +202,7 @@ void drawDoorClossed(byte side, byte vector)
   }
 }
 
-
+//>>>>>>>>>>>>>> here >>>>>>>>>>>
 void drawEnemy(byte object)
 {
   
@@ -233,7 +233,7 @@ void drawObjectFixed(byte object)
     sprites.drawBitmap( enemy[object].x, enemy[object].y + currentRoomY, enemiesPlusMask[0], NULL, 16, 24, SPRITE_PLUS_MASK);
   }
 }
-
+//<<<<<<<<< till here <<<<<<<<<<<<
 
 void updateRoom()
 {
