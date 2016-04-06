@@ -208,7 +208,7 @@ void drawEnemy(byte object)
   
   if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - object) == 1)
   {
-    sprites.drawBitmap( enemy[object].x, enemy[object].y + currentRoomY, enemiesPlusMask[(enemy[object].characteristics & 0b00000011)], NULL, 16, 24, SPRITE_PLUS_MASK); //+(4*((enemy[object].characteristics & 0b11100000)>>5))
+    //sprites.drawBitmap( enemy[object].x, enemy[object].y + currentRoomY, enemies_plus_mask[(enemy[object].characteristics & 0b00000011)], NULL, 16, 24, SPRITE_PLUS_MASK); //+(4*((enemy[object].characteristics & 0b11100000)>>5))
   }
 }
 
@@ -230,7 +230,7 @@ void drawObjectFixed(byte object)
   
   if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - object) == 1)
   {
-    sprites.drawBitmap( enemy[object].x, enemy[object].y + currentRoomY, enemiesPlusMask[0], NULL, 16, 24, SPRITE_PLUS_MASK);
+    //sprites.drawBitmap( enemy[object].x, enemy[object].y + currentRoomY, enemies_plus_mask[0], NULL, 16, 24, SPRITE_PLUS_MASK);
   }
 }
 //<<<<<<<<< till here <<<<<<<<<<<<

@@ -4,9 +4,6 @@
 #include "globals.h"
 #include "room.h"
 
-byte frame = 0;
-
-
 
 struct Enemy {
   public:
