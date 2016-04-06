@@ -19,8 +19,10 @@
 #include "menu.h"
 #include "game.h"
 #include "room.h"
+#include "enemies.h"
 #include "inputs.h"
 #include "player.h"
+
 
 typedef void (*FunctionPointer) ();
 FunctionPointer mainGameLoop[] =

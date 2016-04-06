@@ -14,8 +14,8 @@ void stateMenuIntro()
 void stateMenuMain()
 {
   // show the titleScreen art
-  arduboy.drawBitmap(0, 0, titlescreen, 128, 64, WHITE);
-  arduboy.drawBitmap(17, 56, mainMenuBitmap, 93, 8, WHITE);
+  arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
+  arduboy.drawBitmap(17, 56, mainMenu, 93, 8, WHITE);
   if (arduboy.everyXFrames(2))
   {
     selectorX++;
@@ -23,8 +23,8 @@ void stateMenuMain()
   }
   if (selectorX > 34)selectorX = 17;
   if (selectorX2 < 18)selectorX2 = 35;
-  sprites.drawBitmap(selectorX + ((menuSelection - 2) * 24), 56, selectorPlusMask, NULL, 3, 8, SPRITE_PLUS_MASK);
-  sprites.drawBitmap(selectorX2 + ((menuSelection - 2) * 24), 56, selectorPlusMask, NULL, 3, 8, SPRITE_PLUS_MASK);
+  sprites.drawPlusMask(selectorX + ((menuSelection - 2) * 24), 56, selector_plus_mask, 0);
+  sprites.drawPlusMask(selectorX2 + ((menuSelection - 2) * 24), 56, selector_plus_mask, 0);
   if (buttons.justPressed(RIGHT_BUTTON) && (menuSelection < 5)) menuSelection++;
   if (buttons.justPressed(LEFT_BUTTON) && (menuSelection > 2)) menuSelection--;
   if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = menuSelection;
@@ -44,8 +44,8 @@ void stateMenuInfo()
 
 void stateMenuSoundfx()
 {
-  arduboy.drawBitmap(0, 0, titlescreen, 128, 64, WHITE);
-  arduboy.drawBitmap(17, 56, soundMenuBitmap, 93, 8, WHITE);
+  arduboy.drawBitmap(0, 0, titleScreen, 128, 64, WHITE);
+  arduboy.drawBitmap(17, 56, soundMenu, 93, 8, WHITE);
   if (arduboy.everyXFrames(2))
   {
     selectorX++;
@@ -53,8 +53,8 @@ void stateMenuSoundfx()
   }
   if (selectorX > 34)selectorX = 17;
   if (selectorX2 < 18)selectorX2 = 35;
-  sprites.drawBitmap(selectorX + (soundYesNo * 24) + 40, 56, selectorPlusMask, NULL, 3, 8, SPRITE_PLUS_MASK);
-  sprites.drawBitmap(selectorX2 + (soundYesNo * 24) + 40, 56, selectorPlusMask, NULL, 3, 8, SPRITE_PLUS_MASK);
+  sprites.drawPlusMask(selectorX + (soundYesNo * 24) + 40, 56, selector_plus_mask, 0);
+  sprites.drawPlusMask(selectorX2 + (soundYesNo * 24) + 40, 56, selector_plus_mask, 0);
   if (buttons.justPressed(RIGHT_BUTTON)) soundYesNo = true;
   if (buttons.justPressed(LEFT_BUTTON)) soundYesNo = false;
   if (buttons.justPressed(A_BUTTON | B_BUTTON))

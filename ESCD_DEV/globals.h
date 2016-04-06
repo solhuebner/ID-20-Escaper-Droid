@@ -19,6 +19,15 @@
 #define STATE_GAME_PAUSE         7
 #define STATE_GAME_OVER          8
 
+//define facing directions
+#define NORTH                    0
+#define EAST                     1
+#define SOUTH                    2
+#define WEST                     3
+
+#define NORTH_SOUTH              0
+#define EAST_WEST                1
+
 // globals ///////////////////////////////////////////////////////////////////
 
 Arduboy arduboy;
@@ -35,5 +44,5 @@ int currentRoomY;
 byte level;
 byte selectorX = 17;
 byte selectorX2 = 35;
-byte tyle;
+byte tile;
 #endif

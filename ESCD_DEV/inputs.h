@@ -9,13 +9,6 @@
 #include "player.h"
 #include "collision.h"
 
-extern Arduboy arduboy;
-extern SimpleButtons buttons;
-extern byte currentRoom;
-extern unsigned char gameState;
-extern int currentRoomY;
-
-
 
 boolean canGoTroughDoor(byte x, byte y)
 {

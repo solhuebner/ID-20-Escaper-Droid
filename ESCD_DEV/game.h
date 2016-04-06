@@ -52,13 +52,13 @@ void stateGamePlaying()
 }
 void stateGamePause()
 {
-  arduboy.drawBitmap(0, 0, pause, 128, 64, WHITE);
+  arduboy.drawBitmap(0, 0, pauseScreen, 128, 64, WHITE);
   scoreDraw();
   if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_GAME_PLAYING;
 }
 void stateGameOver()
 {
-  arduboy.drawBitmap(0, 0, gameOverBitmap, 128, 64, WHITE);
+  arduboy.drawBitmap(0, 0, gameOverScreen, 128, 64, WHITE);
   scoreDraw();
   if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }

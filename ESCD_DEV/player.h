@@ -3,17 +3,6 @@
 
 #include "globals.h"
 
-
-//define facing directions
-#define NORTH                    0
-#define EAST                     1
-#define SOUTH                    2
-#define WEST                     3
-
-extern Arduboy arduboy;
-extern Sprites sprites;
-extern int currentRoomY;
-
 struct EscaperDroid
 {
   public:
@@ -45,7 +34,7 @@ void drawPlayer()
 {
   if (bitRead(player.characteristics,2))
   {
-    sprites.drawBitmap( player.x, player.y, droidPlusMask[player.characteristics & 0b00000011], NULL, 16, 24, SPRITE_PLUS_MASK);
+    sprites.drawPlusMask(player.x, player.y, droid_plus_mask, player.characteristics & 0b00000011);
   }
 }
 

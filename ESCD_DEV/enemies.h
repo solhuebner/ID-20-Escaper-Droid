@@ -4,17 +4,8 @@
 #include "globals.h"
 #include "room.h"
 
+byte frame = 0;
 
-//define facing directions
-#define NORTH                    0
-#define EAST                     1
-#define SOUTH                    2
-#define WEST                     3
-
-extern Arduboy arduboy;
-extern Sprites sprites;
-extern int currentRoomY;
-extern byte currentRoom;
 
 
 struct Enemy {
@@ -33,7 +24,6 @@ struct Enemy {
 };
 
 Enemy enemy[8];
-
 
 
 #endif
