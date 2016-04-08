@@ -154,7 +154,7 @@ void drawFloor()
   {
     for (byte x = 0; x < 5; x++)
     {
-      sprites.drawBitmap( 48 - (12 * x) + (12 * y), currentRoomY + 32 + (6 * x) + (6 * y), floorTile, NULL, 22, 13, SPRITE_IS_MASK);
+      sprites.drawSelfMasked(48 - (12 * x) + (12 * y), currentRoomY + 32 + (6 * x) + (6 * y), floorTile, 0);
     }
   }
 }
@@ -164,8 +164,8 @@ void drawWalls()
 {
   for (byte x = 0; x < 6; x++)
   {
-    sprites.drawBitmap( -2 + (10 * x), currentRoomY + 25 - (5 * x), wallPartNorth, NULL, 10, 36, SPRITE_IS_MASK);
-    sprites.drawBitmap(60 + (10 * x), currentRoomY + (5 * x), wallPartEast, NULL, 10, 36, SPRITE_IS_MASK);
+    sprites.drawSelfMasked( -2 + (10 * x), currentRoomY + 25 - (5 * x), wallParts, NORTH);
+    sprites.drawSelfMasked(60 + (10 * x), currentRoomY + (5 * x), wallParts, EAST);
   }
 }
 
@@ -174,7 +174,7 @@ void drawDoorLintel(byte side)
 {
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7 - side) == 1)
   {
-    sprites.drawBitmap( doorsX[side], currentRoomY + doorsY[side], doorLintelPlusMask[side], NULL, 23, 16, SPRITE_PLUS_MASK);
+    sprites.drawPlusMask(doorsX[side], currentRoomY + doorsY[side], doorLintel_plus_mask, side);
   }
 }
 
@@ -182,7 +182,7 @@ void drawDoorPostBig(byte side, byte vector)
 {
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7 - side) == 1)
   {
-    sprites.drawBitmap(doorsX[side] + 8 - (8 * vector), currentRoomY + 16 + doorsY[side], doorPostBigPlusMask[side], NULL, 15, 29, SPRITE_PLUS_MASK);
+    sprites.drawPlusMask(doorsX[side] + 8 - (8 * vector), currentRoomY + 16 + doorsY[side], doorPostBig_plus_mask, side);
   }
 }
 
@@ -190,7 +190,7 @@ void drawDoorPostSmall(byte side, byte vector)
 {
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7 - side) == 1)
   {
-    sprites.drawBitmap(doorsX[side] + (15 * vector), currentRoomY + 16 + doorsY[side], doorPostSmallPlusMask[side], NULL, 8, 30, SPRITE_PLUS_MASK);
+    sprites.drawPlusMask(doorsX[side] + (15 * vector), currentRoomY + 16 + doorsY[side], doorPostSmall_plus_mask, side);
   }
 }
 
@@ -198,7 +198,7 @@ void drawDoorClossed(byte side, byte vector)
 {
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 3 - side) == 1)
   {
-    sprites.drawBitmap(doorsX[side] + 8 - (3 * vector), currentRoomY + 9 + doorsY[side], doorClossedPlusMask[side], NULL, 10, 28, SPRITE_PLUS_MASK);
+    sprites.drawPlusMask(doorsX[side] + 8 - (3 * vector), currentRoomY + 9 + doorsY[side], doorClossed_plus_mask, side);
   }
 }
 
@@ -208,7 +208,7 @@ void drawEnemy(byte object)
   
   if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - object) == 1)
   {
-    //sprites.drawBitmap( enemy[object].x, enemy[object].y + currentRoomY, enemies_plus_mask[(enemy[object].characteristics & 0b00000011)], NULL, 16, 24, SPRITE_PLUS_MASK); //+(4*((enemy[object].characteristics & 0b11100000)>>5))
+    sprites.drawPlusMask(enemy[object].x, enemy[object].y + currentRoomY, enemies_plus_mask, enemy[object].characteristics & 0b00000011); //+(4*((enemy[object].characteristics & 0b11100000)>>5))
   }
 }
 
@@ -221,7 +221,7 @@ void drawObjectChangeable()
   }
   if (frame > 3) frame = 0;
   {
-    sprites.drawBitmap( enemy[2].x-4, enemy[2].y+8 + currentRoomY, objectChangablePlusMask[frame+(4*((enemy[2].characteristics & 0b11100000)>>5))], NULL, 24, 16, SPRITE_PLUS_MASK);
+    sprites.drawPlusMask(enemy[2].x-4, enemy[2].y+8 + currentRoomY, elements_plus_mask, frame+(4*((enemy[2].characteristics & 0b11100000)>>5)));
   }
 }
 
@@ -231,6 +231,7 @@ void drawObjectFixed(byte object)
   if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - object) == 1)
   {
     //sprites.drawBitmap( enemy[object].x, enemy[object].y + currentRoomY, enemies_plus_mask[0], NULL, 16, 24, SPRITE_PLUS_MASK);
+    sprites.drawPlusMask(enemy[object].x, enemy[object].y + currentRoomY, enemies_plus_mask, 0);
   }
 }
 //<<<<<<<<< till here <<<<<<<<<<<<

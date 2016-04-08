@@ -5,7 +5,7 @@
 
  MADE by TEAM a.r.g. : http://www.team-arg.org/About.html
 
- 2016 - JO3RI -STG
+ 2016 - JO3RI - STG
 
  Game License: MIT : https://opensource.org/licenses/MIT
 
