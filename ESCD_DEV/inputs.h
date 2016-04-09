@@ -1,7 +1,7 @@
 #ifndef INPUTS_H
 #define INPUTS_H
 
-#define ENEMIE                   0
+#define ENEMY                    0
 #define PLAYER                   1
 
 

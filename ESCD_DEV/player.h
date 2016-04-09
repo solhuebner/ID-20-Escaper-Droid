@@ -6,7 +6,8 @@
 struct EscaperDroid
 {
   public:
-    int x, y;
+    byte x, y;
+    byte life;
     byte characteristics = 0b00000100;   //this byte holds all the Escaperdroids characteristics
     //                       ||||||||
     //                       |||||||└->  | this 2 bits are used for direction
@@ -24,6 +25,7 @@ struct EscaperDroid
       x = 23;
       y = 24;
       imuneTimer = 60;
+      life = 3;
 
     }
 };

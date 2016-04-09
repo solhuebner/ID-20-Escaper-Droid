@@ -17,7 +17,7 @@ void scoreDraw()
   //draw 0 padding
   for (byte i = 0; i < pad; i++)
   {
-    sprites.drawBitmap(43 + (6 * i), 54, number0, NULL, 5, 8, SPRITE_IS_MASK);
+    sprites.drawSelfMasked(43 + (6 * i), 54, numbersBig, 0);
   }
 
   for (byte i = 0; i < charLen; i++)
@@ -37,7 +37,7 @@ void scoreDraw()
     {
       if (digit == z) j = z;
     }
-    sprites.drawBitmap(43 + (pad * 6) + (6 * i), 54, numbers[digit], NULL, 5, 8, SPRITE_IS_MASK);
+    sprites.drawSelfMasked(43 + (pad * 6) + (6 * i), 54, numbersBig, digit);
 
   }
 }
@@ -47,8 +47,8 @@ void stateGamePlaying()
   if (arduboy.everyXFrames(2))checkInputs();
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
-  updateHUD();
-  Serial.println(tileFromXY(player.x, player.y - currentRoomY));
+  updateHUDRoomNumber();
+  //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
 }
 void stateGamePause()
 {

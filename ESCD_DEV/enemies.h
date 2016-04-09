@@ -5,9 +5,10 @@
 #include "room.h"
 
 
-struct Enemy {
+struct Enemy
+{
   public:
-    int x, y;
+    byte x, y;
     byte characteristics = 0b00000000;   //this byte holds all the Escaperdroids characteristics
     //                       ||||||||
     //                       |||||||└->  \ this 2 bits are used for direction

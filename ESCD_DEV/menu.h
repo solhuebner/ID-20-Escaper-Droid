@@ -32,7 +32,7 @@ void stateMenuMain()
 
 void stateMenuHelp()
 {
-  arduboy.drawBitmap(32, 0, qrCode_bitmap, 64, 64, WHITE);
+  arduboy.drawBitmap(32, 0, qrcode, 64, 64, WHITE);
   if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 
