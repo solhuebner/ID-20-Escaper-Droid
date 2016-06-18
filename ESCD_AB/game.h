@@ -4,9 +4,6 @@
 #include "globals.h"
 #include "inputs.h"
 
-extern byte level;
-extern byte displayLevel;
-
 void scoreDraw()
 {
   char buf[7];
@@ -48,19 +45,18 @@ void stateGamePlaying()
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
   updateHUDRoomNumber();
-  //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
 }
 void stateGamePause()
 {
-  arduboy.drawBitmap(0, 0, pauseScreen, 128, 64, WHITE);
+  for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 0, pauseScreen, i);
   scoreDraw();
-  if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_GAME_PLAYING;
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_GAME_PLAYING;
 }
 void stateGameOver()
 {
-  arduboy.drawBitmap(0, 0, gameOverScreen, 128, 64, WHITE);
+  for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 0, gameOverScreen, i);
   scoreDraw();
-  if (buttons.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+  if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 
 #endif

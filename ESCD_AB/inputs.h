@@ -17,7 +17,7 @@ boolean canGoTroughDoor(byte x, byte y)
 
 void checkInputs()
 {
-  if (buttons.pressed(UP_BUTTON))
+  if (arduboy.pressed(UP_BUTTON))
   {
     bitClear(player.characteristics, 0);
     bitClear(player.characteristics, 1);
@@ -28,7 +28,7 @@ void checkInputs()
       player.x -= 2;
     }
   }
-  if (buttons.pressed(RIGHT_BUTTON))
+  if (arduboy.pressed(RIGHT_BUTTON))
   {
     bitSet(player.characteristics, 0);
     bitClear(player.characteristics, 1);
@@ -41,7 +41,7 @@ void checkInputs()
     
 
   }
-  if (buttons.pressed(DOWN_BUTTON))
+  if (arduboy.pressed(DOWN_BUTTON))
   {
     bitClear(player.characteristics, 0);
     bitSet(player.characteristics, 1);
@@ -52,7 +52,7 @@ void checkInputs()
       player.x += 2;
     }
   }
-  if (buttons.pressed(LEFT_BUTTON))
+  if (arduboy.pressed(LEFT_BUTTON))
   {
     bitSet(player.characteristics, 0);
     bitSet(player.characteristics, 1);
@@ -65,8 +65,8 @@ void checkInputs()
   }
 
 
-  if (buttons.justPressed(A_BUTTON))gameState = STATE_GAME_PAUSE;
-  if (buttons.justPressed(B_BUTTON));
+  if (arduboy.justPressed(A_BUTTON))gameState = STATE_GAME_PAUSE;
+  if (arduboy.justPressed(B_BUTTON));
 }
 
 #endif

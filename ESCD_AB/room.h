@@ -75,15 +75,6 @@ byte tileFromXY(byte x, byte y)
   return (y >> 4) * 5 + (x >> 4);
 }
 
-byte xFromTile(byte currentTile)
-{
-
-}
-
-byte yFromTile(byte currentTile)
-{
-
-}
 
 
 bool isoCollide(byte ax, byte ay, byte bx, byte by, byte max)
@@ -305,23 +296,12 @@ void checkOrderOfObjects(byte roomNumber, byte currentlevel)
   {
     itemsOrder[tileFromXY(enemy[i].x, enemy[i].y)] = i + 2; //enemy0
   }
-
-
-  /*
-    for (byte i = 0; i < sizeof(itemsOrder); i++)
-    {
-    Serial.print(itemsOrder[i]);
-    Serial.print(" , ");
-    }
-    Serial.println();
-  */
-  //Serial.println(pgm_read_byte(&levels[currentlevel - 1][6 + 1 ]),BIN);
 }
 
 void updateHUDRoomNumber()
 {
   //draw HUD mask
-  for (byte y = 0; y < 8; y++) sprites.drawBitmap(118, y * 8, HUD_plus_mask, NULL, 2, 8, SPRITE_PLUS_MASK);
+  for (byte y = 0; y < 8; y++) sprites.drawPlusMask(118, y * 8, hudMask_plus_mask, 0);
 
   //draw room number
   char buf[2];
