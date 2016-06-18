@@ -42,6 +42,14 @@ EscaperDroid player;
 
 void walkThroughDoor()
 {
+  if ((player.characteristics & 0b00000011) == NORTH)
+  {
+    
+  }
+}
+
+void droidWalkNorth()
+{
   
 }
 

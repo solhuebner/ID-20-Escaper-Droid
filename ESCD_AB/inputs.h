@@ -21,7 +21,7 @@ void checkInputs()
   {
     bitClear(player.characteristics, 0);
     bitClear(player.characteristics, 1);
-    if (northBorder(player.x, player.y))
+    if (!hitNorthBorder(player.x, player.y))
     {
       if (currentRoomY < 0) currentRoomY++;
       else player.y -= 1;
@@ -32,7 +32,7 @@ void checkInputs()
   {
     bitSet(player.characteristics, 0);
     bitClear(player.characteristics, 1);
-    if (eastBorder(player.x, player.y))
+    if (!hitEastBorder(player.x, player.y))
     {
       if (currentRoomY < 0)currentRoomY++;
       else player.y -= 1;
@@ -45,7 +45,7 @@ void checkInputs()
   {
     bitClear(player.characteristics, 0);
     bitSet(player.characteristics, 1);
-    if (southBorder(player.x, player.y))
+    if (!hitSouthBorder(player.x, player.y))
     {
       if (currentRoomY > -30)currentRoomY--;
       else player.y += 1;
@@ -56,7 +56,7 @@ void checkInputs()
   {
     bitSet(player.characteristics, 0);
     bitSet(player.characteristics, 1);
-    if (westBorder(player.x, player.y))
+    if (!hitWestBorder(player.x, player.y))
     {
       if (currentRoomY > -30)currentRoomY--;
       else player.y += 1;
