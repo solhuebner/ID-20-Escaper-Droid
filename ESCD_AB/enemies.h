@@ -9,7 +9,8 @@ struct Enemy
 {
   public:
     byte x, y;
-    byte characteristics = 0b00000000;   //this byte holds all the Escaperdroids characteristics
+    byte isVisible;
+    byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
     //                       ||||||||
     //                       |||||||└->  \ this 2 bits are used for direction
     //                       ||||||└-->  / 00 = NORTH / 01 = EAST / 10 = SOUTH / 11 = WEST

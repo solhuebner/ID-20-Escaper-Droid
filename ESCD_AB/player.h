@@ -29,15 +29,9 @@ struct EscaperDroid
       bitSet (characteristics, 2);          //The droid is visible                = false
       imuneTimer = 60;
       steps = 0;
-    }
-
-    void reset()
-    {
+      life = 3;
       x = 23;
       y = 24;
-      imuneTimer = 60;
-      life = 3;
-      steps = 0;
     }
 };
 

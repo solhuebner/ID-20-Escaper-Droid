@@ -6,12 +6,10 @@
 #include "player.h"
 #include "enemies.h"
 
+#define MAX_AMOUNT_OF_ROOMS       32
+
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
-
-extern byte currentRoom;
-extern int currentRoomY;
-extern byte tile;
 
 byte doorsX[4] = {16, 80, 81, 14};
 byte doorsY[4] = {5, 5, 38, 38};
@@ -50,16 +48,22 @@ struct Room {
     //                     └-------->  OBJECT 1 EXISTS (0 = false / 1 = true)
 };
 
-Room stageRoom[32];
+Room stageRoom[MAX_AMOUNT_OF_ROOMS];
 
-void buildRoom(byte roomNumber, byte currentlevel)
+void buildRooms(byte currentLevel)
 {
-  stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentlevel - 1][1 + (13 * roomNumber)]);
-  for (byte i = 0; i < 8; i++)
+  for (byte roomNumber = 0; roomNumber < MAX_AMOUNT_OF_ROOMS; roomNumber++)
   {
-    if ((pgm_read_byte(&levels[currentlevel - 1][6 + i + (13 * roomNumber)])) != 0)
-    {                                                      //0b76543210
-      bitSet (stageRoom[roomNumber].enemiesActive, 7 - i); //0b12345678
+    //clear all info
+    stageRoom[roomNumber].doorsClosedActive = 0;
+    stageRoom[roomNumber].enemiesActive = 0;
+    stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentLevel - 1][1 + (13 * roomNumber)]);
+    for (byte i = 0; i < 8; i++)
+    {
+      if ((pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)])) != 0)
+      { //0b76543210
+        bitSet (stageRoom[roomNumber].enemiesActive, 7 - i);    //0b12345678
+      }
     }
   }
 }
@@ -93,22 +97,23 @@ int translateTileToY (byte currentTile)
 }
 
 
-void enterRoom(byte roomNumber, byte currentlevel)
+void enterRoom(byte roomNumber, byte currentLevel)
 {
   for (byte i = 0; i < 8; i++)
   {
-    //set all enemies at there position
+    // set all enemies at there position
     if (bitRead (stageRoom[roomNumber].enemiesActive, 7 - i) == 1)
     {
-      //set enemy on correct place 0 => 24)
-      byte currentTile = (pgm_read_byte(&levels[currentlevel - 1][6 + i + (13 * roomNumber)])) >> 3;
+      enemy[i].isVisible  = true;
+      // set enemy on correct place 0 => 24)
+      byte currentTile = (pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)])) >> 3;
       enemy[i].x = translateTileToX(currentTile);
       enemy[i].y = translateTileToY(currentTile);
 
-      //first clear the characteristics
+      // first clear the characteristics
       enemy[i].characteristics = 0;
       // get kind of sprite (stored in level data) and put it into the 3 most left bits
-      enemy[i].characteristics = ((pgm_read_byte(&levels[currentlevel - 1][6 + i + (13 * roomNumber)])) & 0b00000111) << 5;
+      enemy[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)])) & 0b00000111) << 5;
 
       // we will always set the current direction to SOUTH (0b00000010)
       bitClear (enemy[i].characteristics, 0);
@@ -118,6 +123,10 @@ void enterRoom(byte roomNumber, byte currentlevel)
     }
   }
 }
+byte goToRoom(byte roomNumber, byte currentLevel)
+{
+  return pgm_read_byte(&levels[currentLevel - 1][1 + (13 * roomNumber)]);
+};
 
 
 void drawFloor()
@@ -270,7 +279,7 @@ void updateRoom()
   drawDoorClossed(WEST, EAST_WEST);
 }
 
-void checkOrderOfObjects(byte roomNumber, byte currentlevel)
+void checkOrderOfObjects(byte roomNumber, byte currentLevel)
 {
   // clear out the itemsOrder
   memset(itemsOrder, 0, sizeof(itemsOrder));
@@ -305,7 +314,7 @@ void updateHUDRoomNumber()
 
   //draw 0 padding
   if (pad > 0) sprites.drawSelfMasked(121, 0, numbersThin, 0);
-  
+
   //draw remaining digits
   for (byte i = 0; i < charLen; i++)
   {
@@ -326,7 +335,7 @@ void updateHUDRoomNumber()
     }
     sprites.drawSelfMasked(121 + (pad * 4) + (4 * i), 0, numbersThin, digit);
   }
-  sprites.drawSelfMasked(120, 8, hudLife, player.life -1);
+  sprites.drawSelfMasked(120, 8, hudLife, player.life - 1);
 }
 
 void scoreDraw()

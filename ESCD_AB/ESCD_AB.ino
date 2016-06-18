@@ -34,6 +34,8 @@ const FunctionPointer PROGMEM  mainGameLoop[] =
   stateMenuInfo,
   stateMenuSoundfx,
   stateGamePlaying,
+  stateGameNextRoom,
+  stateGameNextLevel,
   stateGamePause,
   stateGameOver,
 };
