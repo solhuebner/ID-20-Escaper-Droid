@@ -29,14 +29,14 @@ struct Room {
   public:
     byte doorsClosedActive = 0b00000000;   // this byte holds all the 4 doors characteristics for each room
     //                         ||||||||
-    //                         |||||||└->  DOOR WEST  IS CLOSED (0 = false / 1 = true)
-    //                         ||||||└-->  DOOR SOUTH IS CLOSED (0 = false / 1 = true)
-    //                         |||||└--->  DOOR EAST  IS CLOSED (0 = false / 1 = true)
-    //                         ||||└---->  DOOR NORTH IS CLOSED (0 = false / 1 = true)
-    //                         |||└----->  DOOR WEST  EXISTS    (0 = false / 1 = true)
-    //                         ||└------>  DOOR SOUTH EXISTS    (0 = false / 1 = true)
-    //                         |└------->  DOOR EAST  EXISTS    (0 = false / 1 = true)
-    //                         └-------->  DOOR NORTH EXISTS    (0 = false / 1 = true)
+    //                         |||||||└->  0  DOOR WEST  IS CLOSED (0 = false / 1 = true)
+    //                         ||||||└-->  1  DOOR SOUTH IS CLOSED (0 = false / 1 = true)
+    //                         |||||└--->  2  DOOR EAST  IS CLOSED (0 = false / 1 = true)
+    //                         ||||└---->  3  DOOR NORTH IS CLOSED (0 = false / 1 = true)
+    //                         |||└----->  4  DOOR WEST  EXISTS    (0 = false / 1 = true)
+    //                         ||└------>  5  DOOR SOUTH EXISTS    (0 = false / 1 = true)
+    //                         |└------->  6  DOOR EAST  EXISTS    (0 = false / 1 = true)
+    //                         └-------->  7  DOOR NORTH EXISTS    (0 = false / 1 = true)
 
     byte enemiesActive = 0b00000000;
     //                     ||||||||
@@ -65,7 +65,6 @@ void buildRoom(byte roomNumber, byte currentlevel)
 }
 
 
-
 byte tileFromXY(byte x, byte y)
 {
   unsigned int x45 = x * 170;
@@ -76,11 +75,11 @@ byte tileFromXY(byte x, byte y)
 }
 
 
-
 bool isoCollide(byte ax, byte ay, byte bx, byte by, byte max)
 {
   return (DIFF(ax, bx) + DIFF(ay, by)) < max;
 }
+
 
 int translateTileToX (byte currentTile)
 {
@@ -93,6 +92,7 @@ int translateTileToY (byte currentTile)
   return (18 + (currentTile * 6) - ((currentTile / 5) * 24));
 }
 
+
 void enterRoom(byte roomNumber, byte currentlevel)
 {
   for (byte i = 0; i < 8; i++)
@@ -104,8 +104,6 @@ void enterRoom(byte roomNumber, byte currentlevel)
       byte currentTile = (pgm_read_byte(&levels[currentlevel - 1][6 + i + (13 * roomNumber)])) >> 3;
       enemy[i].x = translateTileToX(currentTile);
       enemy[i].y = translateTileToY(currentTile);
-
-
 
       //first clear the characteristics
       enemy[i].characteristics = 0;
@@ -198,14 +196,9 @@ void drawObjectChangeable()
 
 void drawObjectFixed(byte object)
 {
-
   if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - object) == 1)
   {
     sprites.drawPlusMask(enemy[object].x - 3, enemy[object].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[object].characteristics & 0b11100000) >> 5));
-    Serial.print(enemy[object].x);
-    Serial.print(" ");
-    Serial.print(enemy[object].y);
-    Serial.println();
   }
 }
 
@@ -334,6 +327,41 @@ void updateHUDRoomNumber()
     sprites.drawSelfMasked(121 + (pad * 4) + (4 * i), 0, numbersThin, digit);
   }
   sprites.drawSelfMasked(120, 8, hudLife, player.life -1);
+}
+
+void scoreDraw()
+{
+  char buf[7];
+  ltoa(scorePlayer, buf, 10);
+  char charLen = strlen(buf);
+  char pad = 7 - charLen;
+
+  //draw 0 padding
+  for (byte i = 0; i < pad; i++)
+  {
+    sprites.drawSelfMasked(43 + (6 * i), 54, numbersBig, 0);
+  }
+
+  for (byte i = 0; i < charLen; i++)
+  {
+    char digit = buf[i];
+    byte j;
+    if (digit <= 48)
+    {
+      digit = 0;
+    }
+    else {
+      digit -= 48;
+      if (digit > 9) digit = 0;
+    }
+
+    for (byte z = 0; z < 10; z++)
+    {
+      if (digit == z) j = z;
+    }
+    sprites.drawSelfMasked(43 + (pad * 6) + (6 * i), 54, numbersBig, digit);
+
+  }
 }
 
 

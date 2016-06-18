@@ -70,15 +70,4 @@ void stateMenuSoundfx()
   }
 }
 
-void stateMenuPlay()
-{
-  scorePlayer = 1234567;
-  currentRoom = 0;
-  currentRoomY = -14;
-  buildRoom(currentRoom, level);
-  enterRoom(currentRoom, level);
-  player.reset();
-  gameState = STATE_GAME_PLAYING;
-}
-
 #endif
