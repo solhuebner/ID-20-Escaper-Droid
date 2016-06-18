@@ -19,7 +19,10 @@ void stateMenuPlay()
 void stateGamePlaying()
 {
   if (!bitRead(player.characteristics, 5))checkInputs();
-  else walkThroughDoor();
+  else if (arduboy.everyXFrames(10))
+  {
+    if (player.steps < 4)  walkThroughDoor();
+  }
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
   updateHUDRoomNumber();

@@ -19,6 +19,7 @@ struct EscaperDroid
     //                       |└------->  6
     //                       └-------->  7
     byte imuneTimer;
+    byte steps;
 
     void set()
     {
@@ -27,6 +28,7 @@ struct EscaperDroid
       bitClear (characteristics, 3);        //The droid is imune                  = false
       bitSet (characteristics, 2);          //The droid is visible                = false
       imuneTimer = 60;
+      steps = 0;
     }
 
     void reset()
@@ -35,23 +37,63 @@ struct EscaperDroid
       y = 24;
       imuneTimer = 60;
       life = 3;
+      steps = 0;
     }
 };
 
 EscaperDroid player;
 
-void walkThroughDoor()
-{
-  if ((player.characteristics & 0b00000011) == NORTH)
-  {
-    
-  }
-}
 
 void droidWalkNorth()
 {
-  
+  if (currentRoomY < 0) currentRoomY++;
+  else player.y -= 1;
+  player.x -= 2;
 }
+
+void droidWalkEast()
+{
+  if (currentRoomY < 0)currentRoomY++;
+  else player.y -= 1;
+  player.x += 2;
+}
+
+void droidWalkSouth()
+{
+  if (currentRoomY > -30)currentRoomY--;
+  else player.y += 1;
+  player.x += 2;
+}
+
+void droidWalkWest()
+{
+  if (currentRoomY > -30)currentRoomY--;
+  else player.y += 1;
+  player.x -= 2;
+}
+
+
+void walkThroughDoor()
+{
+  player.steps++;
+  if ((player.characteristics & 0b00000011) == NORTH)
+  {
+    droidWalkNorth();
+  }
+  if ((player.characteristics & 0b00000011) == EAST)
+  {
+    droidWalkEast();
+  }
+  if ((player.characteristics & 0b00000011) == SOUTH)
+  {
+    droidWalkSouth();
+  }
+  if ((player.characteristics & 0b00000011) == WEST)
+  {
+    droidWalkWest();
+  }
+}
+
 
 void drawPlayer()
 {
