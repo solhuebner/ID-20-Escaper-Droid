@@ -161,21 +161,52 @@ int setCurrentRoomY(byte currentTile)
 {
   switch (currentTile)
   {
-    case 2:
+    case 2: case 10:
       return -8;
       break;
-    case 10:
-      return -8;
-      break;
-    case 22:
-      return -20;
-      break;
-    case 14:
+    case 22: case 14:
       return -20;
       break;
   }
 }
 
+int offsetXAfterDoor(byte currentTile)
+{
+  switch (currentTile)
+  {
+    case 2:
+      return -8;
+      break;
+    case 10:
+      return 8;
+      break;
+    case 22:
+      return 8;
+      break;
+    case 14:
+      return -8;
+      break;
+  }
+}
+
+int offsetYAfterDoor(byte currentTile)
+{
+  switch (currentTile)
+  {
+    case 2:
+      return -4;
+      break;
+    case 10:
+      return -4;
+      break;
+    case 22:
+      return 4;
+      break;
+    case 14:
+      return 4;
+      break;
+  }
+}
 
 void drawFloor()
 {

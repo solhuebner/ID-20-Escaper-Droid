@@ -17,32 +17,36 @@ boolean canGoTroughDoor(byte x, byte y)
 
 void checkInputs()
 {
-  if (arduboy.pressed(UP_BUTTON))
-  {
-    bitClear(player.characteristics, 0);
-    bitClear(player.characteristics, 1);
-    if (!hitNorthBorder(player.x, player.y)) droidWalkNorth();
-  }
+  if (arduboy.everyXFrames(2))
 
-  
-  if (arduboy.pressed(RIGHT_BUTTON))
   {
-    bitSet(player.characteristics, 0);
-    bitClear(player.characteristics, 1);
-    if (!hitEastBorder(player.x, player.y)) droidWalkEast();
-  }
-  
-  if (arduboy.pressed(DOWN_BUTTON))
-  {
-    bitClear(player.characteristics, 0);
-    bitSet(player.characteristics, 1);
-    if (!hitSouthBorder(player.x, player.y)) droidWalkSouth();
-  }
-  if (arduboy.pressed(LEFT_BUTTON))
-  {
-    bitSet(player.characteristics, 0);
-    bitSet(player.characteristics, 1);
-    if (!hitWestBorder(player.x, player.y)) droidWalkWest();
+    if (arduboy.pressed(UP_BUTTON))
+    {
+      bitClear(player.characteristics, 0);
+      bitClear(player.characteristics, 1);
+      if (!hitNorthBorder(player.x, player.y)) walkThroughDoor();
+    }
+
+
+    if (arduboy.pressed(RIGHT_BUTTON))
+    {
+      bitSet(player.characteristics, 0);
+      bitClear(player.characteristics, 1);
+      if (!hitEastBorder(player.x, player.y)) walkThroughDoor();
+    }
+
+    if (arduboy.pressed(DOWN_BUTTON))
+    {
+      bitClear(player.characteristics, 0);
+      bitSet(player.characteristics, 1);
+      if (!hitSouthBorder(player.x, player.y)) walkThroughDoor();
+    }
+    if (arduboy.pressed(LEFT_BUTTON))
+    {
+      bitSet(player.characteristics, 0);
+      bitSet(player.characteristics, 1);
+      if (!hitWestBorder(player.x, player.y)) walkThroughDoor();
+    }
   }
 
   if (arduboy.justPressed(A_BUTTON))gameState = STATE_GAME_PAUSE;

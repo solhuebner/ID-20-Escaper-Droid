@@ -16,8 +16,8 @@ struct EscaperDroid
     //                       ||||└---->  3  The droid is imune                 (0 = false / 1 = true)
     //                       |||└----->  4  The droid is dying                 (0 = false / 1 = true)
     //                       ||└------>  5  The droid is going through a door  (0 = false / 1 = true)
-    //                       |└------->  6  
-    //                       └-------->  7  
+    //                       |└------->  6
+    //                       └-------->  7
     byte imuneTimer;
     byte steps;
 
@@ -38,53 +38,31 @@ struct EscaperDroid
 EscaperDroid player;
 
 
-void droidWalkNorth()
-{
-  if (currentRoomY < 0) currentRoomY++;
-  else player.y -= 1;
-  player.x -= 2;
-}
-
-void droidWalkEast()
-{
-  if (currentRoomY < 0)currentRoomY++;
-  else player.y -= 1;
-  player.x += 2;
-}
-
-void droidWalkSouth()
-{
-  if (currentRoomY > -30)currentRoomY--;
-  else player.y += 1;
-  player.x += 2;
-}
-
-void droidWalkWest()
-{
-  if (currentRoomY > -30)currentRoomY--;
-  else player.y += 1;
-  player.x -= 2;
-}
-
-
 void walkThroughDoor()
 {
-  player.steps++;
-  if ((player.characteristics & 0b00000011) == NORTH)
+  if (bitRead(player.characteristics, 5)) player.steps++;
+  switch (player.characteristics & 0b00000011)
   {
-    droidWalkNorth();
-  }
-  if ((player.characteristics & 0b00000011) == EAST)
-  {
-    droidWalkEast();
-  }
-  if ((player.characteristics & 0b00000011) == SOUTH)
-  {
-    droidWalkSouth();
-  }
-  if ((player.characteristics & 0b00000011) == WEST)
-  {
-    droidWalkWest();
+    case NORTH:
+      if (currentRoomY < 0) currentRoomY++;
+      else player.y -= 1;
+      player.x -= 2;
+      break;
+    case EAST:
+      if (currentRoomY < 0)currentRoomY++;
+      else player.y -= 1;
+      player.x += 2;
+      break;
+    case SOUTH:
+      if (currentRoomY > -30)currentRoomY--;
+      else player.y += 1;
+      player.x += 2;
+      break;
+    case WEST:
+      if (currentRoomY > -30)currentRoomY--;
+      else player.y += 1;
+      player.x -= 2;
+      break;
   }
 }
 
