@@ -15,9 +15,9 @@ struct EscaperDroid
     //                       |||||└--->  2  The droid is visible               (0 = false / 1 = true)
     //                       ||||└---->  3  The droid is imune                 (0 = false / 1 = true)
     //                       |||└----->  4  The droid is dying                 (0 = false / 1 = true)
-    //                       ||└------>  5  The droid is going Through a door  (0 = false / 1 = true)
-    //                       |└------->  6
-    //                       └-------->  7
+    //                       ||└------>  5  The droid is going through a door  (0 = false / 1 = true)
+    //                       |└------->  6  
+    //                       └-------->  7  
     byte imuneTimer;
     byte steps;
 
@@ -30,8 +30,6 @@ struct EscaperDroid
       imuneTimer = 60;
       steps = 0;
       life = 3;
-      x = 23;
-      y = 24;
     }
 };
 

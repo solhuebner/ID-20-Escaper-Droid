@@ -6,11 +6,9 @@
 
 void stateMenuPlay()
 {
-  buildRooms(level);
-  enterRoom(currentRoom, level);
   scorePlayer = 1234567;
   player.set();
-  gameState = STATE_GAME_PLAYING;
+  gameState = STATE_GAME_NEXT_LEVEL;
 }
 
 void stateGamePlaying()
@@ -21,7 +19,14 @@ void stateGamePlaying()
     if (player.steps < 4)  walkThroughDoor();
     else
     {
+      currentTile = goToTile(currentRoom, level);
       currentRoom = goToRoom(currentRoom, level);
+      
+      
+      currentRoomY = -14; // this needs work for every door
+      
+      player.x = translateTileToX (currentTile);
+      player.y = translateTileToY (currentTile) + currentRoomY ;
       player.steps = 0;
       gameState = STATE_GAME_NEXT_ROOM;
     }
@@ -29,8 +34,8 @@ void stateGamePlaying()
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
   updateHUDRoomNumber();
-
-  Serial.println(tileFromXY(player.x, player.y - currentRoomY));
+  //Serial.println(level);
+  //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
 }
 
 
@@ -45,9 +50,13 @@ void stateGameNextLevel()
 {
   level++;
   currentRoom = 0;
+  currentTile = 2;
   currentRoomY = -14;
+  player.x = translateTileToX (currentTile);
+  player.y = translateTileToY (currentTile) + currentRoomY ;
   buildRooms(level);
   enterRoom(currentRoom, level);
+  gameState = STATE_GAME_PLAYING;
 }
 
 

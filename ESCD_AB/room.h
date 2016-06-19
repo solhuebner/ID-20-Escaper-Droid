@@ -97,6 +97,7 @@ int translateTileToY (byte currentTile)
 }
 
 
+
 void enterRoom(byte roomNumber, byte currentLevel)
 {
   for (byte i = 0; i < 8; i++)
@@ -123,10 +124,43 @@ void enterRoom(byte roomNumber, byte currentLevel)
     }
   }
 }
+
+
 byte goToRoom(byte roomNumber, byte currentLevel)
 {
-  return pgm_read_byte(&levels[currentLevel - 1][1 + (13 * roomNumber)]);
+  // we now which door the player goes through by the direction the droid is facing
+  byte door = player.characteristics & 0b00000011;
+  return (pgm_read_byte(&levels[currentLevel - 1][1 + 1 + door + (13 * roomNumber)]) >> 2);
+  //return 1;
 };
+
+
+byte goToTile(byte roomNumber, byte currentLevel)
+{
+  // we now which door the player goes through by the direction the droid is facing
+  byte door = player.characteristics & 0b00000011;
+  Serial.print(roomNumber);
+  Serial.print(" ");
+  Serial.print(door);
+  Serial.print(" ");
+  byte doorGoingTo = pgm_read_byte(&levels[currentLevel - 1][1 + 1 + door + (13 * roomNumber)]) & 0b00000011;
+  Serial.println(doorGoingTo);
+  switch (doorGoingTo)
+  {
+    case NORTH:
+      return 2;
+      break;
+    case EAST:
+      return 10;
+      break;
+    case SOUTH:
+      return 22;
+      break;
+    case WEST:
+      return 14;
+      break;
+  }
+}
 
 
 void drawFloor()
