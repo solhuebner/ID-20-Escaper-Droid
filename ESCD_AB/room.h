@@ -7,6 +7,7 @@
 #include "enemies.h"
 
 #define MAX_AMOUNT_OF_ROOMS       32
+#define SIZE_OF_ITEMSORDER        32
 
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
@@ -208,6 +209,14 @@ int offsetYAfterDoor(byte currentTile)
   }
 }
 
+/////////////////  DRAW ROOM    ///////////////////
+///////////////////////////////////////////////////
+void drawNothing()
+{
+
+}
+
+
 void drawFloor()
 {
   for (byte y = 0; y < 5; y++)
@@ -229,52 +238,171 @@ void drawWalls()
   }
 }
 
-
-void drawDoorLintel(byte side)
+///////////////// DRAW LINTEL  ////////////////////
+///////////////////////////////////////////////////
+void drawDoorLintelNorth()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7 - side) == 1)
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
   {
-    sprites.drawPlusMask(doorsX[side], currentRoomY + doorsY[side], doorLintel_plus_mask, side);
+    sprites.drawPlusMask(16, currentRoomY + 5, doorLintel_plus_mask, NORTH);
   }
 }
 
-void drawDoorPostBig(byte side, byte vector)
+void drawDoorLintelEast()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7 - side) == 1)
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
   {
-    sprites.drawPlusMask(doorsX[side] + 8 - (8 * vector), currentRoomY + 16 + doorsY[side], doorPostBig_plus_mask, side);
+    sprites.drawPlusMask(80, currentRoomY + 5, doorLintel_plus_mask, EAST);
   }
 }
 
-void drawDoorPostSmall(byte side, byte vector)
+void drawDoorLintelSouth()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7 - side) == 1)
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
   {
-    sprites.drawPlusMask(doorsX[side] + (15 * vector), currentRoomY + 16 + doorsY[side], doorPostSmall_plus_mask, side);
+    sprites.drawPlusMask(81, currentRoomY + 38, doorLintel_plus_mask, SOUTH);
   }
 }
 
-void drawDoorClossed(byte side, byte vector)
+void drawDoorLintelWest()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 3 - side) == 1)
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
   {
-    sprites.drawPlusMask(doorsX[side] + 8 - (3 * vector), currentRoomY + 9 + doorsY[side], doorClossed_plus_mask, side);
+    sprites.drawPlusMask(14, currentRoomY + 38, doorLintel_plus_mask, WEST);
+  }
+}
+
+///////////////// DRAW BIG POST  //////////////////
+///////////////////////////////////////////////////
+void drawDoorPostBigNorth()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
+  {
+    sprites.drawPlusMask(24, currentRoomY + 21, doorPostBig_plus_mask, NORTH);
+  }
+}
+
+void drawDoorPostBigEast()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
+  {
+    sprites.drawPlusMask(80, currentRoomY + 21, doorPostBig_plus_mask, EAST);
+  }
+}
+
+void drawDoorPostBigSouth()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
+  {
+    sprites.drawPlusMask(89, currentRoomY + 54, doorPostBig_plus_mask, SOUTH);
+  }
+}
+
+void drawDoorPostBigWest()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
+  {
+    sprites.drawPlusMask(14, currentRoomY + 54, doorPostBig_plus_mask, WEST);
   }
 }
 
 
-void drawEnemy(byte object)
+///////////////// DRAW SMALL POST  ////////////////
+///////////////////////////////////////////////////
+void drawDoorPostSmallNorth()
 {
-
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - object) == 1)
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
   {
-    sprites.drawPlusMask(enemy[object].x, enemy[object].y + currentRoomY, enemies_plus_mask, enemy[object].characteristics & 0b00000011 + (4 * ((enemy[object].characteristics & 0b11100000) >> 5)));
+    sprites.drawPlusMask(16, currentRoomY + 21, doorPostSmall_plus_mask, NORTH);
   }
 }
+
+void drawDoorPostSmallEast()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
+  {
+    sprites.drawPlusMask(95, currentRoomY + 21, doorPostSmall_plus_mask, EAST);
+  }
+}
+
+void drawDoorPostSmallSouth()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
+  {
+    sprites.drawPlusMask(81, currentRoomY + 54, doorPostSmall_plus_mask, SOUTH);
+  }
+}
+
+void drawDoorPostSmallWest()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
+  {
+    sprites.drawPlusMask(29, currentRoomY + 54, doorPostSmall_plus_mask, WEST);
+  }
+}
+
+
+///////////////// DRAW DOOR CLOSSED  //////////////
+///////////////////////////////////////////////////
+void drawDoorClossedNorth()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 3))
+  {
+    sprites.drawPlusMask(24, currentRoomY + 14, doorClossed_plus_mask, NORTH);
+  }
+}
+
+void drawDoorClossedEast()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 2))
+  {
+    sprites.drawPlusMask(85, currentRoomY + 14, doorClossed_plus_mask, EAST);
+  }
+}
+
+void drawDoorClossedSouth()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 1))
+  {
+    sprites.drawPlusMask(89 , currentRoomY + 47, doorClossed_plus_mask, SOUTH);
+  }
+}
+
+void drawDoorClossedWest()
+{
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0))
+  {
+    sprites.drawPlusMask(19, currentRoomY + 47, doorClossed_plus_mask, WEST);
+  }
+}
+
+
+///////////////// DRAW ENEMIES //////////////
+/////////////////////////////////////////////
+void drawEnemyOne()
+{
+
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 0))
+  {
+    sprites.drawPlusMask(enemy[0].x, enemy[0].y + currentRoomY, enemies_plus_mask, enemy[0].characteristics & 0b00000011 + (4 * ((enemy[0].characteristics & 0b11100000) >> 5)));
+  }
+}
+
+void drawEnemyTwo()
+{
+
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 1))
+  {
+    sprites.drawPlusMask(enemy[1].x, enemy[1].y + currentRoomY, enemies_plus_mask, enemy[1].characteristics & 0b00000011 + (4 * ((enemy[1].characteristics & 0b11100000) >> 5)));
+  }
+}
+
+///////////////// DRAW ELEMENTS /////////////
+/////////////////////////////////////////////
 
 void drawObjectChangeable()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 5) == 1)
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 5))
   {
     if (arduboy.everyXFrames(8)) frame++;
     if (frame > 3) frame = 0;
@@ -282,29 +410,131 @@ void drawObjectChangeable()
   }
 }
 
-void drawObjectFixed(byte object)
+void drawObjectFixedOne()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - object) == 1)
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 3))
   {
-    sprites.drawPlusMask(enemy[object].x - 3, enemy[object].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[object].characteristics & 0b11100000) >> 5));
+    sprites.drawPlusMask(enemy[3].x - 3, enemy[3].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[3].characteristics & 0b11100000) >> 5));
   }
 }
+
+void drawObjectFixedTwo()
+{
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 4))
+  {
+    sprites.drawPlusMask(enemy[4].x - 3, enemy[4].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[4].characteristics & 0b11100000) >> 5));
+  }
+}
+
+void drawObjectFixedThree()
+{
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 5))
+  {
+    sprites.drawPlusMask(enemy[5].x - 3, enemy[5].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[5].characteristics & 0b11100000) >> 5));
+  }
+}
+
+void drawObjectFixedFour()
+{
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 6))
+  {
+    sprites.drawPlusMask(enemy[6].x - 3, enemy[6].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[6].characteristics & 0b11100000) >> 5));
+  }
+}
+
+void drawObjectFixedFive()
+{
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 7))
+  {
+    sprites.drawPlusMask(enemy[7].x - 3, enemy[7].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[7].characteristics & 0b11100000) >> 5));
+  }
+}
+
+void drawBulletPlayer()
+{
+
+}
+
+void drawBulletEnemy()
+{
+
+}
+
+
+
+typedef void (*FunctionPointer) ();
+const FunctionPointer PROGMEM  updateElementsInRoom[] =
+{
+  drawNothing,                      // 0
+  drawDoorLintelNorth,              // 1
+  drawDoorPostBigNorth,             // 2
+  drawPlayer,                       // 3
+  drawDoorPostSmallNorth,           // 4
+  drawDoorClossedNorth,             // 5
+
+  drawDoorLintelEast,               // 6
+  drawDoorPostBigEast,              // 7
+  drawPlayer,                       // 8
+  drawDoorPostSmallEast,            // 9
+  drawDoorClossedEast,              // 10
+
+
+  drawObjectChangeable,             // 11
+  drawObjectFixedOne,               // 12
+  drawObjectFixedTwo,               // 13
+  drawObjectFixedThree,             // 14
+  drawObjectFixedFour,              // 15
+  drawObjectFixedFive,              // 16
+  drawBulletPlayer,                 // 17
+  drawBulletEnemy,                  // 18
+
+  drawEnemyOne,                     // 19
+  drawEnemyTwo,                     // 20
+
+  drawPlayer,                       // 21
+
+  drawDoorLintelSouth,              // 22
+  drawDoorPostBigSouth,             // 23
+  drawPlayer,                       // 24
+  drawDoorPostSmallSouth,           // 25
+  drawDoorClossedSouth,             // 26
+
+  drawDoorLintelWest,               // 27
+  drawDoorPostBigWest,              // 28
+  drawPlayer,                       // 29
+  drawDoorPostSmallWest,            // 30
+  drawDoorClossedWest,              // 31
+};
 
 
 void updateRoom()
 {
+  drawWalls();
+  drawFloor();
+  byte orderOfitems = 0;
+  while ( orderOfitems < SIZE_OF_ITEMSORDER)
+  {
+    ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[orderOfitems]]))(); // need to update a variable to draw the correct object
+    orderOfitems++;
+  }
+}
+
+
+/*
+  void updateRoom()
+  {
   byte amountOfItems = 0;
   drawWalls();
   drawFloor();
-  drawDoorLintel(NORTH);
-  drawDoorLintel(EAST);
-  drawDoorPostBig(NORTH, NORTH_SOUTH);
-  drawDoorPostSmall(NORTH, NORTH_SOUTH);
-  drawDoorClossed(NORTH, NORTH_SOUTH);
-  drawDoorPostBig(EAST, EAST_WEST);
-  drawDoorPostSmall(EAST, EAST_WEST);
-  drawDoorClossed(EAST, EAST_WEST);
-  while ( amountOfItems < sizeof(itemsOrder))
+  drawDoorLintelNorth();
+  drawDoorLintelEast();
+  drawDoorPostBigNorth();
+  drawDoorPostSmallNorth();
+  drawDoorClossedNorth();
+  drawDoorPostBigEast();
+  drawDoorPostSmallEast();
+  drawDoorClossedEast();
+  while ( amountOfItems < SIZE_OF_ITEMSORDER)
   {
     switch (itemsOrder[amountOfItems])
     {
@@ -314,54 +544,57 @@ void updateRoom()
         drawPlayer();
         break;
       case 2:
-        drawEnemy(0);
+        drawEnemyOne();
         break;
       case 3:
-        drawEnemy(1);
+        drawEnemyTwo();
         break;
       case 4:
         drawObjectChangeable();
         break;
       case 5:
-        drawObjectFixed(3);
+        drawObjectFixedOne();
         break;
       case 6:
-        drawObjectFixed(4);
+        drawObjectFixedTwo();
         break;
       case 7:
-        drawObjectFixed(5);
+        drawObjectFixedThree();
         break;
       case 8:
-        drawObjectFixed(6);
+        drawObjectFixedFour();
         break;
       case 9:
-        drawObjectFixed(7);
+        drawObjectFixedFive();
         break;
       case 10:
-        //bulletPlayer();
+        drawBulletPlayer();
         break;
       case 11:
-        //bulletEnemy();
+        drawBulletEnemy();
         break;
       default :
         break;
     }
     amountOfItems++;
   }
-  drawDoorLintel(SOUTH);
-  drawDoorLintel(WEST);
-  drawDoorPostBig(SOUTH, NORTH_SOUTH);
-  drawDoorPostSmall(SOUTH, NORTH_SOUTH);
-  drawDoorClossed(SOUTH, NORTH_SOUTH);
-  drawDoorPostBig(WEST, EAST_WEST);
-  drawDoorPostSmall(WEST, EAST_WEST);
-  drawDoorClossed(WEST, EAST_WEST);
-}
+  drawDoorLintelSouth();
+  drawDoorLintelWest();
+  drawDoorPostBigSouth();
+  drawDoorPostSmallSouth();
+  drawDoorClossedSouth();
+  drawDoorPostBigWest();
+  drawDoorPostSmallWest();
+  drawDoorClossedWest();
+  }
+*/
 
 void checkOrderOfObjects(byte roomNumber, byte currentLevel)
 {
   // clear out the itemsOrder
-  memset(itemsOrder, 0, sizeof(itemsOrder));
+  memset(itemsOrder, 0, SIZE_OF_ITEMSORDER);
+
+
 
   // check what tile the 5 floor special tiles are on (so that we can determine what order things need to be displayed)
   for (byte i = 3; i < 8; i++)
@@ -370,8 +603,14 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   }
 
   // check what tile the player is on (so that we can determine what order things need to be displayed)
-  itemsOrder[tileFromXY(player.x, player.y - currentRoomY)] = 1;  //player
+  if (!bitRead(player.characteristics, 5))
+  {
+    itemsOrder[tileFromXY(player.x, player.y - currentRoomY)] = 21;  //player
+    for (byte i = 0; i < 4; i++)
+    {
 
+    }
+  }
   // check what tile the 2 enemies and the object are on (so that we can determine what order things need to be displayed)
   for (byte i = 0; i < 3; i++)
   {
