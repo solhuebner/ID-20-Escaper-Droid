@@ -139,12 +139,7 @@ byte goToTile(byte roomNumber, byte currentLevel)
 {
   // we now which door the player goes through by the direction the droid is facing
   byte door = player.characteristics & 0b00000011;
-  Serial.print(roomNumber);
-  Serial.print(" ");
-  Serial.print(door);
-  Serial.print(" ");
   byte doorGoingTo = pgm_read_byte(&levels[currentLevel - 1][1 + 1 + door + (13 * roomNumber)]) & 0b00000011;
-  Serial.println(doorGoingTo);
   switch (doorGoingTo)
   {
     case NORTH:
@@ -158,6 +153,25 @@ byte goToTile(byte roomNumber, byte currentLevel)
       break;
     case WEST:
       return 14;
+      break;
+  }
+}
+
+int setCurrentRoomY(byte currentTile)
+{
+  switch (currentTile)
+  {
+    case 2:
+      return -8;
+      break;
+    case 10:
+      return -8;
+      break;
+    case 22:
+      return -20;
+      break;
+    case 14:
+      return -20;
       break;
   }
 }
