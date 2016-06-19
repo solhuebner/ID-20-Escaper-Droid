@@ -26,6 +26,8 @@ void stateGamePlaying()
       player.y = translateTileToY (currentTile) + offsetYAfterDoor(currentTile) + currentRoomY ;
       player.steps = 0;
       enterRoom(currentRoom, level);
+      bitClear (player.characteristics, 5);
+      bitSet (player.characteristics, 6);
       gameState = STATE_GAME_NEXT_ROOM;
     }
   }
@@ -39,13 +41,13 @@ void stateGamePlaying()
 
 void stateGameNextRoom()
 {
-  if (arduboy.everyXFrames(2))
+  if (arduboy.everyXFrames(20))
   {
     if (player.steps < 4)  walkThroughDoor();
     else
     {
       player.steps = 0;
-      bitClear (player.characteristics, 5);
+      bitClear (player.characteristics, 6);
       gameState = STATE_GAME_PLAYING;
     }
   }

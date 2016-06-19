@@ -7,7 +7,7 @@
 #include "enemies.h"
 
 #define MAX_AMOUNT_OF_ROOMS       32
-#define SIZE_OF_ITEMSORDER        32
+#define SIZE_OF_ITEMSORDER        46
 
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
@@ -460,66 +460,6 @@ void drawBulletEnemy()
 
 }
 
-
-
-typedef void (*FunctionPointer) ();
-const FunctionPointer PROGMEM  updateElementsInRoom[] =
-{
-  drawNothing,                      // 0
-  drawDoorLintelNorth,              // 1
-  drawDoorPostBigNorth,             // 2
-  drawPlayer,                       // 3
-  drawDoorPostSmallNorth,           // 4
-  drawDoorClossedNorth,             // 5
-
-  drawDoorLintelEast,               // 6
-  drawDoorPostBigEast,              // 7
-  drawPlayer,                       // 8
-  drawDoorPostSmallEast,            // 9
-  drawDoorClossedEast,              // 10
-
-
-  drawObjectChangeable,             // 11
-  drawObjectFixedOne,               // 12
-  drawObjectFixedTwo,               // 13
-  drawObjectFixedThree,             // 14
-  drawObjectFixedFour,              // 15
-  drawObjectFixedFive,              // 16
-  drawBulletPlayer,                 // 17
-  drawBulletEnemy,                  // 18
-
-  drawEnemyOne,                     // 19
-  drawEnemyTwo,                     // 20
-
-  drawPlayer,                       // 21
-
-  drawDoorLintelSouth,              // 22
-  drawDoorPostBigSouth,             // 23
-  drawPlayer,                       // 24
-  drawDoorPostSmallSouth,           // 25
-  drawDoorClossedSouth,             // 26
-
-  drawDoorLintelWest,               // 27
-  drawDoorPostBigWest,              // 28
-  drawPlayer,                       // 29
-  drawDoorPostSmallWest,            // 30
-  drawDoorClossedWest,              // 31
-};
-
-
-void updateRoom()
-{
-  drawWalls();
-  drawFloor();
-  byte orderOfitems = 0;
-  while ( orderOfitems < SIZE_OF_ITEMSORDER)
-  {
-    ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[orderOfitems]]))(); // need to update a variable to draw the correct object
-    orderOfitems++;
-  }
-}
-
-
 /*
   void updateRoom()
   {
@@ -589,32 +529,161 @@ void updateRoom()
   }
 */
 
+typedef void (*FunctionPointer) ();
+const FunctionPointer PROGMEM  updateElementsInRoom[] =
+{
+  drawNothing,                      // 0
+
+  drawDoorLintelNorth,              // 1
+  drawDoorPostBigNorth,             // 2
+  drawPlayer,                       // 3
+  drawDoorPostSmallNorth,           // 4
+  drawDoorClossedNorth,             // 5
+
+  drawDoorLintelEast,               // 6
+  drawDoorPostBigEast,              // 7
+  drawPlayer,                       // 8
+  drawDoorPostSmallEast,            // 9
+  drawDoorClossedEast,              // 10
+
+  // between this starting at 0
+  drawObjectChangeable,             // 11
+  drawObjectFixedOne,               // 12
+  drawObjectFixedTwo,               // 13
+  drawObjectFixedThree,             // 14
+  drawObjectFixedFour,              // 15
+  drawObjectFixedFive,              // 16
+  drawBulletPlayer,                 // 17
+  drawBulletEnemy,                  // 18
+
+  drawEnemyOne,                     // 19
+  drawEnemyTwo,                     // 20
+
+  drawPlayer,                       // 21
+
+  // and this we need 25 places
+
+  drawDoorLintelSouth,              // 22
+  drawDoorPostBigSouth,             // 23
+  drawPlayer,                       // 24
+  drawDoorPostSmallSouth,           // 25
+  drawDoorClossedSouth,             // 26
+
+  drawDoorLintelWest,               // 27
+  drawDoorPostBigWest,              // 28
+  drawPlayer,                       // 29
+  drawDoorPostSmallWest,            // 30
+  drawDoorClossedWest,              // 31
+};
+
+
+void updateRoom()
+{
+  drawWalls();
+  drawFloor();
+  byte orderOfitems = 0;
+  while ( orderOfitems < SIZE_OF_ITEMSORDER)
+  {
+    ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[orderOfitems]]))(); // need to update a variable to draw the correct object //itemsOrder[orderOfitems]
+    Serial.println(itemsOrder[orderOfitems]);
+    orderOfitems++;
+  }
+}
+
+
+
+
 void checkOrderOfObjects(byte roomNumber, byte currentLevel)
 {
   // clear out the itemsOrder
   memset(itemsOrder, 0, SIZE_OF_ITEMSORDER);
 
+  //draw door NORTH
+  itemsOrder[0] = 1;
+  itemsOrder[1] = 2;
+  itemsOrder[2] = 0;
+  itemsOrder[3] = 4;
+  itemsOrder[4] = 5;
+
+  //draw door EAST
+  itemsOrder[5] = 6;
+  itemsOrder[6] = 7;
+  itemsOrder[7] = 0;
+  itemsOrder[8] = 9;
+  itemsOrder[9] = 10;
+
+  //draw door SOUTH
+  itemsOrder[36] = 22;
+  itemsOrder[37] = 23;
+  itemsOrder[38] = 0;
+  itemsOrder[39] = 25;
+  itemsOrder[40] = 26;
+
+  //draw door WEST
+  itemsOrder[41] = 27;
+  itemsOrder[42] = 28;
+  itemsOrder[43] = 0;
+  itemsOrder[44] = 30;
+  itemsOrder[45] = 31;
+
+  /*
+    // check what tile the 5 floor special tiles are on (so that we can determine what order things need to be displayed)
+    for (byte i = 3; i < 8; i++)
+    {
+      itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 12 ] = i + 2 + 7; //floor
+    }
 
 
-  // check what tile the 5 floor special tiles are on (so that we can determine what order things need to be displayed)
-  for (byte i = 3; i < 8; i++)
-  {
-    itemsOrder[tileFromXY(enemy[i].x, enemy[i].y)] = i + 2; //floor
-  }
+    // check what tile the 2 enemies and the object are on (so that we can determine what order things need to be displayed)
+    for (byte i = 0; i < 3; i++)
+    {
+    itemsOrder[tileFromXY(enemy[i].x, enemy[i].y)] = i + 2; //enemy0
+    }
+  */
 
   // check what tile the player is on (so that we can determine what order things need to be displayed)
-  if (!bitRead(player.characteristics, 5))
+  if (!bitRead(player.characteristics, 5) && !bitRead(player.characteristics, 6))
   {
-    itemsOrder[tileFromXY(player.x, player.y - currentRoomY)] = 21;  //player
-    for (byte i = 0; i < 4; i++)
-    {
-
-    }
+    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + 11] = 21;  //player
   }
-  // check what tile the 2 enemies and the object are on (so that we can determine what order things need to be displayed)
-  for (byte i = 0; i < 3; i++)
+  else
   {
-    itemsOrder[tileFromXY(enemy[i].x, enemy[i].y)] = i + 2; //enemy0
+    if (bitRead(player.characteristics, 5))
+    {
+      switch (player.characteristics & 0b00000011)
+      {
+        case NORTH:
+          itemsOrder[2] = 21;
+          break;
+        case EAST:
+          itemsOrder[7] = 21;
+          break;
+        case SOUTH:
+          itemsOrder[38] = 21;
+          break;
+        case WEST:
+          itemsOrder[43] = 21;
+          break;
+      }
+    }
+    if (bitRead(player.characteristics, 6))
+    {
+      switch (player.characteristics & 0b00000011)
+      {
+        case NORTH:
+          itemsOrder[38] = 21;
+          break;
+        case EAST:
+          itemsOrder[43] = 21;
+          break;
+        case SOUTH:
+          itemsOrder[2] = 21;
+          break;
+        case WEST:
+          itemsOrder[7] = 21;
+          break;
+      }
+    }
   }
 }
 
