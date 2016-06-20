@@ -171,16 +171,16 @@ int offsetXAfterDoor(byte currentTile)
   switch (currentTile)
   {
     case 2:
-      return -8;
+      return -10;
       break;
     case 10:
-      return 8;
+      return 10;
       break;
     case 22:
-      return 8;
+      return 10;
       break;
     case 14:
-      return -8;
+      return -10;
       break;
   }
 }
@@ -190,16 +190,16 @@ int offsetYAfterDoor(byte currentTile)
   switch (currentTile)
   {
     case 2:
-      return -4;
+      return -5;
       break;
     case 10:
-      return -4;
+      return -5;
       break;
     case 22:
-      return 4;
+      return 5;
       break;
     case 14:
-      return 4;
+      return 5;
       break;
   }
 }

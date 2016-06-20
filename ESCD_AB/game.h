@@ -16,11 +16,12 @@ void stateGamePlaying()
   if (!bitRead(player.characteristics, 5))checkInputs();
   else if (arduboy.everyXFrames(2))
   {
-    if (player.steps < 4)  walkThroughDoor();
+    if (player.steps < 5)  walkThroughDoor();
     else
     {
       currentTile = goToTile(currentRoom, level);
       currentRoomY = setCurrentRoomY(currentTile);
+      Serial.println(currentRoomY);
       currentRoom = goToRoom(currentRoom, level);
       player.x = translateTileToX (currentTile) + offsetXAfterDoor(currentTile);
       player.y = translateTileToY (currentTile) + offsetYAfterDoor(currentTile) + currentRoomY ;
@@ -36,6 +37,7 @@ void stateGamePlaying()
   updateHUDRoomNumber();
   //Serial.println(currentRoomY);
   //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
+  
 }
 
 
@@ -43,7 +45,7 @@ void stateGameNextRoom()
 {
   if (arduboy.everyXFrames(2))
   {
-    if (player.steps < 4)  walkThroughDoor();
+    if (player.steps < 5)  walkThroughDoor();
     else
     {
       player.steps = 0;
