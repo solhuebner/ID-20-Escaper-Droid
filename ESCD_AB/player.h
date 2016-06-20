@@ -6,7 +6,7 @@
 struct EscaperDroid
 {
   public:
-    byte x, y;
+    int x, y;
     byte life;
     byte characteristics = 0b00000000;      //this byte holds all the Escaperdroids characteristics
     //                       ||||||||

@@ -16,12 +16,7 @@ byte doorsX[4] = {16, 80, 81, 14};
 byte doorsY[4] = {5, 5, 38, 38};
 byte frame = 0;
 
-byte itemsOrder[32] = {
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0,
-};
+byte itemsOrder[SIZE_OF_ITEMSORDER];
 
 
 struct Room {
@@ -61,7 +56,7 @@ void buildRooms(byte currentLevel)
     stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentLevel - 1][1 + (13 * roomNumber)]);
     for (byte i = 0; i < 8; i++)
     {
-      if ((pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)])) != 0)
+      if (pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)]))
       { //0b76543210
         bitSet (stageRoom[roomNumber].enemiesActive, 7 - i);    //0b12345678
       }
@@ -104,7 +99,7 @@ void enterRoom(byte roomNumber, byte currentLevel)
   for (byte i = 0; i < 8; i++)
   {
     // set all enemies at there position
-    if (bitRead (stageRoom[roomNumber].enemiesActive, 7 - i) == 1)
+    if (bitRead (stageRoom[roomNumber].enemiesActive, 7 - i))
     {
       enemy[i].isVisible  = true;
       // set enemy on correct place 0 => 24)
@@ -397,57 +392,38 @@ void drawEnemyTwo()
   }
 }
 
+
+
 ///////////////// DRAW ELEMENTS /////////////
 /////////////////////////////////////////////
-
 void drawObjectChangeable()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 5))
-  {
-    if (arduboy.everyXFrames(8)) frame++;
-    if (frame > 3) frame = 0;
-    sprites.drawPlusMask(enemy[2].x + 4, enemy[2].y + 9 + currentRoomY, elements_plus_mask, frame + (4 * ((enemy[2].characteristics & 0b11100000) >> 5)));
-  }
+  sprites.drawPlusMask(enemy[2].x + 4, enemy[2].y + 9 + currentRoomY, elements_plus_mask, frame + (4 * ((enemy[2].characteristics & 0b11100000) >> 5)));
 }
 
 void drawObjectFixedOne()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 3))
-  {
-    sprites.drawPlusMask(enemy[3].x - 3, enemy[3].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[3].characteristics & 0b11100000) >> 5));
-  }
+  sprites.drawPlusMask(enemy[3].x - 3, enemy[3].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[3].characteristics & 0b11100000) >> 5));
 }
 
 void drawObjectFixedTwo()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 4))
-  {
-    sprites.drawPlusMask(enemy[4].x - 3, enemy[4].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[4].characteristics & 0b11100000) >> 5));
-  }
+  sprites.drawPlusMask(enemy[4].x - 3, enemy[4].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[4].characteristics & 0b11100000) >> 5));
 }
 
 void drawObjectFixedThree()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 5))
-  {
-    sprites.drawPlusMask(enemy[5].x - 3, enemy[5].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[5].characteristics & 0b11100000) >> 5));
-  }
+  sprites.drawPlusMask(enemy[5].x - 3, enemy[5].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[5].characteristics & 0b11100000) >> 5));
 }
 
 void drawObjectFixedFour()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 6))
-  {
-    sprites.drawPlusMask(enemy[6].x - 3, enemy[6].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[6].characteristics & 0b11100000) >> 5));
-  }
+  sprites.drawPlusMask(enemy[6].x - 3, enemy[6].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[6].characteristics & 0b11100000) >> 5));
 }
 
 void drawObjectFixedFive()
 {
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 7))
-  {
-    sprites.drawPlusMask(enemy[7].x - 3, enemy[7].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[7].characteristics & 0b11100000) >> 5));
-  }
+  sprites.drawPlusMask(enemy[7].x - 3, enemy[7].y + currentRoomY + 9, floorTile_plus_mask, ((enemy[7].characteristics & 0b11100000) >> 5));
 }
 
 void drawBulletPlayer()
@@ -546,6 +522,7 @@ const FunctionPointer PROGMEM  updateElementsInRoom[] =
   drawDoorPostSmallEast,            // 9
   drawDoorClossedEast,              // 10
 
+
   // between this starting at 0
   drawObjectChangeable,             // 11
   drawObjectFixedOne,               // 12
@@ -560,7 +537,6 @@ const FunctionPointer PROGMEM  updateElementsInRoom[] =
   drawEnemyTwo,                     // 20
 
   drawPlayer,                       // 21
-
   // and this we need 25 places
 
   drawDoorLintelSouth,              // 22
@@ -579,13 +555,14 @@ const FunctionPointer PROGMEM  updateElementsInRoom[] =
 
 void updateRoom()
 {
+  if (arduboy.everyXFrames(8)) frame++;
+  if (frame > 3) frame = 0;
   drawWalls();
   drawFloor();
   byte orderOfitems = 0;
   while ( orderOfitems < SIZE_OF_ITEMSORDER)
   {
     ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[orderOfitems]]))(); // need to update a variable to draw the correct object //itemsOrder[orderOfitems]
-    Serial.println(itemsOrder[orderOfitems]);
     orderOfitems++;
   }
 }
@@ -626,25 +603,31 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   itemsOrder[44] = 30;
   itemsOrder[45] = 31;
 
-  /*
-    // check what tile the 5 floor special tiles are on (so that we can determine what order things need to be displayed)
-    for (byte i = 3; i < 8; i++)
-    {
-      itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 12 ] = i + 2 + 7; //floor
-    }
+
+  // check what tile the 5 special floor tiles are on (so that we can determine what order things need to be displayed)
+  for (byte i = 3; i < 8; i++)
+  {
+    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = i + 9;
+    else itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = 0;
+  }
+
+  // check what tile the object are on (so that we can determine what order things need to be displayed)
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 5)) itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + 10] = 11;
+  else itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + 10] = 0;
 
 
-    // check what tile the 2 enemies and the object are on (so that we can determine what order things need to be displayed)
-    for (byte i = 0; i < 3; i++)
-    {
-    itemsOrder[tileFromXY(enemy[i].x, enemy[i].y)] = i + 2; //enemy0
-    }
-  */
+  // check what tile the 2 enemies are on (so that we can determine what order things need to be displayed)
+  for (byte i = 0; i < 2; i++)
+  {
+    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = i + 19;
+    else itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = 0;
+  }
 
   // check what tile the player is on (so that we can determine what order things need to be displayed)
   if (!bitRead(player.characteristics, 5) && !bitRead(player.characteristics, 6))
   {
-    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + 11] = 21;  //player
+    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + 10] = 21;  //player
+    //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
   }
   else
   {

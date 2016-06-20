@@ -8,7 +8,7 @@
 struct Enemy
 {
   public:
-    byte x, y;
+    int x, y;
     byte isVisible;
     byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
     //                       ||||||||

@@ -1,15 +1,15 @@
 /*
- Escaper Droid: http://www.team-arg.org/escd-manual.html
+  Escaper Droid: http://www.team-arg.org/escd-manual.html
 
- Arduboy version 0.4d:  http://www.team-arg.org/escd-downloads.html
+  Arduboy version 0.4d:  http://www.team-arg.org/escd-downloads.html
 
- MADE by TEAM a.r.g. : http://www.team-arg.org/About.html
+  MADE by TEAM a.r.g. : http://www.team-arg.org/About.html
 
- 2016 - JO3RI - STG
+  2016 - JO3RI - STG
 
- Game License: MIT : https://opensource.org/licenses/MIT
+  Game License: MIT : https://opensource.org/licenses/MIT
 
- */
+*/
 
 //determine the game
 #define GAME_ID 20
@@ -39,6 +39,7 @@ const FunctionPointer PROGMEM  mainGameLoop[] =
   stateGamePause,
   stateGameOver,
 };
+
 
 void setup()
 {
