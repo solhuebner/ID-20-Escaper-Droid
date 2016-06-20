@@ -8,32 +8,22 @@ struct EscaperDroid
   public:
     int x, y;
     byte life;
-    byte characteristics = 0b00000000;      //this byte holds all the Escaperdroids characteristics
-    //                       ||||||||
-    //                       |||||||└->  0  | this 2 bits are used for direction
-    //                       ||||||└-->  1  | 00 = NORTH / 01 = EAST / 10 = SOUTH / 11 = WEST
-    //                       |||||└--->  2  The droid is visible               (0 = false / 1 = true)
-    //                       ||||└---->  3  The droid is imune                 (0 = false / 1 = true)
-    //                       |||└----->  4  The droid is dying                 (0 = false / 1 = true)
-    //                       ||└------>  5  The droid is going through a door  (0 = false / 1 = true)
-    //                       |└------->  6  The droid is coming out a door     (0 = false / 1 = true)
-    //                       └-------->  7
+    byte characteristics;      
     byte imuneTimer;
     byte steps;
 
     void set()
     {
-      
-      /*
-      bitClear (characteristics, 6);        // The droid is coming out a door      = false
-      bitClear (characteristics, 5);        // The droid is going Through a door   = false
-      bitClear (characteristics, 4);        // The droid is dying                  = false
-      bitClear (characteristics, 3);        // The droid is imune                  = false
-      bitSet (characteristics, 2);          // The droid is visible                = false
-      bitClear (characteristics, 0);        // | The droid is facing SOUTH
-      bitSet (characteristics, 1);          // |
-      */
-      characteristics = 0b00000110;
+      characteristics = 0b00000110;   //this byte holds all the Escaperdroids characteristics
+      //                  ||||||||
+      //                  |||||||└->  0  | this 2 bits are used for direction
+      //                  ||||||└-->  1  | 00 = NORTH / 01 = EAST / 10 = SOUTH / 11 = WEST
+      //                  |||||└--->  2  The droid is visible               (0 = false / 1 = true)
+      //                  ||||└---->  3  The droid is imune                 (0 = false / 1 = true)
+      //                  |||└----->  4  The droid is dying                 (0 = false / 1 = true)
+      //                  ||└------>  5  The droid is going through a door  (0 = false / 1 = true)
+      //                  |└------->  6  The droid is coming out a door     (0 = false / 1 = true)
+      //                  └-------->  7
       imuneTimer = 60;
       steps = 0;
       life = 3;

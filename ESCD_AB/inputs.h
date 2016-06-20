@@ -1,19 +1,10 @@
 #ifndef INPUTS_H
 #define INPUTS_H
 
-#define ENEMY                    0
-#define PLAYER                   1
-
-
 #include "globals.h"
 #include "player.h"
 #include "collision.h"
 
-
-boolean canGoTroughDoor(byte x, byte y)
-{
-  return false;
-}
 
 void checkInputs()
 {

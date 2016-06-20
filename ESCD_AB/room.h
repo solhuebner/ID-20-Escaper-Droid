@@ -208,9 +208,7 @@ int offsetYAfterDoor(byte currentTile)
 ///////////////////////////////////////////////////
 void drawNothing()
 {
-
 }
-
 
 void drawFloor()
 {
@@ -223,7 +221,6 @@ void drawFloor()
   }
 }
 
-
 void drawWalls()
 {
   for (byte x = 0; x < 6; x++)
@@ -233,163 +230,115 @@ void drawWalls()
   }
 }
 
-///////////////// DRAW LINTEL  ////////////////////
+
+///////////////// DRAW DOOR NORTH  ////////////////
 ///////////////////////////////////////////////////
 void drawDoorLintelNorth()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
-  {
-    sprites.drawPlusMask(16, currentRoomY + 5, doorLintel_plus_mask, NORTH);
-  }
+  sprites.drawPlusMask(16, currentRoomY + 5, doorLintel_plus_mask, NORTH);
 }
 
-void drawDoorLintelEast()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
-  {
-    sprites.drawPlusMask(80, currentRoomY + 5, doorLintel_plus_mask, EAST);
-  }
-}
-
-void drawDoorLintelSouth()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
-  {
-    sprites.drawPlusMask(81, currentRoomY + 38, doorLintel_plus_mask, SOUTH);
-  }
-}
-
-void drawDoorLintelWest()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
-  {
-    sprites.drawPlusMask(14, currentRoomY + 38, doorLintel_plus_mask, WEST);
-  }
-}
-
-///////////////// DRAW BIG POST  //////////////////
-///////////////////////////////////////////////////
 void drawDoorPostBigNorth()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
-  {
-    sprites.drawPlusMask(24, currentRoomY + 21, doorPostBig_plus_mask, NORTH);
-  }
+  sprites.drawPlusMask(24, currentRoomY + 21, doorPostBig_plus_mask, NORTH);
+}
+
+void drawDoorPostSmallNorth()
+{
+  sprites.drawPlusMask(16, currentRoomY + 21, doorPostSmall_plus_mask, NORTH);
+}
+
+void drawDoorClossedNorth()
+{
+  sprites.drawPlusMask(24, currentRoomY + 14, doorClossed_plus_mask, NORTH);
+}
+
+
+
+/////////////////  DRAW DOOR EAST  ////////////////
+///////////////////////////////////////////////////
+void drawDoorLintelEast()
+{
+  sprites.drawPlusMask(80, currentRoomY + 5, doorLintel_plus_mask, EAST);
 }
 
 void drawDoorPostBigEast()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
-  {
-    sprites.drawPlusMask(80, currentRoomY + 21, doorPostBig_plus_mask, EAST);
-  }
-}
-
-void drawDoorPostBigSouth()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
-  {
-    sprites.drawPlusMask(89, currentRoomY + 54, doorPostBig_plus_mask, SOUTH);
-  }
-}
-
-void drawDoorPostBigWest()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
-  {
-    sprites.drawPlusMask(14, currentRoomY + 54, doorPostBig_plus_mask, WEST);
-  }
-}
-
-
-///////////////// DRAW SMALL POST  ////////////////
-///////////////////////////////////////////////////
-void drawDoorPostSmallNorth()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
-  {
-    sprites.drawPlusMask(16, currentRoomY + 21, doorPostSmall_plus_mask, NORTH);
-  }
+  sprites.drawPlusMask(80, currentRoomY + 21, doorPostBig_plus_mask, EAST);
 }
 
 void drawDoorPostSmallEast()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
-  {
-    sprites.drawPlusMask(95, currentRoomY + 21, doorPostSmall_plus_mask, EAST);
-  }
-}
-
-void drawDoorPostSmallSouth()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
-  {
-    sprites.drawPlusMask(81, currentRoomY + 54, doorPostSmall_plus_mask, SOUTH);
-  }
-}
-
-void drawDoorPostSmallWest()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
-  {
-    sprites.drawPlusMask(29, currentRoomY + 54, doorPostSmall_plus_mask, WEST);
-  }
-}
-
-
-///////////////// DRAW DOOR CLOSSED  //////////////
-///////////////////////////////////////////////////
-void drawDoorClossedNorth()
-{
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 3))
-  {
-    sprites.drawPlusMask(24, currentRoomY + 14, doorClossed_plus_mask, NORTH);
-  }
+  sprites.drawPlusMask(95, currentRoomY + 21, doorPostSmall_plus_mask, EAST);
 }
 
 void drawDoorClossedEast()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 2))
-  {
-    sprites.drawPlusMask(85, currentRoomY + 14, doorClossed_plus_mask, EAST);
-  }
+  sprites.drawPlusMask(85, currentRoomY + 14, doorClossed_plus_mask, EAST);
+}
+
+
+
+/////////////////  DRAW DOOR SOUTH  ///////////////
+///////////////////////////////////////////////////
+void drawDoorLintelSouth()
+{
+  sprites.drawPlusMask(81, currentRoomY + 38, doorLintel_plus_mask, SOUTH);
+}
+
+void drawDoorPostBigSouth()
+{
+  sprites.drawPlusMask(89, currentRoomY + 54, doorPostBig_plus_mask, SOUTH);
+}
+
+void drawDoorPostSmallSouth()
+{
+  sprites.drawPlusMask(81, currentRoomY + 54, doorPostSmall_plus_mask, SOUTH);
 }
 
 void drawDoorClossedSouth()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 1))
-  {
-    sprites.drawPlusMask(89 , currentRoomY + 47, doorClossed_plus_mask, SOUTH);
-  }
+  sprites.drawPlusMask(89 , currentRoomY + 47, doorClossed_plus_mask, SOUTH);
+}
+
+
+
+/////////////////   DRAW DOOR WEST  ///////////////
+///////////////////////////////////////////////////
+void drawDoorLintelWest()
+{
+  sprites.drawPlusMask(14, currentRoomY + 38, doorLintel_plus_mask, WEST);
+}
+
+void drawDoorPostBigWest()
+{
+  sprites.drawPlusMask(14, currentRoomY + 54, doorPostBig_plus_mask, WEST);
+}
+
+void drawDoorPostSmallWest()
+{
+  sprites.drawPlusMask(29, currentRoomY + 54, doorPostSmall_plus_mask, WEST);
 }
 
 void drawDoorClossedWest()
 {
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0))
-  {
-    sprites.drawPlusMask(19, currentRoomY + 47, doorClossed_plus_mask, WEST);
-  }
+  sprites.drawPlusMask(19, currentRoomY + 47, doorClossed_plus_mask, WEST);
 }
+
 
 
 ///////////////// DRAW ENEMIES //////////////
 /////////////////////////////////////////////
 void drawEnemyOne()
 {
-
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 0))
-  {
-    sprites.drawPlusMask(enemy[0].x, enemy[0].y + currentRoomY, enemies_plus_mask, enemy[0].characteristics & 0b00000011 + (4 * ((enemy[0].characteristics & 0b11100000) >> 5)));
-  }
+  if (arduboy.everyXFrames(8)) frame++;
+  if (frame > 3) frame = 0;
+  sprites.drawPlusMask(enemy[0].x, enemy[0].y + currentRoomY, enemies_plus_mask, enemy[0].characteristics & 0b00000011 + (4 * ((enemy[0].characteristics & 0b11100000) >> 5)));
 }
 
 void drawEnemyTwo()
 {
-
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - 1))
-  {
-    sprites.drawPlusMask(enemy[1].x, enemy[1].y + currentRoomY, enemies_plus_mask, enemy[1].characteristics & 0b00000011 + (4 * ((enemy[1].characteristics & 0b11100000) >> 5)));
-  }
+  sprites.drawPlusMask(enemy[1].x, enemy[1].y + currentRoomY, enemies_plus_mask, enemy[1].characteristics & 0b00000011 + (4 * ((enemy[1].characteristics & 0b11100000) >> 5)));
 }
 
 
@@ -436,74 +385,6 @@ void drawBulletEnemy()
 
 }
 
-/*
-  void updateRoom()
-  {
-  byte amountOfItems = 0;
-  drawWalls();
-  drawFloor();
-  drawDoorLintelNorth();
-  drawDoorLintelEast();
-  drawDoorPostBigNorth();
-  drawDoorPostSmallNorth();
-  drawDoorClossedNorth();
-  drawDoorPostBigEast();
-  drawDoorPostSmallEast();
-  drawDoorClossedEast();
-  while ( amountOfItems < SIZE_OF_ITEMSORDER)
-  {
-    switch (itemsOrder[amountOfItems])
-    {
-      case 0:
-        break;
-      case 1:
-        drawPlayer();
-        break;
-      case 2:
-        drawEnemyOne();
-        break;
-      case 3:
-        drawEnemyTwo();
-        break;
-      case 4:
-        drawObjectChangeable();
-        break;
-      case 5:
-        drawObjectFixedOne();
-        break;
-      case 6:
-        drawObjectFixedTwo();
-        break;
-      case 7:
-        drawObjectFixedThree();
-        break;
-      case 8:
-        drawObjectFixedFour();
-        break;
-      case 9:
-        drawObjectFixedFive();
-        break;
-      case 10:
-        drawBulletPlayer();
-        break;
-      case 11:
-        drawBulletEnemy();
-        break;
-      default :
-        break;
-    }
-    amountOfItems++;
-  }
-  drawDoorLintelSouth();
-  drawDoorLintelWest();
-  drawDoorPostBigSouth();
-  drawDoorPostSmallSouth();
-  drawDoorClossedSouth();
-  drawDoorPostBigWest();
-  drawDoorPostSmallWest();
-  drawDoorClossedWest();
-  }
-*/
 
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM  updateElementsInRoom[] =
@@ -522,8 +403,6 @@ const FunctionPointer PROGMEM  updateElementsInRoom[] =
   drawDoorPostSmallEast,            // 9
   drawDoorClossedEast,              // 10
 
-
-  // between this starting at 0
   drawObjectChangeable,             // 11
   drawObjectFixedOne,               // 12
   drawObjectFixedTwo,               // 13
@@ -537,7 +416,6 @@ const FunctionPointer PROGMEM  updateElementsInRoom[] =
   drawEnemyTwo,                     // 20
 
   drawPlayer,                       // 21
-  // and this we need 25 places
 
   drawDoorLintelSouth,              // 22
   drawDoorPostBigSouth,             // 23
@@ -555,19 +433,15 @@ const FunctionPointer PROGMEM  updateElementsInRoom[] =
 
 void updateRoom()
 {
-  if (arduboy.everyXFrames(8)) frame++;
-  if (frame > 3) frame = 0;
   drawWalls();
   drawFloor();
-  byte orderOfitems = 0;
-  while ( orderOfitems < SIZE_OF_ITEMSORDER)
+  byte itemsOrderCounter = 0;
+  while ( itemsOrderCounter < SIZE_OF_ITEMSORDER)
   {
-    ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[orderOfitems]]))(); // need to update a variable to draw the correct object //itemsOrder[orderOfitems]
-    orderOfitems++;
+    ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[itemsOrderCounter]]))();
+    itemsOrderCounter++;
   }
 }
-
-
 
 
 void checkOrderOfObjects(byte roomNumber, byte currentLevel)
@@ -576,32 +450,43 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   memset(itemsOrder, 0, SIZE_OF_ITEMSORDER);
 
   //draw door NORTH
-  itemsOrder[0] = 1;
-  itemsOrder[1] = 2;
-  itemsOrder[2] = 0;
-  itemsOrder[3] = 4;
-  itemsOrder[4] = 5;
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
+  {
+    itemsOrder[0] = 1;                                                            // Lintel
+    itemsOrder[1] = 2;                                                            // Big doorpost
+    itemsOrder[3] = 4;                                                            // Small doorpost
+  }
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 3)) itemsOrder[4] = 5;    // door is closed
+
 
   //draw door EAST
-  itemsOrder[5] = 6;
-  itemsOrder[6] = 7;
-  itemsOrder[7] = 0;
-  itemsOrder[8] = 9;
-  itemsOrder[9] = 10;
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
+  {
+    itemsOrder[5] = 6;                                                            // Lintel
+    itemsOrder[6] = 7;                                                            // Big doorpost
+    itemsOrder[8] = 9;                                                            // Small doorpost
+  }
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 2)) itemsOrder[9] = 10;   // door is closed
+
 
   //draw door SOUTH
-  itemsOrder[36] = 22;
-  itemsOrder[37] = 23;
-  itemsOrder[38] = 0;
-  itemsOrder[39] = 25;
-  itemsOrder[40] = 26;
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
+  {
+    itemsOrder[36] = 22;                                                            // Lintel
+    itemsOrder[37] = 23;                                                            // Big doorpost
+    itemsOrder[39] = 25;                                                            // Small doorpost
+  }
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 1)) itemsOrder[40] = 26;    // door is closed
+
 
   //draw door WEST
-  itemsOrder[41] = 27;
-  itemsOrder[42] = 28;
-  itemsOrder[43] = 0;
-  itemsOrder[44] = 30;
-  itemsOrder[45] = 31;
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
+  {
+    itemsOrder[41] = 27;                                                            // Lintel
+    itemsOrder[42] = 28;                                                            // Big doorpost
+    itemsOrder[44] = 30;                                                            // Small doorpost
+  }
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0)) itemsOrder[45] = 31;    // door is closed
 
 
   // check what tile the 5 special floor tiles are on (so that we can determine what order things need to be displayed)

@@ -41,7 +41,7 @@ void stateGamePlaying()
 
 void stateGameNextRoom()
 {
-  if (arduboy.everyXFrames(20))
+  if (arduboy.everyXFrames(2))
   {
     if (player.steps < 4)  walkThroughDoor();
     else
