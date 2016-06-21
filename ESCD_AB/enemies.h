@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "room.h"
 
+byte objectFrame = 0;
 
 struct Enemy
 {
@@ -20,9 +21,9 @@ struct Enemy
     //                       ||└------>  \
     //                       |└------->   | these 3 bits are used to determine kind of sprite to use
     //                       └-------->  /
+
 };
 
 Enemy enemy[8];
-
 
 #endif

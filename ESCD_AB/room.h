@@ -6,7 +6,6 @@
 #include "player.h"
 #include "enemies.h"
 
-#define MAX_AMOUNT_OF_ROOMS       32
 #define SIZE_OF_ITEMSORDER        46
 
 //define how collision works
@@ -14,7 +13,7 @@
 
 //byte doorsX[4] = {16, 80, 81, 14};
 //byte doorsY[4] = {5, 5, 38, 38};
-byte frame = 0;
+
 byte lifeVisible = true;
 
 byte itemsOrder[SIZE_OF_ITEMSORDER];
@@ -35,21 +34,21 @@ struct Room {
 
     byte enemiesActive = 0b00000000;
     //                     ||||||||
-    //                     |||||||└->  OBJECT 8 EXISTS (0 = false / 1 = true)
-    //                     ||||||└-->  OBJECT 7 EXISTS (0 = false / 1 = true)
-    //                     |||||└--->  OBJECT 6 EXISTS (0 = false / 1 = true)
-    //                     ||||└---->  OBJECT 5 EXISTS (0 = false / 1 = true)
-    //                     |||└----->  OBJECT 4 EXISTS (0 = false / 1 = true)
-    //                     ||└------>  OBJECT 3 EXISTS (0 = false / 1 = true)
-    //                     |└------->  OBJECT 2 EXISTS (0 = false / 1 = true)
-    //                     └-------->  OBJECT 1 EXISTS (0 = false / 1 = true)
+    //                     |||||||└->  7 FLOOR  5 EXISTS (0 = false / 1 = true)
+    //                     ||||||└-->  6 FLOOR  4 EXISTS (0 = false / 1 = true)
+    //                     |||||└--->  5 FLOOR  3 EXISTS (0 = false / 1 = true)
+    //                     ||||└---->  4 FLOOR  2 EXISTS (0 = false / 1 = true)
+    //                     |||└----->  3 FLOOR  1 EXISTS (0 = false / 1 = true)
+    //                     ||└------>  2 OBJECT 3 EXISTS (0 = false / 1 = true)
+    //                     |└------->  1 ENEMY  2 EXISTS (0 = false / 1 = true)
+    //                     └-------->  0 ENEMY  1 EXISTS (0 = false / 1 = true)
 };
 
 Room stageRoom[MAX_AMOUNT_OF_ROOMS];
 
 void buildRooms(byte currentLevel)
 {
-  for (byte roomNumber = 0; roomNumber < MAX_AMOUNT_OF_ROOMS; roomNumber++)
+  for (byte roomNumber = 0; roomNumber < pgm_read_byte(&levels[currentLevel - 1][0]); roomNumber++)
   {
     //clear all info
     stageRoom[roomNumber].doorsClosedActive = 0;
@@ -57,12 +56,17 @@ void buildRooms(byte currentLevel)
     stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentLevel - 1][1 + (13 * roomNumber)]);
     for (byte i = 0; i < 8; i++)
     {
-      if (pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)]))
+      if (pgm_read_byte(&levels[currentLevel - 1][1 + 5 + i + (13 * roomNumber)]))
       { //0b76543210
         bitSet (stageRoom[roomNumber].enemiesActive, 7 - i);    //0b12345678
       }
+      Serial.print(pgm_read_byte(&levels[currentLevel - 1][1 + 5 + i + (13 * roomNumber)]), BIN);
+      Serial.print(" : ");
     }
+    Serial.println();
+    Serial.println(stageRoom[roomNumber].enemiesActive, BIN);
   }
+  Serial.println();
 }
 
 
@@ -100,11 +104,13 @@ void enterRoom(byte roomNumber, byte currentLevel)
   for (byte i = 0; i < 8; i++)
   {
     // set all enemies at there position
-    if (bitRead (stageRoom[roomNumber].enemiesActive, 7 - i))
+    //Serial.print(bitRead (stageRoom[roomNumber].enemiesActive, 7 - i));
+    //if (bitRead (stageRoom[roomNumber].enemiesActive, 7 - i))
     {
       enemy[i].isVisible  = true;
       // set enemy on correct place 0 => 24)
       byte currentTile = (pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)])) >> 3;
+      //Serial.println((pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)])) >> 3);
       enemy[i].x = translateTileToX(currentTile);
       enemy[i].y = translateTileToY(currentTile);
 
@@ -112,14 +118,14 @@ void enterRoom(byte roomNumber, byte currentLevel)
       enemy[i].characteristics = 0;
       // get kind of sprite (stored in level data) and put it into the 3 most left bits
       enemy[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][6 + i + (13 * roomNumber)])) & 0b00000111) << 5;
-
+      //Serial.println(enemy[i].characteristics, BIN);
       // we will always set the current direction to SOUTH (0b00000010)
-      bitClear (enemy[i].characteristics, 0);
       bitSet (enemy[i].characteristics, 1);
 
       //set the enemy hurt/movable/pickup
     }
   }
+  //Serial.println();
 }
 
 
@@ -128,7 +134,6 @@ byte goToRoom(byte roomNumber, byte currentLevel)
   // we now which door the player goes through by the direction the droid is facing
   byte door = player.characteristics & 0b00000011;
   return (pgm_read_byte(&levels[currentLevel - 1][1 + 1 + door + (13 * roomNumber)]) >> 2);
-  //return 1;
 };
 
 
@@ -338,8 +343,6 @@ void drawDoorClossedWest()
 /////////////////////////////////////////////
 void drawEnemyOne()
 {
-  if (arduboy.everyXFrames(8)) frame++;
-  if (frame > 3) frame = 0;
   sprites.drawPlusMask(enemy[0].x, enemy[0].y + currentRoomY, enemies_plus_mask, enemy[0].characteristics & 0b00000011 + (4 * ((enemy[0].characteristics & 0b11100000) >> 5)));
 }
 
@@ -354,7 +357,9 @@ void drawEnemyTwo()
 /////////////////////////////////////////////
 void drawObjectChangeable()
 {
-  sprites.drawPlusMask(enemy[2].x + 4, enemy[2].y + 9 + currentRoomY, elements_plus_mask, frame + (4 * ((enemy[2].characteristics & 0b11100000) >> 5)));
+  if (arduboy.everyXFrames(8)) objectFrame++;
+  if (objectFrame > 3) objectFrame = 0;
+  sprites.drawPlusMask(enemy[2].x + 4, enemy[2].y + 9 + currentRoomY, elements_plus_mask, objectFrame + (4 * ((enemy[2].characteristics & 0b11100000) >> 5)));
 }
 
 void drawObjectFixedOne()
@@ -479,40 +484,36 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   //draw door SOUTH
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
   {
-    itemsOrder[36] = 22;                                                            // Lintel
-    itemsOrder[37] = 23;                                                            // Big doorpost
-    itemsOrder[39] = 25;                                                            // Small doorpost
+    itemsOrder[35] = 22;                                                            // Lintel
+    itemsOrder[36] = 23;                                                            // Big doorpost
+    itemsOrder[38] = 25;                                                            // Small doorpost
   }
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 1)) itemsOrder[40] = 26;    // door is closed
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 1)) itemsOrder[39] = 26;    // door is closed
 
 
   //draw door WEST
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
   {
-    itemsOrder[41] = 27;                                                            // Lintel
-    itemsOrder[42] = 28;                                                            // Big doorpost
-    itemsOrder[44] = 30;                                                            // Small doorpost
+    itemsOrder[40] = 27;                                                            // Lintel
+    itemsOrder[41] = 28;                                                            // Big doorpost
+    itemsOrder[43] = 30;                                                            // Small doorpost
   }
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0)) itemsOrder[45] = 31;    // door is closed
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0)) itemsOrder[44] = 31;    // door is closed
 
 
   // check what tile the 5 special floor tiles are on (so that we can determine what order things need to be displayed)
   for (byte i = 3; i < 8; i++)
   {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = i + 9;
-    else itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = 0;
+    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i))itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = i + 9;
   }
 
   // check what tile the object are on (so that we can determine what order things need to be displayed)
   if (bitRead(stageRoom[currentRoom].enemiesActive, 5)) itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + 10] = 11;
-  else itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + 10] = 0;
-
 
   // check what tile the 2 enemies are on (so that we can determine what order things need to be displayed)
   for (byte i = 0; i < 2; i++)
   {
     if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = i + 19;
-    else itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = 0;
   }
 
   // check what tile the player is on (so that we can determine what order things need to be displayed)
@@ -534,10 +535,10 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
           itemsOrder[7] = 21;
           break;
         case SOUTH:
-          itemsOrder[38] = 21;
+          itemsOrder[37] = 21;
           break;
         case WEST:
-          itemsOrder[43] = 21;
+          itemsOrder[42] = 21;
           break;
       }
     }
@@ -546,10 +547,10 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
       switch (player.characteristics & 0b00000011)
       {
         case NORTH:
-          itemsOrder[38] = 21;
+          itemsOrder[37] = 21;
           break;
         case EAST:
-          itemsOrder[43] = 21;
+          itemsOrder[42] = 21;
           break;
         case SOUTH:
           itemsOrder[2] = 21;
@@ -560,6 +561,12 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
       }
     }
   }
+  for (byte i = 0; i < SIZE_OF_ITEMSORDER; i++)
+  {
+    Serial.print(itemsOrder[i]);
+    Serial.print(" : ");
+  }
+  Serial.println();
 }
 
 void updateHUDRoomNumber()

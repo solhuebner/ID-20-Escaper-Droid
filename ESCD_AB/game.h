@@ -21,7 +21,6 @@ void stateGamePlaying()
     {
       currentTile = goToTile(currentRoom, level);
       currentRoomY = setCurrentRoomY(currentTile);
-      Serial.println(currentRoomY);
       currentRoom = goToRoom(currentRoom, level);
       player.x = translateTileToX (currentTile) + offsetXAfterDoor(currentTile);
       player.y = translateTileToY (currentTile) + offsetYAfterDoor(currentTile) + currentRoomY ;
@@ -35,7 +34,6 @@ void stateGamePlaying()
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
   updateHUDRoomNumber();
-  Serial.println(currentRoomY);
   //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
   
 }
