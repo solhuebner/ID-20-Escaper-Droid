@@ -35,7 +35,7 @@ void stateGamePlaying()
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
   updateHUDRoomNumber();
-  //Serial.println(currentRoomY);
+  Serial.println(currentRoomY);
   //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
   
 }

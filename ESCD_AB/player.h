@@ -14,19 +14,19 @@ struct EscaperDroid
 
     void set()
     {
-      characteristics = 0b00000110;   //this byte holds all the Escaperdroids characteristics
+      characteristics = 0b10000110;   //this byte holds all the Escaperdroids characteristics
       //                  ||||||||
       //                  |||||||└->  0  | this 2 bits are used for direction
       //                  ||||||└-->  1  | 00 = NORTH / 01 = EAST / 10 = SOUTH / 11 = WEST
-      //                  |||||└--->  2  The droid is visible               (0 = false / 1 = true)
-      //                  ||||└---->  3  The droid is imune                 (0 = false / 1 = true)
-      //                  |||└----->  4  The droid is dying                 (0 = false / 1 = true)
-      //                  ||└------>  5  The droid is going through a door  (0 = false / 1 = true)
-      //                  |└------->  6  The droid is coming out a door     (0 = false / 1 = true)
-      //                  └-------->  7
+      //                  |||||└--->  2  The droid is visible                   (0 = false / 1 = true)
+      //                  ||||└---->  3  The droid is imune                     (0 = false / 1 = true)
+      //                  |||└----->  4  The droid is dying                     (0 = false / 1 = true)
+      //                  ||└------>  5  The droid is going through a door      (0 = false / 1 = true)
+      //                  |└------->  6  The droid is coming out a door         (0 = false / 1 = true)
+      //                  └-------->  7  the droid's battery meter is visible   (0 = false / 1 = true)
       imuneTimer = 60;
       steps = 0;
-      life = 3;
+      life = 1;
     }
 };
 

@@ -12,9 +12,10 @@
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
 
-byte doorsX[4] = {16, 80, 81, 14};
-byte doorsY[4] = {5, 5, 38, 38};
+//byte doorsX[4] = {16, 80, 81, 14};
+//byte doorsY[4] = {5, 5, 38, 38};
 byte frame = 0;
+byte lifeVisible = true;
 
 byte itemsOrder[SIZE_OF_ITEMSORDER];
 
@@ -157,11 +158,17 @@ int setCurrentRoomY(byte currentTile)
 {
   switch (currentTile)
   {
-    case 2: case 10:
-      return -8;
+    case 2:
+      return -9;
       break;
-    case 22: case 14:
-      return -20;
+    case 10:
+      return -9;
+      break;
+    case 14:
+      return -35;
+      break;
+    case 22:
+      return -35;
       break;
   }
 }
@@ -557,6 +564,7 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
 
 void updateHUDRoomNumber()
 {
+  if (arduboy.everyXFrames(20) && (player.life - 1 < 1)) player.characteristics ^= 0b10000000;
   //draw HUD mask
   for (byte y = 0; y < 8; y++) sprites.drawPlusMask(118, y * 8, hudMask_plus_mask, 0);
 
@@ -590,7 +598,7 @@ void updateHUDRoomNumber()
     }
     sprites.drawSelfMasked(121 + (pad * 4) + (4 * i), 0, numbersThin, digit);
   }
-  sprites.drawSelfMasked(120, 8, hudLife, player.life - 1);
+  if (bitRead(player.characteristics, 7)) sprites.drawSelfMasked(120, 8, hudLife, player.life - 1);
 }
 
 void scoreDraw()
