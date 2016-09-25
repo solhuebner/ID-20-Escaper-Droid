@@ -31,6 +31,7 @@ void stateGamePlaying()
       gameState = STATE_GAME_NEXT_ROOM;
     }
   }
+  
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
   updateHUDRoomNumber();
@@ -60,7 +61,7 @@ void stateGameNextLevel()
 {
   level++;
   currentRoom = 0;
-  currentTile = 2;
+  currentTile = TILE_GAME_STARTS_ON;
   currentRoomY = -14;
   player.x = translateTileToX (currentTile);
   player.y = translateTileToY (currentTile) + currentRoomY ;
@@ -73,9 +74,10 @@ void stateGameNextLevel()
 void stateGamePause()
 {
   for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 0, pauseScreen, i);
-  scoreDraw();
+  //scoreDraw();
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_GAME_PLAYING;
 }
+
 void stateGameOver()
 {
   for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 0, gameOverScreen, i);

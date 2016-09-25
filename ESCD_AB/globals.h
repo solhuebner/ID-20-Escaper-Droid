@@ -33,7 +33,13 @@
 #define SMALL_FONT                   0
 #define BIG_FONT                     1
 
+#define SIZE_OF_ITEMSORDER           46
+#define ITEMS_ORDER_TILES_START      10
+
 #define LEVEL_TO_START_WITH          1
+#define TILE_GAME_STARTS_ON          12
+
+
 
 // globals ///////////////////////////////////////////////////////////////////
 
@@ -46,6 +52,7 @@ byte globalCounter = 0;
 byte level = LEVEL_TO_START_WITH -1;
 unsigned long scorePlayer; 
 
+byte itemsOrder[SIZE_OF_ITEMSORDER];
 byte currentRoom;
 byte currentTile;
 int currentRoomY;

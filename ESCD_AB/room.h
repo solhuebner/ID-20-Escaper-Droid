@@ -6,8 +6,6 @@
 #include "player.h"
 #include "enemies.h"
 
-#define SIZE_OF_ITEMSORDER        46
-
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
 
@@ -15,8 +13,6 @@
 //byte doorsY[4] = {5, 5, 38, 38};
 
 byte lifeVisible = true;
-
-byte itemsOrder[SIZE_OF_ITEMSORDER];
 
 
 struct Room {
@@ -60,13 +56,13 @@ void buildRooms(byte currentLevel)
       { //0b76543210
         bitSet (stageRoom[roomNumber].enemiesActive, 7 - i);    //0b12345678
       }
-      Serial.print(pgm_read_byte(&levels[currentLevel - 1][1 + 5 + i + (13 * roomNumber)]), BIN);
-      Serial.print(" : ");
+      //Serial.print(pgm_read_byte(&levels[currentLevel - 1][1 + 5 + i + (13 * roomNumber)]), BIN);
+      //Serial.print(" : ");
     }
-    Serial.println();
-    Serial.println(stageRoom[roomNumber].enemiesActive, BIN);
+    //Serial.println();
+    //Serial.println(stageRoom[roomNumber].enemiesActive, BIN);
   }
-  Serial.println();
+  //Serial.println();
 }
 
 
@@ -501,25 +497,13 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0)) itemsOrder[44] = 31;    // door is closed
 
 
-  // check what tile the 5 special floor tiles are on (so that we can determine what order things need to be displayed)
-  for (byte i = 3; i < 8; i++)
-  {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i))itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = i + 9;
-  }
-
-  // check what tile the object are on (so that we can determine what order things need to be displayed)
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 5)) itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + 10] = 11;
-
-  // check what tile the 2 enemies are on (so that we can determine what order things need to be displayed)
-  for (byte i = 0; i < 2; i++)
-  {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + 10] = i + 19;
-  }
-
+  //******************************
+  //determine what is on the tiles
+  //******************************
   // check what tile the player is on (so that we can determine what order things need to be displayed)
   if (!bitRead(player.characteristics, 5) && !bitRead(player.characteristics, 6))
   {
-    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + 10] = 21;  //player
+    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + ITEMS_ORDER_TILES_START] = 21;  //player
     //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
   }
   else
@@ -561,12 +545,29 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
       }
     }
   }
+
+  // check what tile the 5 special floor tiles are on (so that we can determine what order things need to be displayed)
+  for (byte i = 3; i < 8; i++)
+  {
+    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i))itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + ITEMS_ORDER_TILES_START] = i + 9;
+  }
+
+  // check what tile the object are on (so that we can determine what order things need to be displayed)
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 5)) itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + ITEMS_ORDER_TILES_START] = 11;
+
+  // check what tile the 2 enemies are on (so that we can determine what order things need to be displayed)
+  for (byte i = 0; i < 2; i++)
+  {
+    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + ITEMS_ORDER_TILES_START] = i + 19;
+  }
+
+  
   for (byte i = 0; i < SIZE_OF_ITEMSORDER; i++)
   {
-    Serial.print(itemsOrder[i]);
-    Serial.print(" : ");
+    //Serial.print(itemsOrder[i]);
+    //Serial.print(" : ");
   }
-  Serial.println();
+  //Serial.println();
 }
 
 void updateHUDRoomNumber()

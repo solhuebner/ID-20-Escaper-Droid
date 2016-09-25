@@ -80,5 +80,71 @@ boolean hitWestBorder(int objectX, int objectY)
   }
 }
 
+boolean tileIsOccupied(byte tileTesting)
+{
+  Serial.print("tile ");
+  Serial.print(tileTesting);
+  Serial.print(" has ");
+  Serial.println(itemsOrder[tileTesting + ITEMS_ORDER_TILES_START]);
+  if ((itemsOrder[tileTesting + ITEMS_ORDER_TILES_START] == 21) || (itemsOrder[tileTesting + ITEMS_ORDER_TILES_START] == 0))
+  {
+    Serial.println("free");
+    Serial.println(" ");
+    return false;
+  }
+  else
+  {
+    Serial.println("not free");
+    Serial.println(" ");
+    return true;
+  }
+}
+
+void whatsOnTile()
+{
+  for (byte i = 0; i < 25; i++)
+  {
+    Serial.print("tile ");
+    Serial.print(i);
+    Serial.print(" has ");
+    Serial.println(itemsOrder[i + ITEMS_ORDER_TILES_START]);
+  }
+  Serial.println(" ");
+}
+
+boolean hitObjects (int objectX, int objectY, byte directionFacing)
+{
+  byte testingTile;
+  switch (directionFacing)
+  {
+    case NORTH:
+      testingTile = tileFromXY(objectX - 8, objectY - 4);
+      Serial.println(testingTile);
+      if (tileIsOccupied(testingTile)) return true;
+      else return false;
+      break;
+    case EAST:
+      testingTile = tileFromXY(objectX + 8, objectY - 4);
+      Serial.println(testingTile);
+      if (tileIsOccupied(testingTile)) return true;
+      else return false;
+      break;
+    case SOUTH:
+      testingTile = tileFromXY(objectX + 6, objectY + 3);
+      Serial.println(testingTile);
+      if (tileIsOccupied(testingTile)) return true;
+      else return false;
+      break;
+    case WEST:
+      testingTile = tileFromXY(objectX - 6, objectY + 3);
+      Serial.println(testingTile);
+      if (tileIsOccupied(testingTile)) return true;
+      else return false;
+      break;
+  }
+}
+
+
+
 
 #endif
