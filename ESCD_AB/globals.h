@@ -55,8 +55,9 @@ unsigned long scorePlayer;
 byte itemsOrder[SIZE_OF_ITEMSORDER];
 byte currentRoom;
 byte currentTile;
+byte currentlyOnTile;
 int currentRoomY;
 byte selectorX = 17;
 byte selectorX2 = 35;
-byte tile;
+
 #endif

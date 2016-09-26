@@ -17,7 +17,10 @@ void checkInputs()
       bitClear(player.characteristics, 1);
       if (!hitNorthBorder(player.x, player.y))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, NORTH));
+        if (hitObjects(player.x, player.y - currentRoomY, NORTH))
+        {
+          
+        }
         else walkThroughDoor();
       }
     }

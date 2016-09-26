@@ -82,35 +82,15 @@ boolean hitWestBorder(int objectX, int objectY)
 
 boolean tileIsOccupied(byte tileTesting)
 {
+  currentlyOnTile = itemsOrder[tileTesting + ITEMS_ORDER_TILES_START];
   Serial.print("tile ");
   Serial.print(tileTesting);
   Serial.print(" has ");
-  Serial.println(itemsOrder[tileTesting + ITEMS_ORDER_TILES_START]);
-  if ((itemsOrder[tileTesting + ITEMS_ORDER_TILES_START] == 21) || (itemsOrder[tileTesting + ITEMS_ORDER_TILES_START] == 0))
-  {
-    Serial.println("free");
-    Serial.println(" ");
-    return false;
-  }
-  else
-  {
-    Serial.println("not free");
-    Serial.println(" ");
-    return true;
-  }
+  Serial.println(currentlyOnTile);
+  if ((currentlyOnTile == 21) || (currentlyOnTile == 0)) return false;
+  else return true;
 }
 
-void whatsOnTile()
-{
-  for (byte i = 0; i < 25; i++)
-  {
-    Serial.print("tile ");
-    Serial.print(i);
-    Serial.print(" has ");
-    Serial.println(itemsOrder[i + ITEMS_ORDER_TILES_START]);
-  }
-  Serial.println(" ");
-}
 
 boolean hitObjects (int objectX, int objectY, byte directionFacing)
 {
