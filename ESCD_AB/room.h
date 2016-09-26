@@ -30,14 +30,14 @@ struct Room {
 
     byte enemiesActive = 0b00000000;
     //                     ||||||||
-    //                     |||||||└->  7 FLOOR  5 EXISTS (0 = false / 1 = true)
-    //                     ||||||└-->  6 FLOOR  4 EXISTS (0 = false / 1 = true)
-    //                     |||||└--->  5 FLOOR  3 EXISTS (0 = false / 1 = true)
-    //                     ||||└---->  4 FLOOR  2 EXISTS (0 = false / 1 = true)
-    //                     |||└----->  3 FLOOR  1 EXISTS (0 = false / 1 = true)
-    //                     ||└------>  2 OBJECT 3 EXISTS (0 = false / 1 = true)
-    //                     |└------->  1 ENEMY  2 EXISTS (0 = false / 1 = true)
-    //                     └-------->  0 ENEMY  1 EXISTS (0 = false / 1 = true)
+    //                     |||||||└->  7 => 0 FLOOR  5 EXISTS (0 = false / 1 = true)
+    //                     ||||||└-->  6 => 1 FLOOR  4 EXISTS (0 = false / 1 = true)
+    //                     |||||└--->  5 => 2 FLOOR  3 EXISTS (0 = false / 1 = true)
+    //                     ||||└---->  4 => 3 FLOOR  2 EXISTS (0 = false / 1 = true)
+    //                     |||└----->  3 => 4 FLOOR  1 EXISTS (0 = false / 1 = true)
+    //                     ||└------>  2 => 5 OBJECT 3 EXISTS (0 = false / 1 = true)
+    //                     |└------->  1 => 6 ENEMY  2 EXISTS (0 = false / 1 = true)
+    //                     └-------->  0 => 7 ENEMY  1 EXISTS (0 = false / 1 = true)
 };
 
 Room stageRoom[MAX_AMOUNT_OF_ROOMS];

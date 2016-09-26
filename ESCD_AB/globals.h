@@ -49,13 +49,14 @@ Sprites sprites(arduboy);
 byte gameState = STATE_MENU_INTRO;   // start the game with the TEAM a.r.g. logo
 byte menuSelection = STATE_MENU_PLAY; // PLAY menu item is pre-selected
 byte globalCounter = 0;
-byte level = LEVEL_TO_START_WITH -1;
-unsigned long scorePlayer; 
+byte level = LEVEL_TO_START_WITH - 1;
+unsigned long scorePlayer;
 
 byte itemsOrder[SIZE_OF_ITEMSORDER];
 byte currentRoom;
 byte currentTile;
-byte currentlyOnTile;
+byte currentlyOnTestingTile;
+byte testingTile;
 int currentRoomY;
 byte selectorX = 17;
 byte selectorX2 = 35;

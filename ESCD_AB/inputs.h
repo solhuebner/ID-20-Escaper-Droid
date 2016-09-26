@@ -19,7 +19,7 @@ void checkInputs()
       {
         if (hitObjects(player.x, player.y - currentRoomY, NORTH))
         {
-          
+          decideOnCollision();
         }
         else walkThroughDoor();
       }
@@ -32,7 +32,10 @@ void checkInputs()
       bitClear(player.characteristics, 1);
       if (!hitEastBorder(player.x, player.y))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, EAST));
+        if (hitObjects(player.x, player.y - currentRoomY, EAST))
+        {
+          decideOnCollision();
+        }
         else walkThroughDoor();
       }
     }
@@ -43,7 +46,10 @@ void checkInputs()
       bitSet(player.characteristics, 1);
       if (!hitSouthBorder(player.x, player.y))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, SOUTH));
+        if (hitObjects(player.x, player.y - currentRoomY, SOUTH))
+        {
+          decideOnCollision();
+        }
         else walkThroughDoor();
       }
     }
@@ -53,7 +59,10 @@ void checkInputs()
       bitSet(player.characteristics, 1);
       if (!hitWestBorder(player.x, player.y))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, WEST));
+        if (hitObjects(player.x, player.y - currentRoomY, WEST))
+        {
+          decideOnCollision();
+        }
         else walkThroughDoor();
       }
     }
