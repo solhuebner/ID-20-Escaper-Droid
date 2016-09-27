@@ -14,8 +14,7 @@ void drawTitleScreen()
 void stateMenuIntro()
 {
   globalCounter++;
-  for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 10, TEAMarg, i);
-  sprites.drawSelfMasked(43, 50, TEAM_argPart5, 0);
+  sprites.drawSelfMasked(34, 4, T_arg, 0);
   if (globalCounter > 180) gameState = STATE_MENU_MAIN;
 }
 
