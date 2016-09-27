@@ -61,4 +61,7 @@ int currentRoomY;
 byte selectorX = 17;
 byte selectorX2 = 35;
 
+byte amountOfTransporters;
+byte amountOfRooms;
+
 #endif

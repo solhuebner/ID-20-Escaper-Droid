@@ -33,10 +33,6 @@
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
 
-//byte doorsX[4] = {16, 80, 81, 14};
-//byte doorsY[4] = {5, 5, 38, 38};
-//byte lifeVisible = true;
-
 
 struct Room {
   public:
@@ -73,14 +69,14 @@ void buildRooms(byte currentLevel)
     //clear all info
     stageRoom[roomNumber].doorsClosedActive = 0;
     stageRoom[roomNumber].enemiesActive = 0;
-    stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + (BYTES_USED_FOR_ROOMS * roomNumber)]);
+    stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentLevel - 1][ROOMS_DATA_START_AT_BYTE + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]);
     for (byte i = 0; i < 8; i++)
     {
-      if (pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + 5 + i + (BYTES_USED_FOR_ROOMS * roomNumber)]))
+      if (pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]))
       { //0b76543210
         bitSet (stageRoom[roomNumber].enemiesActive, 7 - i);    //0b12345678
       }
-      //Serial.print(pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + 5 + i + (BYTES_USED_FOR_ROOMS * roomNumber)]), BIN);
+      //Serial.print(pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]), BIN);
       //Serial.print(" : ");
     }
     //Serial.println();
@@ -131,13 +127,13 @@ void enterRoom(byte roomNumber, byte currentLevel)
     {
       // set all enemies at there position
       // set elements on correct place 0 => 24)
-      byte currentTile = (pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + 5 + i + (BYTES_USED_FOR_ROOMS * roomNumber)])) >> 3;
-      //Serial.println((pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + 5 + i + (BYTES_USED_FOR_ROOMS * roomNumber)])) >> 3);
+      byte currentTile = (pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)])) >> 3;
+      //Serial.println((pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)])) >> 3);
       elements[i].x = translateTileToX(currentTile);
       elements[i].y = translateTileToY(currentTile);
 
       // get kind of sprite (stored in level data) and put it into the 3 most left bits
-      elements[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + 5 + i + (BYTES_USED_FOR_ROOMS * roomNumber)])) & 0b00000111) << 5;
+      elements[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)])) & 0b00000111) << 5;
       //Serial.println(elements[i].characteristics, BIN);
       // we will always set the current direction to SOUTH (0b00000010)
       bitSet (elements[i].characteristics, 1);
@@ -154,7 +150,7 @@ byte goToRoom(byte roomNumber, byte currentLevel)
 {
   // we now which door the player goes through by the direction the droid is facing
   byte door = player.characteristics & 0b00000011;
-  return (pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + 1 + door + (BYTES_USED_FOR_ROOMS * roomNumber)]) >> 2);
+  return (pgm_read_byte(&levels[currentLevel - 1][DOORS_DATA_START_AT_BYTE + door + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]) >> 2);
 };
 
 
@@ -162,7 +158,7 @@ byte goToTile(byte roomNumber, byte currentLevel)
 {
   // we now which door the player goes through by the direction the droid is facing
   byte door = player.characteristics & 0b00000011;
-  byte doorGoingTo = pgm_read_byte(&levels[currentLevel - 1][ROOMS_START_AT_BYTE + 1 + door + (BYTES_USED_FOR_ROOMS * roomNumber)]) & 0b00000011;
+  byte doorGoingTo = pgm_read_byte(&levels[currentLevel - 1][DOORS_DATA_START_AT_BYTE + door + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]) & 0b00000011;
   switch (doorGoingTo)
   {
     case NORTH:
