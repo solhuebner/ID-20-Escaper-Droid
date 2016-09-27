@@ -6,13 +6,36 @@
 #include "player.h"
 #include "enemies.h"
 
+#define NORTH_LINTEL                  11
+#define NORTH_BIG_POST                12
+#define NORTH_SMALL_POST              13
+#define NORTH_DOOR_CLOSSED            14
+
+#define EAST_LINTEL                   15
+#define EAST_BIG_POST                 16
+#define EAST_SMALL_POST               17
+#define EAST_DOOR_CLOSSED             18
+
+#define SOUTH_LINTEL                  19
+#define SOUTH_BIG_POST                20
+#define SOUTH_SMALL_POST              21
+#define SOUTH_DOOR_CLOSSED            22
+
+#define WEST_LINTEL                   23
+#define WEST_BIG_POST                 24
+#define WEST_SMALL_POST               25
+#define WEST_DOOR_CLOSSED             26
+
+#define EMPTY_PLACE                   27
+
+
+
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
 
 //byte doorsX[4] = {16, 80, 81, 14};
 //byte doorsY[4] = {5, 5, 38, 38};
-
-byte lifeVisible = true;
+//byte lifeVisible = true;
 
 
 struct Room {
@@ -119,6 +142,7 @@ void enterRoom(byte roomNumber, byte currentLevel)
       bitSet (enemy[i].characteristics, 1);
 
       //set the enemy hurt/movable/pickup
+
     }
   }
   //Serial.println();
@@ -397,45 +421,40 @@ void drawBulletEnemy()
 typedef void (*FunctionPointer) ();
 const FunctionPointer PROGMEM  updateElementsInRoom[] =
 {
-  drawNothing,                      // 0
+  drawEnemyOne,                     // 0
+  drawEnemyTwo,                     // 1
+  drawObjectChangeable,             // 2
+  drawObjectFixedOne,               // 3
+  drawObjectFixedTwo,               // 4
+  drawObjectFixedThree,             // 5
+  drawObjectFixedFour,              // 6
+  drawObjectFixedFive,              // 7
+  drawBulletEnemy,                  // 8
 
-  drawDoorLintelNorth,              // 1
-  drawDoorPostBigNorth,             // 2
-  drawPlayer,                       // 3
-  drawDoorPostSmallNorth,           // 4
-  drawDoorClossedNorth,             // 5
+  drawPlayer,                       // 9
+  drawBulletPlayer,                 // 10
 
-  drawDoorLintelEast,               // 6
-  drawDoorPostBigEast,              // 7
-  drawPlayer,                       // 8
-  drawDoorPostSmallEast,            // 9
-  drawDoorClossedEast,              // 10
+  drawDoorLintelNorth,              // 11
+  drawDoorPostBigNorth,             // 12
+  drawDoorPostSmallNorth,           // 13
+  drawDoorClossedNorth,             // 14
 
-  drawObjectChangeable,             // 11
-  drawObjectFixedOne,               // 12
-  drawObjectFixedTwo,               // 13
-  drawObjectFixedThree,             // 14
-  drawObjectFixedFour,              // 15
-  drawObjectFixedFive,              // 16
-  drawBulletPlayer,                 // 17
-  drawBulletEnemy,                  // 18
+  drawDoorLintelEast,               // 15
+  drawDoorPostBigEast,              // 16
+  drawDoorPostSmallEast,            // 17
+  drawDoorClossedEast,              // 18
 
-  drawEnemyOne,                     // 19
-  drawEnemyTwo,                     // 20
+  drawDoorLintelSouth,              // 19
+  drawDoorPostBigSouth,             // 20
+  drawDoorPostSmallSouth,           // 21
+  drawDoorClossedSouth,             // 22
 
-  drawPlayer,                       // 21
+  drawDoorLintelWest,               // 23
+  drawDoorPostBigWest,              // 24
+  drawDoorPostSmallWest,            // 25
+  drawDoorClossedWest,              // 26
 
-  drawDoorLintelSouth,              // 22
-  drawDoorPostBigSouth,             // 23
-  drawPlayer,                       // 24
-  drawDoorPostSmallSouth,           // 25
-  drawDoorClossedSouth,             // 26
-
-  drawDoorLintelWest,               // 27
-  drawDoorPostBigWest,              // 28
-  drawPlayer,                       // 29
-  drawDoorPostSmallWest,            // 30
-  drawDoorClossedWest,              // 31
+  drawNothing,                      // 27
 };
 
 
@@ -455,46 +474,46 @@ void updateRoom()
 void checkOrderOfObjects(byte roomNumber, byte currentLevel)
 {
   // clear out the itemsOrder
-  memset(itemsOrder, 0, SIZE_OF_ITEMSORDER);
+  memset(itemsOrder, EMPTY_PLACE, SIZE_OF_ITEMSORDER);
 
   //draw door NORTH
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 7))
   {
-    itemsOrder[0] = 1;                                                            // Lintel
-    itemsOrder[1] = 2;                                                            // Big doorpost
-    itemsOrder[3] = 4;                                                            // Small doorpost
+    itemsOrder[0] = NORTH_LINTEL;
+    itemsOrder[1] = NORTH_BIG_POST;
+    itemsOrder[3] = NORTH_SMALL_POST;
   }
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 3)) itemsOrder[4] = 5;    // door is closed
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 3)) itemsOrder[4] = NORTH_DOOR_CLOSSED;
 
 
   //draw door EAST
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 6))
   {
-    itemsOrder[5] = 6;                                                            // Lintel
-    itemsOrder[6] = 7;                                                            // Big doorpost
-    itemsOrder[8] = 9;                                                            // Small doorpost
+    itemsOrder[5] = EAST_LINTEL;
+    itemsOrder[6] = EAST_BIG_POST;
+    itemsOrder[8] = EAST_SMALL_POST;
   }
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 2)) itemsOrder[9] = 10;   // door is closed
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 2)) itemsOrder[9] = EAST_DOOR_CLOSSED;
 
 
   //draw door SOUTH
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 5))
   {
-    itemsOrder[35] = 22;                                                            // Lintel
-    itemsOrder[36] = 23;                                                            // Big doorpost
-    itemsOrder[38] = 25;                                                            // Small doorpost
+    itemsOrder[35] = SOUTH_LINTEL;
+    itemsOrder[36] = SOUTH_BIG_POST;
+    itemsOrder[38] = SOUTH_SMALL_POST;
   }
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 1)) itemsOrder[39] = 26;    // door is closed
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 1)) itemsOrder[39] = SOUTH_DOOR_CLOSSED;
 
 
   //draw door WEST
   if (bitRead(stageRoom[currentRoom].doorsClosedActive, 4))
   {
-    itemsOrder[40] = 27;                                                            // Lintel
-    itemsOrder[41] = 28;                                                            // Big doorpost
-    itemsOrder[43] = 30;                                                            // Small doorpost
+    itemsOrder[40] = WEST_LINTEL;
+    itemsOrder[41] = WEST_BIG_POST;
+    itemsOrder[43] = WEST_SMALL_POST;
   }
-  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0)) itemsOrder[44] = 31;    // door is closed
+  if (bitRead(stageRoom[currentRoom].doorsClosedActive, 0)) itemsOrder[44] = WEST_DOOR_CLOSSED;
 
 
   //******************************
@@ -503,7 +522,7 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   // check what tile the player is on (so that we can determine what order things need to be displayed)
   if (!bitRead(player.characteristics, 5) && !bitRead(player.characteristics, 6))
   {
-    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + ITEMS_ORDER_TILES_START] = 21;  //player
+    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + ITEMS_ORDER_TILES_START] = PLAYER_DROID;
     //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
   }
   else
@@ -513,16 +532,16 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
       switch (player.characteristics & 0b00000011)
       {
         case NORTH:
-          itemsOrder[2] = 21;
+          itemsOrder[2] = PLAYER_DROID;
           break;
         case EAST:
-          itemsOrder[7] = 21;
+          itemsOrder[7] = PLAYER_DROID;
           break;
         case SOUTH:
-          itemsOrder[37] = 21;
+          itemsOrder[37] = PLAYER_DROID;
           break;
         case WEST:
-          itemsOrder[42] = 21;
+          itemsOrder[42] = PLAYER_DROID;
           break;
       }
     }
@@ -531,16 +550,16 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
       switch (player.characteristics & 0b00000011)
       {
         case NORTH:
-          itemsOrder[37] = 21;
+          itemsOrder[37] = PLAYER_DROID;
           break;
         case EAST:
-          itemsOrder[42] = 21;
+          itemsOrder[42] = PLAYER_DROID;
           break;
         case SOUTH:
-          itemsOrder[2] = 21;
+          itemsOrder[2] = PLAYER_DROID;
           break;
         case WEST:
-          itemsOrder[7] = 21;
+          itemsOrder[7] = PLAYER_DROID;
           break;
       }
     }
@@ -549,19 +568,19 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   // check what tile the 5 special floor tiles are on (so that we can determine what order things need to be displayed)
   for (byte i = 3; i < 8; i++)
   {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i))itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + ITEMS_ORDER_TILES_START] = i + 9;
+    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i))itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + ITEMS_ORDER_TILES_START] = i;
   }
 
   // check what tile the object are on (so that we can determine what order things need to be displayed)
-  if (bitRead(stageRoom[currentRoom].enemiesActive, 5)) itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + ITEMS_ORDER_TILES_START] = 11;
+  if (bitRead(stageRoom[currentRoom].enemiesActive, 5)) itemsOrder[tileFromXY(enemy[2].x, enemy[2].y) + ITEMS_ORDER_TILES_START] = 2;
 
   // check what tile the 2 enemies are on (so that we can determine what order things need to be displayed)
   for (byte i = 0; i < 2; i++)
   {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + ITEMS_ORDER_TILES_START] = i + 19;
+    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(enemy[i].x, enemy[i].y) + ITEMS_ORDER_TILES_START] = i;
   }
 
-  
+
   for (byte i = 0; i < SIZE_OF_ITEMSORDER; i++)
   {
     //Serial.print(itemsOrder[i]);

@@ -3,6 +3,9 @@
 
 #include "globals.h"
 
+#define PLAYER_DROID            9
+#define PLAYER_BULLET           10
+
 struct EscaperDroid
 {
   public:

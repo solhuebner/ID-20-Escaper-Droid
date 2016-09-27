@@ -4,14 +4,15 @@
 #include "globals.h"
 #include "room.h"
 
-#define ENEMY_ONE         0
-#define ENEMY_TWO         1
-#define OBJECT_THREE      11
-#define FLOOR_ONE         3
-#define FLOOR_TWO         4
-#define FLOOR_THREE       5
-#define FLOOR_FOUR        6
-#define FLOOR_FIVE        7
+#define ENEMY_ONE             0
+#define ENEMY_TWO             1
+#define OBJECT_THREE          2
+#define FLOOR_ONE             3
+#define FLOOR_TWO             4
+#define FLOOR_THREE           5
+#define FLOOR_FOUR            6
+#define FLOOR_FIVE            7
+#define ENEMY_BULLET          8
 
 
 byte objectFrame = 0;
@@ -31,7 +32,6 @@ struct Enemy
     //                       ||└------>  \
     //                       |└------->   | these 3 bits are used to determine kind of sprite to use
     //                       └-------->  /
-
 };
 
 Enemy enemy[8];

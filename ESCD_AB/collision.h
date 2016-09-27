@@ -87,7 +87,7 @@ boolean tileIsOccupied(byte tileTesting)
   Serial.print(tileTesting);
   Serial.print(" has ");
   Serial.println(currentlyOnTestingTile);
-  if ((currentlyOnTestingTile == 21) || (currentlyOnTestingTile == 0)) return false;
+  if ((currentlyOnTestingTile == PLAYER_DROID) || (currentlyOnTestingTile == EMPTY_PLACE)) return false;
   else return true;
 }
 
@@ -123,6 +123,13 @@ boolean hitObjects (int objectX, int objectY, byte directionFacing)
   }
 }
 
+void checkObjectTypeAndAct()
+{
+  
+  bitClear(stageRoom[currentRoom].enemiesActive, 5);
+}
+
+
 void decideOnCollision()
 {
   Serial.print("testing : ");
@@ -135,7 +142,7 @@ void decideOnCollision()
       break;
     case OBJECT_THREE:
       Serial.print(" switching");
-      bitClear(stageRoom[currentRoom].enemiesActive, 5);
+      checkObjectTypeAndAct();
       //itemsOrder[testingTile + ITEMS_ORDER_TILES_START] = 0;
       break;
     case FLOOR_ONE:
