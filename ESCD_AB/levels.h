@@ -68,15 +68,27 @@
 //
 //
 //
-//                     ||||||||
-//                     |||||||└->  7 => 0 FLOOR  5 EXISTS (0 = false / 1 = true)
-//                     ||||||└-->  6 => 1 FLOOR  4 EXISTS (0 = false / 1 = true)
-//                     |||||└--->  5 => 2 FLOOR  3 EXISTS (0 = false / 1 = true)
-//                     ||||└---->  4 => 3 FLOOR  2 EXISTS (0 = false / 1 = true)
-//                     |||└----->  3 => 4 FLOOR  1 EXISTS (0 = false / 1 = true)
-//                     ||└------>  2 => 5 OBJECT 3 EXISTS (0 = false / 1 = true)
-//                     |└------->  1 => 6 ENEMY  2 EXISTS (0 = false / 1 = true)
-//                     └-------->  0 => 7 ENEMY  1 EXISTS (0 = false / 1 = true)
+//    ROOM      ELEMENT
+//0b00000001, 0b00000001,
+//  ||||||||    ||||||||
+//  ||||||||    |||||||└->  7 => 0 FLOOR  5 INFLUENCED (0 = false / 1 = true)
+//  ||||||||    ||||||└-->  6 => 1 FLOOR  4 INFLUENCED (0 = false / 1 = true)
+//  ||||||||    |||||└--->  5 => 2 FLOOR  3 INFLUENCED (0 = false / 1 = true)
+//  ||||||||    ||||└---->  4 => 3 FLOOR  2 INFLUENCED (0 = false / 1 = true)
+//  ||||||||    |||└----->  3 => 4 FLOOR  1 INFLUENCED (0 = false / 1 = true)
+//  ||||||||    ||└------>  2 => 5 OBJECT 3 INFLUENCED (0 = false / 1 = true)
+//  ||||||||    |└------->  1 => 6 ENEMY  2 INFLUENCED (0 = false / 1 = true)
+//  ||||||||    └-------->  0 => 7 ENEMY  1 INFLUENCED (0 = false / 1 = true)
+//  ||||||||
+//  ||||||||
+//  |||||||└->  \
+//  ||||||└-->   |
+//  |||||└--->   |  these 6 bits are used for the roomnumber in which the element is influenced
+//  ||||└---->   |
+//  |||└----->   | 
+//  ||└------>  /
+//  |└------->
+//  └-------->
 
 
 const unsigned char PROGMEM level01[] =

@@ -64,7 +64,7 @@ Room stageRoom[MAX_AMOUNT_OF_ROOMS];
 
 void buildRooms(byte currentLevel)
 {
-  for (byte roomNumber = 0; roomNumber < pgm_read_byte(&levels[currentLevel - 1][0]); roomNumber++)
+  for (byte roomNumber = 0; roomNumber < pgm_read_byte(&levels[currentLevel - 1][AMOUNT_OF_ROOMS_AT_BYTE]); roomNumber++)
   {
     //clear all info
     stageRoom[roomNumber].doorsClosedActive = 0;
@@ -156,7 +156,7 @@ byte goToRoom(byte roomNumber, byte currentLevel)
 
 byte goToTile(byte roomNumber, byte currentLevel)
 {
-  // we now which door the player goes through by the direction the droid is facing
+  // we know which door the player goes through by the direction the droid is facing
   byte door = player.characteristics & 0b00000011;
   byte doorGoingTo = pgm_read_byte(&levels[currentLevel - 1][DOORS_DATA_START_AT_BYTE + door + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]) & 0b00000011;
   switch (doorGoingTo)
@@ -524,69 +524,41 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   }
   else
   {
-    if (bitRead(player.characteristics, 5))
+    switch (player.characteristics & 0b00000011)
     {
-      switch (player.characteristics & 0b00000011)
-      {
-        case NORTH:
-          itemsOrder[2] = PLAYER_DROID;
-          break;
-        case EAST:
-          itemsOrder[7] = PLAYER_DROID;
-          break;
-        case SOUTH:
-          itemsOrder[37] = PLAYER_DROID;
-          break;
-        case WEST:
-          itemsOrder[42] = PLAYER_DROID;
-          break;
-      }
-    }
-    if (bitRead(player.characteristics, 6))
-    {
-      switch (player.characteristics & 0b00000011)
-      {
-        case NORTH:
-          itemsOrder[37] = PLAYER_DROID;
-          break;
-        case EAST:
-          itemsOrder[42] = PLAYER_DROID;
-          break;
-        case SOUTH:
-          itemsOrder[2] = PLAYER_DROID;
-          break;
-        case WEST:
-          itemsOrder[7] = PLAYER_DROID;
-          break;
-      }
+      case NORTH:
+        if (bitRead(player.characteristics, 5)) itemsOrder[2] = PLAYER_DROID;
+        if (bitRead(player.characteristics, 6)) itemsOrder[37] = PLAYER_DROID;
+        break;
+      case EAST:
+        if (bitRead(player.characteristics, 5)) itemsOrder[7] = PLAYER_DROID;
+        if (bitRead(player.characteristics, 6)) itemsOrder[37] = PLAYER_DROID;
+        break;
+      case SOUTH:
+        if (bitRead(player.characteristics, 5)) itemsOrder[37] = PLAYER_DROID;
+        if (bitRead(player.characteristics, 6)) itemsOrder[2] = PLAYER_DROID;
+        break;
+      case WEST:
+        if (bitRead(player.characteristics, 5)) itemsOrder[42] = PLAYER_DROID;
+        if (bitRead(player.characteristics, 6)) itemsOrder[7] = PLAYER_DROID;
+        break;
     }
   }
 
   // check what tile the 5 special floor tiles are on (so that we can determine what order things need to be displayed)
-  for (byte i = 3; i < 8; i++)
+  // check what tile the 8 elements are on  (so that we can determine what order things need to be displayed)
+  for (byte i = 0; i < 8; i++)
   {
     if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i))itemsOrder[tileFromXY(elements[i].x, elements[i].y) + ITEMS_ORDER_TILES_START] = i;
   }
-
-  // check what tile the object is on (so that we can determine what order things need to be displayed)
-  for (byte i = 2; i < 3; i++)
-  {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(elements[i].x, elements[i].y) + ITEMS_ORDER_TILES_START] = i;
-  }
-
-  // check what tile the 2 enemies are on (so that we can determine what order things need to be displayed)
-  for (byte i = 0; i < 2; i++)
-  {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i)) itemsOrder[tileFromXY(elements[i].x, elements[i].y) + ITEMS_ORDER_TILES_START] = i;
-  }
-
-
-  for (byte i = 0; i < SIZE_OF_ITEMSORDER; i++)
-  {
-    //Serial.print(itemsOrder[i]);
-    //Serial.print(" : ");
-  }
-  //Serial.println();
+  /*
+    for (byte i = 0; i < SIZE_OF_ITEMSORDER; i++)
+    {
+    Serial.print(itemsOrder[i]);
+    Serial.print(" : ");
+    }
+    Serial.println();
+  */
 }
 
 void updateHUDRoomNumber()
@@ -659,7 +631,6 @@ void scoreDraw()
       if (digit == z) j = z;
     }
     sprites.drawSelfMasked(43 + (pad * 6) + (6 * i), 54, numbersBig, digit);
-
   }
 }
 
