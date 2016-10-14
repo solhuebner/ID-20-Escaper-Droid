@@ -9,7 +9,6 @@
 void checkInputs()
 {
   if (arduboy.everyXFrames(2))
-
   {
     if (arduboy.pressed(UP_BUTTON))
     {
@@ -26,7 +25,7 @@ void checkInputs()
     }
 
 
-    if (arduboy.pressed(RIGHT_BUTTON))
+    else if (arduboy.pressed(RIGHT_BUTTON))
     {
       bitSet(player.characteristics, 0);
       bitClear(player.characteristics, 1);
@@ -40,7 +39,7 @@ void checkInputs()
       }
     }
 
-    if (arduboy.pressed(DOWN_BUTTON))
+    else if (arduboy.pressed(DOWN_BUTTON))
     {
       bitClear(player.characteristics, 0);
       bitSet(player.characteristics, 1);
@@ -53,7 +52,8 @@ void checkInputs()
         else walkThroughDoor();
       }
     }
-    if (arduboy.pressed(LEFT_BUTTON))
+    
+    else if (arduboy.pressed(LEFT_BUTTON))
     {
       bitSet(player.characteristics, 0);
       bitSet(player.characteristics, 1);

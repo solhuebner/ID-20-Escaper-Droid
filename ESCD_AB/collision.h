@@ -125,8 +125,7 @@ boolean hitObjects (int objectX, int objectY, byte directionFacing)
 
 void checkObjectTypeAndAct()
 {
-  
-  bitClear(stageRoom[currentRoom].enemiesActive, 5);
+  if (((elements[2].characteristics & 0b11100000) >> 5) < TELEPORT) bitClear(stageRoom[currentRoom].enemiesActive, 5);
 }
 
 

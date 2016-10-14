@@ -376,7 +376,7 @@ void drawObjectChangeable()
 {
   if (arduboy.everyXFrames(8)) objectFrame++;
   if (objectFrame > 3) objectFrame = 0;
-  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + 9 + currentRoomY, elements_plus_mask, objectFrame + (4 * ((elements[2].characteristics & 0b11100000) >> 5)));
+  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, objectFrame + (4 * ((elements[2].characteristics & 0b11100000) >> 5)));
 }
 
 void drawObjectFixedOne()
