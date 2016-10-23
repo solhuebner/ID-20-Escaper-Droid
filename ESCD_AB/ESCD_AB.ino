@@ -15,6 +15,7 @@
 #define GAME_ID 20
 
 #include "Arglib.h"
+#include "ATMlib.h"
 #include "globals.h"
 #include "menu.h"
 #include "game.h"
@@ -22,6 +23,7 @@
 #include "elements.h"
 #include "inputs.h"
 #include "player.h"
+#include "song.h"
 
 
 typedef void (*FunctionPointer) ();
@@ -45,6 +47,12 @@ void setup()
 {
   arduboy.start();
   arduboy.setFrameRate(60);
+  //Initializes ATMSynth and samplerate
+  ATM.begin(15625);
+  // Begin playback of song.
+  ATM.play(music);
+  // Lower the tempo ever so slightly
+  ATM.tempo(50);
   Serial.begin(9600);
 }
 
