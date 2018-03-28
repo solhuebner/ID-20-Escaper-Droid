@@ -1,94 +1,174 @@
 #ifndef SONG_H
 #define SONG_H
 
-#define Song const uint8_t PROGMEM
+#include "atm_cmd_constants.h"
 
-Song music[] = {                // total song in bytes = 61
-  //                            // setup bytes 21
-  8,                            // Number of tracks
-  0, 0,                         // Address of track 0
-  4, 0,                         // Address of track 1
-  8, 0,                         // Address of track 2
-  13, 0,                        // Address of track 3
-  21, 0,                        // Address of track 4
-  42, 0,                        // Address of track 5
-  56, 0,                        // Address of track 6
-  66, 0,                        // Address of track 7
-  2,                            // Channel 0 entry track (PULSE)
-  1,                            // Channel 1 entry track (SQUARE)
-  0,                            // Channel 2 entry track (TRIANGLE)
-  3,                            // Channel 3 entry track (NOISE)
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(a) (sizeof (a) / sizeof ((a)[0]))
+#endif
 
-  //"Track 0"                   // ticks = 64, bytes = 5
-  0x40, 0,                      // FX: SET VOLUME: volume = 0
-  0x9F + 63,                    // DELAY: 63 ticks
-  0xFE,                         // RETURN
+#ifndef NUM_PATTERNS
+#define NUM_PATTERNS(struct_) (ARRAY_SIZE( ((struct_ *)0)->patterns_offset))
+#endif
 
-  //"Track 1"                   // ticks = 2048, bytes = 4
-  0xFD, 3, 4,                   // REPEAT: count = 4 - track = 4  (4 * 512 ticks)
-  0xFE,                         // RETURN
+#ifndef DEFINE_PATTERN
+#define DEFINE_PATTERN(pattern_id, values) const uint8_t pattern_id[] = values;
+#endif
 
-  //"Track 2"                   // ticks = 2048, bytes = 5
-  0xFD, 31, 6,                  // REPEAT: count = 32 - track = 5  (32 * 64 ticks)
-  0x00,                         // NOTE OFF
-  0xFE,                         // RETURN
+/* pattern (channel) / bytes = 46*/
+#define pattern0_data { \
+    ATM_CMD_M_SET_VOLUME(127), \
+    ATM_CMD_M_SLIDE_VOL_ADV_ON(-16, 64+1), \
+    ATM_CMD_M_SET_TEMPO(24), \
+    ATM_CMD_M_CALL_REPEAT(4, 7), \
+    ATM_CMD_M_SET_TRANSPOSITION(-2), \
+    ATM_CMD_M_CALL(4), \
+    ATM_CMD_M_SET_TRANSPOSITION(-4), \
+    ATM_CMD_M_CALL(4), \
+    ATM_CMD_M_CALL_REPEAT(4, 6), \
+    ATM_CMD_M_SET_TRANSPOSITION(-5), \
+    ATM_CMD_M_CALL(4), \
+    ATM_CMD_M_SET_TRANSPOSITION(-7), \
+    ATM_CMD_M_CALL(4), \
+    ATM_CMD_M_CALL_REPEAT(4, 7), \
+    ATM_CMD_M_SET_TRANSPOSITION(-2), \
+    ATM_CMD_M_CALL(4), \
+    ATM_CMD_M_CALL_REPEAT(4, 3), \
+    ATM_CMD_M_SET_TRANSPOSITION(-1), \
+    ATM_CMD_M_CALL(4), \
+    ATM_CMD_M_CALL_REPEAT(4, 3), \
+    ATM_CMD_M_SET_LOOP_PATTERN(0), \
+    ATM_CMD_I_STOP, \
+  }
+DEFINE_PATTERN(pattern0_array, pattern0_data);
 
-  //"Track 3"                   // ticks = 2048, bytes = 7
-  0xFD, 7,  0,                  // REPEAT: count = 8 - track = 8 (8 *64 ticks)
-  0x9F + 8,                     // DELAY: 4 ticks
-  0xFD, 23, 7,                  // REPEAT: count = 24 - track = 8 (24 *64 ticks)
-  0xFE,                         // RETURN
+/* pattern (channel) / bytes = 15*/
+#define pattern1_data { \
+    ATM_CMD_M_SET_VOLUME(48), \
+    ATM_CMD_M_ARPEGGIO_ON(192, 64), \
+    ATM_CMD_M_CALL_REPEAT(5, 2), \
+    ATM_CMD_M_CALL(6), \
+    ATM_CMD_M_CALL(7), \
+    ATM_CMD_M_SET_LOOP_PATTERN(1), \
+    ATM_CMD_I_STOP, \
+  }
+DEFINE_PATTERN(pattern1_array, pattern1_data);
 
-  //"Track 4"                   // ticks = 512, bytes = 21
-  0xFD, 1, 5,                   // REPEAT: count = 2 - track = 5  (2 * 64 ticks)
-  0x4B, 3,                      // FX: ADD TRANSPOSITION: notes = 3
-  0xFD, 1, 5,                   // REPEAT: count = 2 - track = 5  (2 * 64 ticks)
-  0x4B, -1,                     // FX: ADD TRANSPOSITION: notes = 3
-  0xFD, 1, 5,                   // REPEAT: count = 2 - track = 5  (2 * 64 ticks)
-  0x4B, 3,                      // FX: ADD TRANSPOSITION: notes = 3
-  0xFD, 1, 5,                   // REPEAT: count = 2 - track = 5  (2 * 64 ticks)
-  0x4B, -5,                     // FX: ADD TRANSPOSITION: notes = 3
-  0xFE,                         // RETURN
+/* pattern (channel) / bytes = 1*/
+#define pattern2_data { \
+    ATM_CMD_I_STOP, \
+  }
+DEFINE_PATTERN(pattern2_array, pattern2_data);
 
-  //"Track 5"                   // ticks = 64, bytes = 14
-  0x00 + 49,                    // NOTE ON: note = 49 (delay 1 tick)
-  0x40, 63,                     // FX: SET VOLUME: volume = 63
-  0x41, -16,                    // FX: VOLUME SLIDE ON: steps = -8
-  0x9F + 16,                    // DELAY: 16 ticks
-  0x40, 16,                     // FX: SET VOLUME: volume = 16
-  0x41, -4,                     // FX: VOLUME SLIDE ON: steps = -4
-  0x9F + 4,                     // DELAY: 4 ticks
-  0x43,                         // FX: VOLUME SLIDE OFF
-  0x9F + 43,                    // DELAY: 43 ticks
-  0xFE,                         // RETURN
+/* pattern (channel) / bytes = 1*/
+#define pattern3_data { \
+    ATM_CMD_I_STOP, \
+  }
+DEFINE_PATTERN(pattern3_array, pattern3_data);
 
-  //"track 6"                   // ticks = 64, bytes = 10
-  0x00 + 13,                    // NOTE ON: note = 23 (delay 1 tick)
-  0x40, 32,                     // FX: SET VOLUME: volume = 32
-  0x4E, 1, 0x00 + 0x00 + 30,    // SET TREMOLO OR VIBRATO: depth = 16 / retrig = OFF / TorV = TREMOLO / rate = 3
-  0x9F + 62,                    // DELAY: 62 ticks
-  0x4F,                         // TREMOLO OR VIBRATO OFF
-  0x9F + 1,                     // DELAY: 1 ticks
-  0xFE,                         // RETURN
+/* pattern (tune) / "Pattern 1" / bytes = 3*/
+#define pattern4_data { \
+    ATM_CMD_I_NOTE_A2, \
+    ATM_CMD_M_DELAY_TICKS(8), \
+    ATM_CMD_I_RETURN, \
+  }
+DEFINE_PATTERN(pattern4_array, pattern4_data);
 
-  //"track 7"                   // ticks = 64, bytes = 20
-  0x40, 32,                     // FX: SET VOLUME: volume = 32
-  0x9F + 1,                     // DELAY: ticks = 1
-  0x40,  0,                     // FX: SET VOLUME: volume = 0
-  0x9F + 15,                    // DELAY: ticks = 15
+/* pattern (tune) / "Pattern 2" / bytes = 9*/
+#define pattern5_data { \
+    ATM_CMD_M_SLIDE_VOL_ADV_ON(-2, 64+1), \
+    ATM_CMD_I_NOTE_A4, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_I_NOTE_C5, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_I_NOTE_D5, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_M_SLIDE_VOL_ON(-2), \
+    ATM_CMD_I_NOTE_E5, \
+    ATM_CMD_M_DELAY_TICKS_1(52), \
+    ATM_CMD_I_RETURN, \
+  }
+DEFINE_PATTERN(pattern5_array, pattern5_data);
 
-  0x40, 32,                     // FX: SET VOLUME: volume = 32
-  0x9F + 1,                     // DELAY: ticks = 1
-  0x40,  0,                     // FX: SET VOLUME: volume = 0
-  0x9F + 15,                    // DELAY: ticks = 15
+/* pattern (tune) / "Pattern 3" / bytes = 11*/
+#define pattern6_data { \
+    ATM_CMD_M_SLIDE_VOL_ADV_ON(-2, 64+1), \
+    ATM_CMD_I_NOTE_A4, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_I_NOTE_C5, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_I_NOTE_D5, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_M_SLIDE_VOL_ON(-2), \
+    ATM_CMD_I_NOTE_E5, \
+    ATM_CMD_M_DELAY_TICKS_1(44), \
+    ATM_CMD_M_SLIDE_VOL_ADV_ON(-2, 64+1), \
+    ATM_CMD_I_NOTE_D5, \
+    ATM_CMD_M_DELAY_TICKS(8), \
+    ATM_CMD_I_RETURN, \
+  }
+DEFINE_PATTERN(pattern6_array, pattern6_data);
 
-  0x40, 32,                     // FX: SET VOLUME: volume = 32
-  0x41, -2,                     // FX: VOLUME SLIDE ON: steps = -2
-  0x9F + 16,                    // DELAY: ticks = 16
-  0x43,                         // FX: VOLUME SLIDE OFF
-  0x9F + 16,                    // DELAY: ticks = 16
-  0xFE,                         // RETURN
+/* pattern (tune) / "Pattern 4" / bytes = 11*/
+#define pattern7_data { \
+    ATM_CMD_M_SLIDE_VOL_ON(-2), \
+    ATM_CMD_I_NOTE_C5, \
+    ATM_CMD_M_DELAY_TICKS(24), \
+    ATM_CMD_M_SLIDE_VOL_ADV_ON(-2, 64+1), \
+    ATM_CMD_I_NOTE_D5, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_I_NOTE_C5, \
+    ATM_CMD_M_DELAY_TICKS(4), \
+    ATM_CMD_I_NOTE_B4, \
+    ATM_CMD_M_DELAY_TICKS(16), \
+    ATM_CMD_I_NOTE_G4_, \
+    ATM_CMD_M_DELAY_TICKS(16), \
+    ATM_CMD_I_RETURN, \
+  }
+DEFINE_PATTERN(pattern7_array, pattern7_data);
 
+const PROGMEM struct score_data {
+  uint8_t fmt;
+  uint8_t num_patterns;
+  uint16_t patterns_offset[8];
+  uint8_t num_channels;
+  uint8_t start_patterns[4];
+  uint8_t pattern0[sizeof(pattern0_array)];
+  uint8_t pattern1[sizeof(pattern1_array)];
+  uint8_t pattern2[sizeof(pattern2_array)];
+  uint8_t pattern3[sizeof(pattern3_array)];
+  uint8_t pattern4[sizeof(pattern4_array)];
+  uint8_t pattern5[sizeof(pattern5_array)];
+  uint8_t pattern6[sizeof(pattern6_array)];
+  uint8_t pattern7[sizeof(pattern7_array)];
+} score = {
+  .fmt = ATM_SCORE_FMT_FULL,
+  .num_patterns = NUM_PATTERNS(struct score_data),
+  .patterns_offset = {
+    offsetof(struct score_data, pattern0),
+    offsetof(struct score_data, pattern1),
+    offsetof(struct score_data, pattern2),
+    offsetof(struct score_data, pattern3),
+    offsetof(struct score_data, pattern4),
+    offsetof(struct score_data, pattern5),
+    offsetof(struct score_data, pattern6),
+    offsetof(struct score_data, pattern7),
+  },
+  .num_channels = 4,
+  .start_patterns = {
+    0x00,                         // Channel 0 entry pattern (SQUARE)
+    0x01,                         // Channel 1 entry pattern (SQUARE)
+    0x02,                         // Channel 2 entry pattern (SQUARE)
+    0x03,                         // Channel 3 entry pattern (NOISE)
+  },
+  .pattern0 = pattern0_data,
+  .pattern1 = pattern1_data,
+  .pattern2 = pattern2_data,
+  .pattern3 = pattern3_data,
+  .pattern4 = pattern4_data,
+  .pattern5 = pattern5_data,
+  .pattern6 = pattern6_data,
+  .pattern7 = pattern7_data,
 };
 
 #endif

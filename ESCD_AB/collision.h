@@ -142,6 +142,7 @@ void decideOnCollision()
     case OBJECT_THREE:
       Serial.print(" switching");
       checkObjectTypeAndAct();
+      atm_synth_play_sfx_track(OSC_CH_TWO, (const uint8_t*)&sfx0, &sfx_state);
       //itemsOrder[testingTile + ITEMS_ORDER_TILES_START] = 0;
       break;
     case FLOOR_ONE:

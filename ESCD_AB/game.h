@@ -73,14 +73,14 @@ void stateGameNextLevel()
 
 void stateGamePause()
 {
-  for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 0, pauseScreen, i);
+  sprites.drawSelfMasked(0, 0, pauseScreen, 0);
   //scoreDraw();
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_GAME_PLAYING;
 }
 
 void stateGameOver()
 {
-  for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 0, gameOverScreen, i);
+  sprites.drawSelfMasked(0, 0, gameOverScreen, 0);
   scoreDraw();
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }

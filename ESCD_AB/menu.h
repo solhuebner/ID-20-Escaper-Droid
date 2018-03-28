@@ -6,8 +6,7 @@
 
 void drawTitleScreen()
 {
-  byte test;
-  for (byte i = 0; i < 4; i++) sprites.drawSelfMasked(32 * i, 0, titleScreen, i);
+  sprites.drawSelfMasked(0, 0, titleScreen, 0);
   sprites.drawSelfMasked(17, 56, mainMenus, gameState / 5);
 }
 
@@ -38,7 +37,7 @@ void stateMenuMain()
 
 void stateMenuHelp()
 {
-  for (byte i = 0; i < 2; i++) sprites.drawSelfMasked(32, 32 * i, qrcode, i);
+  sprites.drawSelfMasked(32, 0, qrcode, 0);
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 

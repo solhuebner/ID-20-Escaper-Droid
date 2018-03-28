@@ -1,8 +1,12 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "Arglib.h"
+#include <Arduino.h>
+#include <Arduboy2.h>
+#include <ATMlib2.h>
+#include <Sprites.h>
 #include "bitmaps.h"
+#include "sfx.h"
 
 // constants /////////////////////////////////////////////////////////////////
 
@@ -43,8 +47,12 @@
 
 // globals ///////////////////////////////////////////////////////////////////
 
-Arduboy arduboy;
-Sprites sprites(arduboy);
+Arduboy2Base arduboy;
+Sprites sprites;
+
+ATMsynth ATM;
+
+struct atm_sfx_state sfx_state;
 
 byte gameState = STATE_MENU_INTRO;   // start the game with the TEAM a.r.g. logo
 byte menuSelection = STATE_MENU_PLAY; // PLAY menu item is pre-selected

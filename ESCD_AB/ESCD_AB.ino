@@ -14,8 +14,6 @@
 //determine the game
 #define GAME_ID 20
 
-#include "Arglib.h"
-#include "ATMlib.h"
 #include "globals.h"
 #include "menu.h"
 #include "game.h"
@@ -45,21 +43,18 @@ const FunctionPointer PROGMEM  mainGameLoop[] =
 
 void setup()
 {
-  arduboy.start();
+  arduboy.boot();
+  arduboy.audio.begin();
   arduboy.setFrameRate(60);
-  //Initializes ATMSynth and samplerate
-  ATM.begin(15625);
-  // Begin playback of song.
-  ATM.play(music);
-  // Lower the tempo ever so slightly
-  ATM.tempo(50);
+  atm_synth_setup();
+  atm_synth_play_score((const uint8_t*)&score);
   Serial.begin(9600);
 }
 
 void loop() {
   if (!(arduboy.nextFrame())) return;
-  arduboy.poll();
-  arduboy.clearDisplay();
+  arduboy.pollButtons();
+  arduboy.clear();
   ((FunctionPointer) pgm_read_word (&mainGameLoop[gameState]))();
   arduboy.display();
 };
