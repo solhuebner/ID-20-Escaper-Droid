@@ -14,6 +14,7 @@ struct EscaperDroid
     byte characteristics;      
     byte imuneTimer;
     byte steps;
+    byte assets;
 
     void set()
     {
@@ -29,7 +30,17 @@ struct EscaperDroid
       //                  └-------->  7  the droid's battery meter is visible   (0 = false / 1 = true)
       imuneTimer = 60;
       steps = 0;
-      life = 1;
+      life = 2;
+      assets = 0b00000000;
+      //         ||||||||
+      //         |||||||└->  0  \ 
+      //         ||||||└-->  1   | this 3 bits are used for amount of shots
+      //         |||||└--->  2  /
+      //         ||||└---->  3  \
+      //         |||└----->  4   | this 2 bits are used for amount of white cards
+      //         ||└------>  5  \
+      //         |└------->  6   | this 2 bites are used for the amount of black cards
+      //         └-------->  7   reserved
     }
 };
 

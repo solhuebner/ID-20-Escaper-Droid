@@ -46,9 +46,7 @@ void setup()
   arduboy.boot();
   arduboy.audio.begin();
   arduboy.setFrameRate(60);
-  atm_synth_setup();
-  atm_synth_play_score((const uint8_t*)&score);
-  Serial.begin(9600);
+  //Serial.begin(9600);
 }
 
 void loop() {

@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <Arduboy2.h>
-#include <ATMlib2.h>
 #include <Sprites.h>
 #include "bitmaps.h"
 #include "sfx.h"
@@ -34,8 +33,9 @@
 #define NORTH_SOUTH                  0
 #define EAST_WEST                    1
 
-#define SMALL_FONT                   0
-#define BIG_FONT                     1
+#define BIG_FONT                     0
+#define THIN_FONT                    1
+#define SMALL_FONT                   2
 
 #define SIZE_OF_ITEMSORDER           46
 #define ITEMS_ORDER_TILES_START      10
@@ -49,10 +49,6 @@
 
 Arduboy2Base arduboy;
 Sprites sprites;
-
-ATMsynth ATM;
-
-struct atm_sfx_state sfx_state;
 
 byte gameState = STATE_MENU_INTRO;   // start the game with the TEAM a.r.g. logo
 byte menuSelection = STATE_MENU_PLAY; // PLAY menu item is pre-selected

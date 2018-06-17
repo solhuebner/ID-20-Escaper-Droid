@@ -83,10 +83,10 @@ boolean hitWestBorder(int objectX, int objectY)
 boolean tileIsOccupied(byte tileTesting)
 {
   currentlyOnTestingTile = itemsOrder[tileTesting + ITEMS_ORDER_TILES_START];
-  Serial.print("tile ");
-  Serial.print(tileTesting);
-  Serial.print(" has ");
-  Serial.println(currentlyOnTestingTile);
+  //Serial.print("tile ");
+  //Serial.print(tileTesting);
+  //Serial.print(" has ");
+  //Serial.println(currentlyOnTestingTile);
   if ((currentlyOnTestingTile == PLAYER_DROID) || (currentlyOnTestingTile == EMPTY_PLACE)) return false;
   else return true;
 }
@@ -98,41 +98,87 @@ boolean hitObjects (int objectX, int objectY, byte directionFacing)
   {
     case NORTH:
       testingTile = tileFromXY(objectX - 8, objectY - 4);
-      Serial.println(testingTile);
+      //Serial.println(testingTile);
       if (tileIsOccupied(testingTile)) return true;
       else return false;
       break;
     case EAST:
       testingTile = tileFromXY(objectX + 8, objectY - 4);
-      Serial.println(testingTile);
+      //Serial.println(testingTile);
       if (tileIsOccupied(testingTile)) return true;
       else return false;
       break;
     case SOUTH:
       testingTile = tileFromXY(objectX + 6, objectY + 3);
-      Serial.println(testingTile);
+      //Serial.println(testingTile);
       if (tileIsOccupied(testingTile)) return true;
       else return false;
       break;
     case WEST:
       testingTile = tileFromXY(objectX - 6, objectY + 3);
-      Serial.println(testingTile);
+      //Serial.println(testingTile);
       if (tileIsOccupied(testingTile)) return true;
       else return false;
       break;
   }
 }
 
+void clearElement()
+{
+  bitClear(stageRoom[currentRoom].elementsActive, 5);
+}
+
 void checkObjectTypeAndAct()
 {
-  if (((elements[2].characteristics & 0b11100000) >> 5) < TELEPORT) bitClear(stageRoom[currentRoom].enemiesActive, 5);
+  switch ((elements[2].characteristics & 0b11100000) >> 5)
+  {
+    case PICKUP_BLACK_CARD: // opens level door
+      if ((player.assets & 0b01100000) < 0b01100000)
+      {
+        clearElement();
+        player.assets += 0b00100000;
+        scorePlayer += SCORE_BLACK_CARD;
+      }
+      break;
+    case PICKUP_WHITE_CARD: // opens normal door
+      if ((player.assets & 0b00011000) < 0b00011000)
+      {
+        clearElement();
+        player.assets += 0b00001000;
+        scorePlayer += SCORE_WHITE_CARD;
+      }
+      break;
+    case PICKUP_BATTERY:    // 1 extra life
+      if (player.life < 3)
+      {
+        player.life++;
+      }
+      clearElement();
+      scorePlayer += SCORE_LIFE;
+      break;
+    case PICKUP_BULLET:     // 1 shot
+      if ((player.assets & 0b00000111) < 0b00000111)
+      {
+        player.assets++;
+        clearElement();
+        scorePlayer += SCORE_BULLET;
+      }
+      break;
+    case PICKUP_CHIP:       // extra points
+      clearElement();
+      scorePlayer += SCORE_CHIP;
+      break;
+    case TELEPORT:          // TELEPORT
+      break;
+  }
+
 }
 
 
 void decideOnCollision()
 {
-  Serial.print("testing : ");
-  Serial.print(testingTile);
+  //Serial.print("testing : ");
+  //Serial.print(testingTile);
   switch (currentlyOnTestingTile)
   {
     case ENEMY_ONE:
@@ -140,9 +186,8 @@ void decideOnCollision()
     case ENEMY_TWO:
       break;
     case OBJECT_THREE:
-      Serial.print(" switching");
+      //Serial.print(" switching");
       checkObjectTypeAndAct();
-      atm_synth_play_sfx_track(OSC_CH_TWO, (const uint8_t*)&sfx0, &sfx_state);
       //itemsOrder[testingTile + ITEMS_ORDER_TILES_START] = 0;
       break;
     case FLOOR_ONE:

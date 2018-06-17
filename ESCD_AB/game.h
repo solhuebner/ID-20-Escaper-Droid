@@ -6,7 +6,7 @@
 
 void stateMenuPlay()
 {
-  scorePlayer = 1234567;
+  scorePlayer = 0;
   player.set();
   gameState = STATE_GAME_NEXT_LEVEL;
 }
@@ -34,7 +34,7 @@ void stateGamePlaying()
   
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
-  updateHUDRoomNumber();
+  drawHUD();
   //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
   
 }
@@ -54,7 +54,7 @@ void stateGameNextRoom()
   }
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
-  updateHUDRoomNumber();
+  drawHUD();
 }
 
 void stateGameNextLevel()
@@ -74,14 +74,14 @@ void stateGameNextLevel()
 void stateGamePause()
 {
   sprites.drawSelfMasked(0, 0, pauseScreen, 0);
-  //scoreDraw();
+  drawNumbers(43,54,scorePlayer, BIG_FONT);
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_GAME_PLAYING;
 }
 
 void stateGameOver()
 {
   sprites.drawSelfMasked(0, 0, gameOverScreen, 0);
-  scoreDraw();
+  drawNumbers(43,54,scorePlayer, BIG_FONT);
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 

@@ -47,7 +47,7 @@ struct Room {
     //                         |└------->  6  DOOR EAST  EXISTS    (0 = false / 1 = true)
     //                         └-------->  7  DOOR NORTH EXISTS    (0 = false / 1 = true)
 
-    byte enemiesActive = 0b00000000;
+    byte elementsActive = 0b00000000;
     //                     ||||||||
     //                     |||||||└->  7 => 0 FLOOR  5 EXISTS (0 = false / 1 = true)
     //                     ||||||└-->  6 => 1 FLOOR  4 EXISTS (0 = false / 1 = true)
@@ -68,19 +68,19 @@ void buildRooms(byte currentLevel)
   {
     //clear all info
     stageRoom[roomNumber].doorsClosedActive = 0;
-    stageRoom[roomNumber].enemiesActive = 0;
+    stageRoom[roomNumber].elementsActive = 0;
     stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentLevel - 1][ROOMS_DATA_START_AT_BYTE + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]);
     for (byte i = 0; i < 8; i++)
     {
       if (pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]))
       { //0b76543210
-        bitSet (stageRoom[roomNumber].enemiesActive, 7 - i);    //0b12345678
+        bitSet (stageRoom[roomNumber].elementsActive, 7 - i);    //0b12345678
       }
       //Serial.print(pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]), BIN);
       //Serial.print(" : ");
     }
     //Serial.println();
-    //Serial.println(stageRoom[roomNumber].enemiesActive, BIN);
+    //Serial.println(stageRoom[roomNumber].elementsActive, BIN);
   }
   //Serial.println();
 }
@@ -122,8 +122,8 @@ void enterRoom(byte roomNumber, byte currentLevel)
     // first clear the characteristics
     elements[i].characteristics = 0;
 
-    //Serial.print(bitRead (stageRoom[roomNumber].enemiesActive, 7 - i));
-    if (bitRead (stageRoom[roomNumber].enemiesActive, 7 - i))
+    //Serial.print(bitRead (stageRoom[roomNumber].elementsActive, 7 - i));
+    if (bitRead (stageRoom[roomNumber].elementsActive, 7 - i))
     {
       // set all enemies at there position
       // set elements on correct place 0 => 24)
@@ -374,10 +374,12 @@ void drawEnemyTwo()
 /////////////////////////////////////////////
 void drawObjectChangeable()
 {
-  if (arduboy.everyXFrames(8)) objectFrame++;
-  if (objectFrame > 3) objectFrame = 0;
-  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, objectFrame + (4 * ((elements[2].characteristics & 0b11100000) >> 5)));
+  if (arduboy.everyXFrames(8)) objectFrame = (++objectFrame) % 6;
+  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, objectFrame + (6 * ((elements[2].characteristics & 0b11100000) >> 5)));
 }
+
+///////////////// DRAW SPECIAL FLOOR ////////
+/////////////////////////////////////////////
 
 void drawObjectFixedOne()
 {
@@ -549,7 +551,7 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   // check what tile the 8 elements are on  (so that we can determine what order things need to be displayed)
   for (byte i = 0; i < 8; i++)
   {
-    if (bitRead(stageRoom[currentRoom].enemiesActive, 7 - i))itemsOrder[tileFromXY(elements[i].x, elements[i].y) + ITEMS_ORDER_TILES_START] = i;
+    if (bitRead(stageRoom[currentRoom].elementsActive, 7 - i))itemsOrder[tileFromXY(elements[i].x, elements[i].y) + ITEMS_ORDER_TILES_START] = i;
   }
   /*
     for (byte i = 0; i < SIZE_OF_ITEMSORDER; i++)
@@ -561,27 +563,22 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   */
 }
 
-void updateHUDRoomNumber()
+void drawNumbers(byte x, byte y, unsigned long numbers, byte fontType)
 {
-  if (arduboy.everyXFrames(20) && (player.life - 1 < 1)) player.characteristics ^= 0b10000000;
-  //draw HUD mask
-  for (byte y = 0; y < 8; y++) sprites.drawPlusMask(118, y * 8, hudMask_plus_mask, 0);
-
-  //draw room number
-  char buf[2];
-  itoa(currentRoom, buf, 10);
+  char buf[10];
+  ltoa(numbers, buf, 10);
   //itoa(arduboy.cpuLoad(), buf, 10);
   char charLen = strlen(buf);
-  char pad = 2 - charLen;
+  char pad = (7 - (5 * fontType)) - charLen;
 
-  //draw 0 padding
-  if (pad > 0) sprites.drawSelfMasked(121, 0, numbersThin, 0);
+  if (fontType == BIG_FONT) for (byte i = 0; i < pad; i++) sprites.drawSelfMasked(43 + (6 * i), 54, numbersBig, 0);
+  else if (pad > 0) sprites.drawSelfMasked(121, 0, numbersThin, 0);
+
 
   //draw remaining digits
   for (byte i = 0; i < charLen; i++)
   {
     char digit = buf[i];
-    byte j;
     if (digit <= 48)
     {
       digit = 0;
@@ -590,48 +587,44 @@ void updateHUDRoomNumber()
       digit -= 48;
       if (digit > 9) digit = 0;
     }
-
-    for (byte z = 0; z < 10; z++)
+    switch (fontType)
     {
-      if (digit == z) j = z;
+      case BIG_FONT:
+        sprites.drawSelfMasked(x + (pad * 6) + (6 * i), 54, numbersBig, digit);
+        break;
+      case THIN_FONT:
+        sprites.drawSelfMasked(x + (pad * 4) + (4 * i), y, numbersThin, digit);
+        break;
+      case SMALL_FONT:
+        sprites.drawSelfMasked(x + (4 * i), y, numbersSmall, digit);
     }
-    sprites.drawSelfMasked(121 + (pad * 4) + (4 * i), 0, numbersThin, digit);
+
   }
-  if (bitRead(player.characteristics, 7)) sprites.drawSelfMasked(120, 8, hudLife, player.life - 1);
 }
 
-void scoreDraw()
+void drawHUD()
 {
-  char buf[7];
-  ltoa(scorePlayer, buf, 10);
-  char charLen = strlen(buf);
-  char pad = 7 - charLen;
+  //draw HUD mask
+  for (byte y = 0; y < 8; y++) sprites.drawPlusMask(118, y * 8, hudMask_plus_mask, 0);
 
-  //draw 0 padding
-  for (byte i = 0; i < pad; i++)
-  {
-    sprites.drawSelfMasked(43 + (6 * i), 54, numbersBig, 0);
-  }
+  //draw room number
+  drawNumbers(121, 0, currentRoom, THIN_FONT);
 
-  for (byte i = 0; i < charLen; i++)
-  {
-    char digit = buf[i];
-    byte j;
-    if (digit <= 48)
-    {
-      digit = 0;
-    }
-    else {
-      digit -= 48;
-      if (digit > 9) digit = 0;
-    }
+  //draw amount of bullets
+  drawNumbers(123, 23, (player.assets & 0b00000111), SMALL_FONT);
+  sprites.drawSelfMasked(122, 29, hudBullet, 0);
 
-    for (byte z = 0; z < 10; z++)
-    {
-      if (digit == z) j = z;
-    }
-    sprites.drawSelfMasked(43 + (pad * 6) + (6 * i), 54, numbersBig, digit);
-  }
+  //draw amount of white cards
+  drawNumbers(123, 38, (player.assets & 0b00011000) >> 3, SMALL_FONT);
+  sprites.drawSelfMasked(121, 44, hudWhiteCard, 0);
+
+  //draw amount of black cards
+  drawNumbers(123, 53, (player.assets & 0b01100000) >> 5, SMALL_FONT);
+  sprites.drawSelfMasked(121, 59, hudBlackCard, 0);
+
+  //draw life
+  if (arduboy.everyXFrames(20) && (player.life - 1 < 1)) player.characteristics ^= 0b10000000;
+  if (bitRead(player.characteristics, 7)) sprites.drawSelfMasked(122, 11, hudLife, player.life - 1);
 }
 
 
