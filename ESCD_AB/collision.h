@@ -130,7 +130,7 @@ void clearElement()
 
 void checkObjectTypeAndAct()
 {
-  switch ((elements[2].characteristics & 0b11100000) >> 5)
+  switch ((elements[2].characteristics & 0b00000111))
   {
     case PICKUP_BLACK_CARD: // opens level door
       if ((player.assets & 0b01100000) < 0b01100000)

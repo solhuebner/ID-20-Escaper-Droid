@@ -133,11 +133,11 @@ void enterRoom(byte roomNumber, byte currentLevel)
       elements[i].y = translateTileToY(currentTile);
 
       // get kind of sprite (stored in level data) and put it into the 3 most left bits
-      elements[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)])) & 0b00000111) << 5;
+      elements[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)])) & 0b00000111);
       //Serial.println(elements[i].characteristics, BIN);
-      // we will always set the current direction to SOUTH (0b00000010)
-      bitSet (elements[i].characteristics, 1);
-
+      
+      // we will always set the current direction to SOUTH (0b00010000)
+      bitSet (elements[i].characteristics, 4);
       //set the elements hurt/movable/pickup
 
     }
@@ -360,12 +360,12 @@ void drawDoorClossedWest()
 /////////////////////////////////////////////
 void drawEnemyOne()
 {
-  sprites.drawPlusMask(elements[0].x, elements[0].y + currentRoomY, enemies_plus_mask, elements[0].characteristics & 0b00000011 + (4 * ((elements[0].characteristics & 0b11100000) >> 5)));
+  sprites.drawPlusMask(elements[0].x, elements[0].y + currentRoomY, enemies_plus_mask, ((elements[0].characteristics & 0b00011000) >> 3) + (4*(elements[0].characteristics & 0b00000111))); 
 }
 
 void drawEnemyTwo()
 {
-  sprites.drawPlusMask(elements[1].x, elements[1].y + currentRoomY, enemies_plus_mask, elements[1].characteristics & 0b00000011 + (4 * ((elements[1].characteristics & 0b11100000) >> 5)));
+  sprites.drawPlusMask(elements[1].x, elements[1].y + currentRoomY, enemies_plus_mask, ((elements[1].characteristics & 0b00011000) >> 3) + (4*(elements[1].characteristics & 0b00000111)));
 }
 
 
@@ -375,7 +375,7 @@ void drawEnemyTwo()
 void drawObjectChangeable()
 {
   if (arduboy.everyXFrames(8)) objectFrame = (++objectFrame) % 6;
-  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, objectFrame + (6 * ((elements[2].characteristics & 0b11100000) >> 5)));
+  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, objectFrame + (6 * ((elements[2].characteristics & 0b00000111))));
 }
 
 ///////////////// DRAW SPECIAL FLOOR ////////
@@ -383,27 +383,27 @@ void drawObjectChangeable()
 
 void drawObjectFixedOne()
 {
-  sprites.drawPlusMask(elements[3].x - 3, elements[3].y + currentRoomY + 9, floorTile_plus_mask, ((elements[3].characteristics & 0b11100000) >> 5));
+  sprites.drawPlusMask(elements[3].x - 3, elements[3].y + currentRoomY + 9, floorTile_plus_mask, ((elements[3].characteristics & 0b00000111)));
 }
 
 void drawObjectFixedTwo()
 {
-  sprites.drawPlusMask(elements[4].x - 3, elements[4].y + currentRoomY + 9, floorTile_plus_mask, ((elements[4].characteristics & 0b11100000) >> 5));
+  sprites.drawPlusMask(elements[4].x - 3, elements[4].y + currentRoomY + 9, floorTile_plus_mask, ((elements[4].characteristics & 0b00000111)));
 }
 
 void drawObjectFixedThree()
 {
-  sprites.drawPlusMask(elements[5].x - 3, elements[5].y + currentRoomY + 9, floorTile_plus_mask, ((elements[5].characteristics & 0b11100000) >> 5));
+  sprites.drawPlusMask(elements[5].x - 3, elements[5].y + currentRoomY + 9, floorTile_plus_mask, ((elements[5].characteristics & 0b00000111)));
 }
 
 void drawObjectFixedFour()
 {
-  sprites.drawPlusMask(elements[6].x - 3, elements[6].y + currentRoomY + 9, floorTile_plus_mask, ((elements[6].characteristics & 0b11100000) >> 5));
+  sprites.drawPlusMask(elements[6].x - 3, elements[6].y + currentRoomY + 9, floorTile_plus_mask, ((elements[6].characteristics & 0b00000111)));
 }
 
 void drawObjectFixedFive()
 {
-  sprites.drawPlusMask(elements[7].x - 3, elements[7].y + currentRoomY + 9, floorTile_plus_mask, ((elements[7].characteristics & 0b11100000) >> 5));
+  sprites.drawPlusMask(elements[7].x - 3, elements[7].y + currentRoomY + 9, floorTile_plus_mask, ((elements[7].characteristics & 0b00000111)));
 }
 
 void drawBulletPlayer()
