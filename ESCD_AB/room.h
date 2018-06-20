@@ -137,7 +137,9 @@ void enterRoom(byte roomNumber, byte currentLevel)
       //Serial.println(elements[i].characteristics, BIN);
       
       // we will always set the current direction to SOUTH (0b00010000)
-      bitSet (elements[i].characteristics, 4);
+      bitSet (elements[i].characteristics, 3);
+      //bitSet (elements[i].characteristics, 4);
+      
       //set the elements hurt/movable/pickup
 
     }

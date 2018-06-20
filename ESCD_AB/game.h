@@ -31,7 +31,7 @@ void stateGamePlaying()
       gameState = STATE_GAME_NEXT_ROOM;
     }
   }
-  
+  updateEnemies();
   checkOrderOfObjects(currentRoom, level);
   updateRoom();
   drawHUD();

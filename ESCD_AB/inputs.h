@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "player.h"
 #include "collision.h"
+#include "elements.h"
 
 
 void checkInputs()
@@ -14,7 +15,7 @@ void checkInputs()
     {
       bitClear(player.characteristics, 0);
       bitClear(player.characteristics, 1);
-      if (!hitNorthBorder(player.x, player.y))
+      if (!checkborderHit(player.x, player.y, NORTH))
       {
         if (hitObjects(player.x, player.y - currentRoomY, NORTH))
         {
@@ -29,7 +30,7 @@ void checkInputs()
     {
       bitSet(player.characteristics, 0);
       bitClear(player.characteristics, 1);
-      if (!hitEastBorder(player.x, player.y))
+      if (!checkborderHit(player.x, player.y, EAST))
       {
         if (hitObjects(player.x, player.y - currentRoomY, EAST))
         {
@@ -43,7 +44,7 @@ void checkInputs()
     {
       bitClear(player.characteristics, 0);
       bitSet(player.characteristics, 1);
-      if (!hitSouthBorder(player.x, player.y))
+      if (!checkborderHit(player.x, player.y, SOUTH))
       {
         if (hitObjects(player.x, player.y - currentRoomY, SOUTH))
         {
@@ -52,12 +53,12 @@ void checkInputs()
         else walkThroughDoor();
       }
     }
-    
+
     else if (arduboy.pressed(LEFT_BUTTON))
     {
       bitSet(player.characteristics, 0);
       bitSet(player.characteristics, 1);
-      if (!hitWestBorder(player.x, player.y))
+      if (!checkborderHit(player.x, player.y, WEST))
       {
         if (hitObjects(player.x, player.y - currentRoomY, WEST))
         {
@@ -72,6 +73,88 @@ void checkInputs()
   if (arduboy.justPressed(B_BUTTON))
   {
 
+  }
+}
+
+
+
+////Moving the Enemies /////
+////////////////////////////
+void moveEnemies(int enemyX, int enemyY, byte directionFacing, bool enemy)
+{
+  if (arduboy.everyXFrames(4))
+  {
+    switch (directionFacing)
+    {
+      case NORTH:
+        elements[enemy].y -= 1;
+        elements[enemy].x -= 2;
+        break;
+      case EAST:
+        elements[enemy].y -= 1;
+        elements[enemy].x += 2;
+        break;
+      case SOUTH:
+        elements[enemy].y += 1;
+        elements[enemy].x += 2;
+        break;
+      case WEST:
+        elements[enemy].y += 1;
+        elements[enemy].x -= 2;
+        break;
+    }
+  }
+}
+
+
+void updateEnemies()
+{
+  switch (elements[0].characteristics & 0b00000111)
+  {
+    case ENEMY_BOX:
+      if (!hitBorders(elements[0].x, elements[0].y, (elements[0].characteristics & 0b00011000) >> 3, ENEMY))
+      {
+        moveEnemies(elements[0].x, elements[0].y, (elements[0].characteristics & 0b00011000) >> 3, 0);
+      }
+      else
+      {
+        byte test = ((elements[0].characteristics & 0b00011000) >> 3) + 1;
+        if (test > 3) test = 0;
+        elements[0].characteristics = (elements[0].characteristics & 0b11100111) + (test << 3);
+        /*
+          switch ((elements[0].characteristics & 0b00011000) >> 3)
+          {
+          case NORTH:
+            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00010000; // 2
+            break;
+          case EAST:
+            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00011000; // 3
+            break;
+          case SOUTH:
+            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00000000; // 0
+            break;
+          case WEST:
+            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00001000; // 1
+            break;
+          }
+          /*
+          byte test = (elements[0].characteristics & 0b00011000) >> 3;
+          for (byte i = 0; i< 2; i++)
+          {
+          test++;
+          if (test > 3)
+          test = 0;
+          }
+          elements[0].characteristics = (elements[0].characteristics & 0b11100111) + (test << 3);
+        */
+      }
+      break;
+    case ENEMY_SPHERE:
+      break;
+    case ENEMY_JUMPER:
+      break;
+    case ENEMY_MOVER:
+      break;
   }
 }
 

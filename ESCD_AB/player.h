@@ -6,6 +6,8 @@
 #define PLAYER_DROID            9
 #define PLAYER_BULLET           10
 
+#define PLAYER                  1
+
 struct EscaperDroid
 {
   public:
@@ -45,7 +47,6 @@ struct EscaperDroid
 };
 
 EscaperDroid player;
-
 
 void walkThroughDoor()
 {

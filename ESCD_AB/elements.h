@@ -2,7 +2,6 @@
 #define ELEMENTS_H
 
 #include "globals.h"
-#include "room.h"
 
 #define ENEMY_ONE                 0
 #define ENEMY_TWO                 1
@@ -14,8 +13,15 @@
 #define FLOOR_FIVE                7
 #define ENEMY_BULLET              8
 
+#define ENEMY                     0
+
 #define ENEMY_MOVING              0
 #define ENEMY_SHOTING             1
+
+#define ENEMY_BOX                 0
+#define ENEMY_SPHERE              1
+#define ENEMY_JUMPER              2
+#define ENEMY_MOVER               3
 
 #define PICKUP_BLACK_CARD         0     // opens level door
 #define PICKUP_WHITE_CARD         1     // opens normal door
@@ -46,7 +52,7 @@ struct Element
     byte characteristics = 0b00000000;   //this byte holds all the enemies characteristics
     //                       ||||||||
     //                       |||||||└->  0 \
-    //                       ||||||└-->  1  | these 3 bits are used to determine kind of sprite to use 
+    //                       ||||||└-->  1  | these 3 bits are used to determine kind of sprite to use
     //                       |||||└--->  2 /
     //                       ||||└---->  3 \  these 2 bits are used for direction
     //                       |||└----->  4 /  00 = NORTH / 01 = EAST / 10 = SOUTH / 11 = WEST
@@ -56,5 +62,6 @@ struct Element
 };
 
 Element elements[8];
+
 
 #endif
