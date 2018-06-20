@@ -109,52 +109,57 @@ void moveEnemies(int enemyX, int enemyY, byte directionFacing, bool enemy)
 
 void updateEnemies()
 {
-  switch (elements[0].characteristics & 0b00000111)
+  byte i = 0;
+  while (i < 2)
   {
-    case ENEMY_BOX:
-      if (!hitBorders(elements[0].x, elements[0].y, (elements[0].characteristics & 0b00011000) >> 3, ENEMY))
-      {
-        moveEnemies(elements[0].x, elements[0].y, (elements[0].characteristics & 0b00011000) >> 3, 0);
-      }
-      else
-      {
-        byte test = ((elements[0].characteristics & 0b00011000) >> 3) + 1;
-        if (test > 3) test = 0;
-        elements[0].characteristics = (elements[0].characteristics & 0b11100111) + (test << 3);
-        /*
-          switch ((elements[0].characteristics & 0b00011000) >> 3)
-          {
-          case NORTH:
-            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00010000; // 2
-            break;
-          case EAST:
-            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00011000; // 3
-            break;
-          case SOUTH:
-            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00000000; // 0
-            break;
-          case WEST:
-            elements[0].characteristics = (elements[0].characteristics & 0b11100111) + 0b00001000; // 1
-            break;
-          }
+    switch (elements[i].characteristics & 0b00000111)
+    {
+      case ENEMY_BOX:
+        if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY))
+        {
+          moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
+        }
+        else
+        {
+          byte test = ((elements[i].characteristics & 0b00011000) >> 3) + 1;
+          if (test > 3) test = 0;
+          elements[i].characteristics = (elements[i].characteristics & 0b11100111) + (test << 3);
           /*
-          byte test = (elements[0].characteristics & 0b00011000) >> 3;
-          for (byte i = 0; i< 2; i++)
-          {
-          test++;
-          if (test > 3)
-          test = 0;
-          }
-          elements[0].characteristics = (elements[0].characteristics & 0b11100111) + (test << 3);
-        */
-      }
-      break;
-    case ENEMY_SPHERE:
-      break;
-    case ENEMY_JUMPER:
-      break;
-    case ENEMY_MOVER:
-      break;
+            switch ((elements[i].characteristics & 0b00011000) >> 3)
+            {
+            case NORTH:
+              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00010000; // 2
+              break;
+            case EAST:
+              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00011000; // 3
+              break;
+            case SOUTH:
+              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00000000; // 0
+              break;
+            case WEST:
+              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00001000; // 1
+              break;
+            }
+            /*
+            byte test = (elements[i].characteristics & 0b00011000) >> 3;
+            for (byte i = 0; i< 2; i++)
+            {
+            test++;
+            if (test > 3)
+            test = 0;
+            }
+            elements[i].characteristics = (elements[i].characteristics & 0b11100111) + (test << 3);
+          */
+        }
+        break;
+      case ENEMY_SPHERE:
+        break;
+      case ENEMY_JUMPER:
+        break;
+      case ENEMY_MOVER:
+        break;
+    }
+    i++;
   }
 }
 

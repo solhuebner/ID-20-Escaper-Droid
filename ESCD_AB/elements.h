@@ -43,8 +43,6 @@
 #define SCORE_CHIP                200
 
 
-byte objectFrame = 0;
-
 struct Element
 {
   public:
@@ -59,6 +57,7 @@ struct Element
     //                       ||└------>  5 this enemy/object can hurt you         (0 = false / 1 = true)
     //                       |└------->  6 this object is movable by player       (0 = false / 1 = true)
     //                       └-------->  7 this object can be picked up by player (0 = false / 1 = true)
+    byte frame;
 };
 
 Element elements[8];

@@ -135,11 +135,11 @@ void enterRoom(byte roomNumber, byte currentLevel)
       // get kind of sprite (stored in level data) and put it into the 3 most left bits
       elements[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)])) & 0b00000111);
       //Serial.println(elements[i].characteristics, BIN);
-      
+
       // we will always set the current direction to SOUTH (0b00010000)
       bitSet (elements[i].characteristics, 3);
       //bitSet (elements[i].characteristics, 4);
-      
+
       //set the elements hurt/movable/pickup
 
     }
@@ -360,14 +360,32 @@ void drawDoorClossedWest()
 
 ///////////////// DRAW ENEMIES //////////////
 /////////////////////////////////////////////
+void drawEnemies(bool enemyOneOrTwo)
+{
+  if (arduboy.everyXFrames(8)) elements[enemyOneOrTwo].frame = (++elements[enemyOneOrTwo].frame) % 4;
+  switch (elements[enemyOneOrTwo].characteristics & 0b00000111)
+  {
+    case ENEMY_BOX:
+      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, ((elements[enemyOneOrTwo].characteristics & 0b00011000) >> 3) + (4 * (elements[enemyOneOrTwo].characteristics & 0b00000111)));
+      break;
+    case ENEMY_SPHERE:
+      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, 4 + elements[enemyOneOrTwo].frame);
+      break;
+    case ENEMY_JUMPER:
+      break;
+    case ENEMY_MOVER:
+      break;
+  }
+}
+
 void drawEnemyOne()
 {
-  sprites.drawPlusMask(elements[0].x, elements[0].y + currentRoomY, enemies_plus_mask, ((elements[0].characteristics & 0b00011000) >> 3) + (4*(elements[0].characteristics & 0b00000111))); 
+ drawEnemies(0);
 }
 
 void drawEnemyTwo()
 {
-  sprites.drawPlusMask(elements[1].x, elements[1].y + currentRoomY, enemies_plus_mask, ((elements[1].characteristics & 0b00011000) >> 3) + (4*(elements[1].characteristics & 0b00000111)));
+  drawEnemies(1);
 }
 
 
@@ -376,8 +394,8 @@ void drawEnemyTwo()
 /////////////////////////////////////////////
 void drawObjectChangeable()
 {
-  if (arduboy.everyXFrames(8)) objectFrame = (++objectFrame) % 6;
-  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, objectFrame + (6 * ((elements[2].characteristics & 0b00000111))));
+  if (arduboy.everyXFrames(8)) elements[2].frame = (++elements[2].frame) % 6;
+  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, elements[2].frame + (6 * ((elements[2].characteristics & 0b00000111))));
 }
 
 ///////////////// DRAW SPECIAL FLOOR ////////
