@@ -29,11 +29,11 @@ void stateGamePlaying()
     }
     else
     {
-      currentTile = goToTile(currentRoom, level);
-      currentRoomY = setCurrentRoomY(currentTile);
+      player.isOnTile = goToTile(currentRoom, level);
+      currentRoomY = setCurrentRoomY(player.isOnTile);
       currentRoom = goToRoom(currentRoom, level);
-      player.x = translateTileToX (currentTile) + offsetXAfterDoor(currentTile);
-      player.y = translateTileToY (currentTile) + offsetYAfterDoor(currentTile) + currentRoomY ;
+      player.x = translateTileToX (player.isOnTile) + offsetXAfterDoor(player.isOnTile);
+      player.y = translateTileToY (player.isOnTile) + offsetYAfterDoor(player.isOnTile) + currentRoomY ;
       player.steps = 0;
       enterRoom(currentRoom, level);
       bitClear (player.characteristics, 5);
@@ -74,10 +74,10 @@ void stateGameNextLevel()
 {
   level++;
   currentRoom = 0;
-  currentTile = TILE_GAME_STARTS_ON;
+  player.isOnTile = TILE_GAME_STARTS_ON;
   currentRoomY = -14;
-  player.x = translateTileToX (currentTile);
-  player.y = translateTileToY (currentTile) + currentRoomY ;
+  player.x = translateTileToX (player.isOnTile);
+  player.y = translateTileToY (player.isOnTile) + currentRoomY ;
   buildRooms(level);
   enterRoom(currentRoom, level);
   gameState = STATE_GAME_PLAYING;
@@ -96,6 +96,16 @@ void stateGameOver()
   sprites.drawSelfMasked(0, 0, gameOverScreen, 0);
   drawNumbers(43, 54, scorePlayer, BIG_FONT);
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
+}
+
+void stateGameTransporting()
+{
+  currentRoom = transportToRoom(currentRoom);
+  player.x = translateTileToX (player.isOnTile) ;
+  player.y = translateTileToY (player.isOnTile) + currentRoomY ;
+  player.steps = 0;
+  checkOrderOfObjects(currentRoom, level);
+  gameState = STATE_GAME_PLAYING;
 }
 
 #endif

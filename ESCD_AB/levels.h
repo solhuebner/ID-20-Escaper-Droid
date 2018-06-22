@@ -7,7 +7,7 @@
 #define AMOUNT_OF_ROOMS_AT_BYTE                   0
 #define ROOMS_DATA_START_AT_BYTE                  3
 #define DOORS_DATA_START_AT_BYTE                  ROOMS_DATA_START_AT_BYTE + 1
-#define ELEMENTS_DATA_START_AT_BYTE               ROOMS_DATA_START_AT_BYTE + 5
+#define ELEMENTS_DATA_START_AT_BYTE               ROOMS_DATA_START_AT_BYTE + 5 
 #define BYTES_USED_FOR_EVERY_ROOM                 13
 
 // ROOM ORDER OF TILES
@@ -86,27 +86,16 @@
 //
 //
 //
-// ROOM+DIR       TILE
-//0b00000001, 0b00000001,
-//  ||||||||    ||||||||
-//  ||||||||    |||||||└->  \
-//  ||||||||    ||||||└-->   |
-//  ||||||||    |||||└--->   |  these 5 bits are used to determine on what floor tile the object is
-//  ||||||||    ||||└---->   |
-//  ||||||||    |||└----->  /
-//  ||||||||    ||└------>  \
-//  ||||||||    |└------->   |  these 3 bits
-//  ||||||||    └-------->  /
-//  ||||||||
-//  ||||||||
-//  |||||||└->  \  these 2 bits are used for direction
-//  ||||||└-->  /  00 = NORTH / 01 = EAST / 10 = SOUTH / 11 = WEST
-//  |||||└--->  \
+// TRANSPORT
+//0b00000001,
+//  |||||||└->  \
+//  ||||||└-->   |
+//  |||||└--->   | these 6 bits are used for the roomnumber you'll go to
 //  ||||└---->   |
-//  |||└----->   | these 6 bits are used for the roomnumber you'll go to
-//  ||└------>   |
-//  |└------->   |
-//  └-------->  /
+//  |||└----->   |
+//  ||└------>  /
+//  |└-------> NOT USED
+//  └--------> NOT USED
 //
 //
 //
@@ -125,12 +114,13 @@
 //  ||||||||
 //  |||||||└->  \
 //  ||||||└-->   |
-//  |||||└--->   |  these 6 bits are used for the roomnumber in which the element is influenced
+//  |||||└--->   | these 6 bits are used for the roomnumber where the elements are influenced
 //  ||||└---->   |
 //  |||└----->   |
 //  ||└------>  /
-//  |└------->
-//  └-------->
+//  |└-------> NOT USED
+//  └--------> NOT USED
+
 
 
 const unsigned char PROGMEM level01[] =
@@ -140,14 +130,14 @@ const unsigned char PROGMEM level01[] =
   3, // amount of influencing objects
   // DOORS         NORTH       EAST       SOUTH       WEST          ENEMY1      ENEMY2        OBJECT3       FLOOR1      FLOOR2      FLOOR3      FLOOR4      FLOOR5
   0b11111001,  0b00000000, 0b00001111, 0b00000100, 0b00000000,    0b00000000, 0b00000000,   0b00000000,   0b00000010, 0b00001010, 0b00010010, 0b00011010, 0b00100010,  //room00
-  0b11000000,  0b00000010, 0b00001011, 0b00000000, 0b00000000,    0b00100000, 0b11000001,   0b01100010,   0b00001001, 0b00110001, 0b00000000, 0b00000000, 0b00000000,  //room01 0b00100001
+  0b11000000,  0b00000010, 0b00001011, 0b00000000, 0b00000000,    0b00100000, 0b11000001,   0b01100101,   0b00001001, 0b00110001, 0b00000000, 0b00000000, 0b00000000,  //room01
   0b10010000,  0b00001110, 0b00000000, 0b00000000, 0b00000101,    0b00000000, 0b00000000,   0b10100001,   0b01111011, 0b10000011, 0b10101011, 0b00000000, 0b00000000,  //room02
   0b00110000,  0b00000000, 0b00000000, 0b00001000, 0b00000001,    0b11000010, 0b00000000,   0b01100101,   0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000,  //room03
 
   // transporters data, the order of the data is by ascending numbers
-  // ROOM+DIR     TILE
-  0b00000001,  0b00000001,
-  0b00000011,  0b00000011,
+  // ROOM+DIR
+  0b00000001,
+  0b00000011,
 
   // data about the elements that get influenced
   // ROOM         ELEMENT

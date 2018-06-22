@@ -35,27 +35,67 @@
 
 struct Room {
   public:
-    byte doorsClosedActive = 0b00000000;   // this byte holds all the 4 doors characteristics for each room
-    //                         ||||||||
-    //                         |||||||└->  0  DOOR WEST  IS CLOSED (0 = false / 1 = true)
-    //                         ||||||└-->  1  DOOR SOUTH IS CLOSED (0 = false / 1 = true)
-    //                         |||||└--->  2  DOOR EAST  IS CLOSED (0 = false / 1 = true)
-    //                         ||||└---->  3  DOOR NORTH IS CLOSED (0 = false / 1 = true)
-    //                         |||└----->  4  DOOR WEST  EXISTS    (0 = false / 1 = true)
-    //                         ||└------>  5  DOOR SOUTH EXISTS    (0 = false / 1 = true)
-    //                         |└------->  6  DOOR EAST  EXISTS    (0 = false / 1 = true)
-    //                         └-------->  7  DOOR NORTH EXISTS    (0 = false / 1 = true)
+    byte doorsClosedActive;
+    byte elementsActive;
+    byte roomToTransportTo;
+    byte roomNumberInfluencing;
+    byte elementInfluenced;
 
-    byte elementsActive = 0b00000000;
-    //                     ||||||||
-    //                     |||||||└->  7 => 0 FLOOR  5 EXISTS (0 = false / 1 = true)
-    //                     ||||||└-->  6 => 1 FLOOR  4 EXISTS (0 = false / 1 = true)
-    //                     |||||└--->  5 => 2 FLOOR  3 EXISTS (0 = false / 1 = true)
-    //                     ||||└---->  4 => 3 FLOOR  2 EXISTS (0 = false / 1 = true)
-    //                     |||└----->  3 => 4 FLOOR  1 EXISTS (0 = false / 1 = true)
-    //                     ||└------>  2 => 5 OBJECT 3 EXISTS (0 = false / 1 = true)
-    //                     |└------->  1 => 6 ENEMY  2 EXISTS (0 = false / 1 = true)
-    //                     └-------->  0 => 7 ENEMY  1 EXISTS (0 = false / 1 = true)
+    void set()
+    {
+      doorsClosedActive = 0b00000000;   // this byte holds all the 4 doors characteristics for each room
+      //                    ||||||||
+      //                    |||||||└->  0  DOOR WEST  IS CLOSED (0 = false / 1 = true)
+      //                    ||||||└-->  1  DOOR SOUTH IS CLOSED (0 = false / 1 = true)
+      //                    |||||└--->  2  DOOR EAST  IS CLOSED (0 = false / 1 = true)
+      //                    ||||└---->  3  DOOR NORTH IS CLOSED (0 = false / 1 = true)
+      //                    |||└----->  4  DOOR WEST  EXISTS    (0 = false / 1 = true)
+      //                    ||└------>  5  DOOR SOUTH EXISTS    (0 = false / 1 = true)
+      //                    |└------->  6  DOOR EAST  EXISTS    (0 = false / 1 = true)
+      //                    └-------->  7  DOOR NORTH EXISTS    (0 = false / 1 = true)
+
+      elementsActive = 0b00000000;
+      //                 ||||||||
+      //                 |||||||└->  7 => 0 FLOOR  5 EXISTS (0 = false / 1 = true)
+      //                 ||||||└-->  6 => 1 FLOOR  4 EXISTS (0 = false / 1 = true)
+      //                 |||||└--->  5 => 2 FLOOR  3 EXISTS (0 = false / 1 = true)
+      //                 ||||└---->  4 => 3 FLOOR  2 EXISTS (0 = false / 1 = true)
+      //                 |||└----->  3 => 4 FLOOR  1 EXISTS (0 = false / 1 = true)
+      //                 ||└------>  2 => 5 OBJECT 3 EXISTS (0 = false / 1 = true)
+      //                 |└------->  1 => 6 ENEMY  2 EXISTS (0 = false / 1 = true)
+      //                 └-------->  0 => 7 ENEMY  1 EXISTS (0 = false / 1 = true)
+
+      roomToTransportTo = 0b00000000;
+      //                    |||||||└->  \
+      //                    ||||||└-->   |
+      //                    |||||└--->   | these 6 bits are used for the roomnumber you'll go to
+      //                    ||||└---->   |
+      //                    |||└----->   |
+      //                    ||└------>  /
+      //                    |└-------> NOT USED
+      //                    └--------> NOT USED
+
+      roomNumberInfluencing = 0b00000000;
+      //                        |||||||└->  \
+      //                        ||||||└-->   |
+      //                        |||||└--->   | these 6 bits are used for the roomnumber where the elements are influenced
+      //                        ||||└---->   |
+      //                        |||└----->   |
+      //                        ||└------>  /
+      //                        |└-------> NOT USED
+      //                        └--------> NOT USED
+
+      elementInfluenced = 0b00000000;
+      //                    ||||||||
+      //                    |||||||└->  7 => 0 FLOOR  5 INFLUENCED (0 = false / 1 = true)
+      //                    ||||||└-->  6 => 1 FLOOR  4 INFLUENCED (0 = false / 1 = true)
+      //                    |||||└--->  5 => 2 FLOOR  3 INFLUENCED (0 = false / 1 = true)
+      //                    ||||└---->  4 => 3 FLOOR  2 INFLUENCED (0 = false / 1 = true)
+      //                    |||└----->  3 => 4 FLOOR  1 INFLUENCED (0 = false / 1 = true)
+      //                    ||└------>  2 => 5 OBJECT 3 INFLUENCED (0 = false / 1 = true)
+      //                    |└------->  1 => 6 ENEMY  2 INFLUENCED (0 = false / 1 = true)
+      //                    └-------->  0 => 7 ENEMY  1 INFLUENCED (0 = false / 1 = true)
+    }
 };
 
 Room stageRoom[MAX_AMOUNT_OF_ROOMS];
@@ -63,12 +103,17 @@ Room stageRoom[MAX_AMOUNT_OF_ROOMS];
 
 void buildRooms(byte currentLevel)
 {
+  byte transporterCounter = 0;
   for (byte roomNumber = 0; roomNumber < pgm_read_byte(&levels[currentLevel - 1][AMOUNT_OF_ROOMS_AT_BYTE]); roomNumber++)
   {
-    //clear all info
-    stageRoom[roomNumber].doorsClosedActive = 0;
-    stageRoom[roomNumber].elementsActive = 0;
+    // clear all info
+    stageRoom[roomNumber].set();
+
+    // now lets set all the data for each room in the current level from the datasheet
+    // first set all the doors and if those are closed or open
     stageRoom[roomNumber].doorsClosedActive = pgm_read_byte(&levels[currentLevel - 1][ROOMS_DATA_START_AT_BYTE + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]);
+
+    // Second thing to do is to set the 8 elements active or inactive in each room (2 enemies, an object and 5 special floor tiles)
     for (byte i = 0; i < 8; i++)
     {
       if (pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]))
@@ -80,7 +125,26 @@ void buildRooms(byte currentLevel)
     }
     //Serial.println();
     //Serial.println(stageRoom[roomNumber].elementsActive, BIN);
+
+    // Third thing to do is to set the transporter data in the correct room
+    if ((pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + OBJECT_THREE + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]) & 0b00000111) == TELEPORT)
+    {
+      byte transportDataAtByte = ROOMS_DATA_START_AT_BYTE + (BYTES_USED_FOR_EVERY_ROOM * pgm_read_byte(&levels[currentLevel - 1][AMOUNT_OF_ROOMS_AT_BYTE]));
+      stageRoom[roomNumber].roomToTransportTo = pgm_read_byte(&levels[currentLevel - 1][transportDataAtByte + transporterCounter]);
+      transporterCounter++;
+      //Serial.print(transportDataAtByte);
+      //Serial.print(" : ");
+      //Serial.print(roomNumber);
+      //Serial.print(" : ");
+      //Serial.println(stageRoom[roomNumber].roomToTransportTo);
+    }
+    // Fourth thing to do is to set in which room an element is influenced
   }
+
+
+  //stageRoom[roomNumber].roomNumberInfluencing = pgm_read_byte(&levels[currentLevel - 1][ROOMS_DATA_START_AT_BYTE + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)]);
+
+  // And finally lets set what elements will be influenced in the room that has been set above
   //Serial.println();
 }
 
@@ -159,6 +223,11 @@ void enterRoom(byte roomNumber, byte currentLevel)
     }
   }
   //Serial.println();
+}
+
+byte transportToRoom (byte roomNumber)
+{
+  return stageRoom[roomNumber].roomToTransportTo;
 }
 
 
@@ -477,8 +546,8 @@ void checkOrderOfObjects(byte roomNumber, byte currentLevel)
   // check what tile the player is on (so that we can determine what order things need to be displayed)
   if (!bitRead(player.characteristics, 5) && !bitRead(player.characteristics, 6))
   {
-    itemsOrder[tileFromXY(player.x, player.y - currentRoomY) + ITEMS_ORDER_TILES_START] = PLAYER_DROID;
-    //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
+    itemsOrder[player.isOnTile + ITEMS_ORDER_TILES_START] = PLAYER_DROID;
+    //Serial.println(player.isOnTile);
   }
   else
   {

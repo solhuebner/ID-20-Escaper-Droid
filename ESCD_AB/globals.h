@@ -23,6 +23,7 @@
 #define STATE_GAME_NEXT_LEVEL        8
 #define STATE_GAME_PAUSE             9
 #define STATE_GAME_OVER              10
+#define STATE_GAME_TRANSPORTING      11
 
 //define facing directions
 #define NORTH                        0
@@ -58,7 +59,6 @@ unsigned long scorePlayer;
 
 byte itemsOrder[SIZE_OF_ITEMSORDER];
 byte currentRoom;
-byte currentTile;
 byte currentlyOnTestingTile;
 byte testingTile;
 int currentRoomY;

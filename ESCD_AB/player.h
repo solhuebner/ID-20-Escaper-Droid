@@ -18,6 +18,7 @@ struct EscaperDroid
     byte imuneTimer;
     byte steps;
     byte assets;
+    byte isOnTile;
 
     void set()
     {
@@ -44,6 +45,7 @@ struct EscaperDroid
       //         ||└------>  5  \
       //         |└------->  6   | this 2 bites are used for the amount of black cards
       //         └-------->  7   reserved
+      isOnTile =TILE_GAME_STARTS_ON;
     }
 };
 

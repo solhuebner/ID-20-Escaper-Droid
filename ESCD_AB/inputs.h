@@ -10,9 +10,9 @@ void checkInputs()
 {
   if (arduboy.everyXFrames(2))
   {
-    //byte testingTile = tileFromXY(player.x, player.y - currentRoomY);
-    //if (testingTile < 25) currentTile = tileFromXY(player.x, player.y - currentRoomY);
-    //Serial.println(currentTile);
+    byte testingTile = tileFromXY(player.x, player.y - currentRoomY);
+    if (testingTile < 25) player.isOnTile = tileFromXY(player.x, player.y - currentRoomY);
+    //Serial.println(player.isOnTile);
     if (arduboy.pressed(UP_BUTTON))
     {
       bitClear(player.characteristics, 0);
