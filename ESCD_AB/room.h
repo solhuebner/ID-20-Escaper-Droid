@@ -82,7 +82,7 @@ struct Room {
       //                        ||||└---->   |
       //                        |||└----->   |
       //                        ||└------>  /
-      //                        |└-------> NOT USED
+      //                        |└-------> RESERVED FOR SWITCH (0 = OFF / 1 = ON)
       //                        └--------> NOT USED
 
       elementInfluenced = 0b00000000;
