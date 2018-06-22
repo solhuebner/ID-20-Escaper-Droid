@@ -3,22 +3,24 @@
 
 #include "globals.h"
 
-boolean hitBorders(int objectX, int objectY, byte directionFacing, bool playerOrEnemy)
+boolean hitBorders(int objectX, int objectY, int directionFacing, bool playerOrEnemy)
 {
   // check the borders of the room
+  if (directionFacing < 0) directionFacing = 3;
+  if (directionFacing > 3) directionFacing = 0;
   switch (directionFacing)
   {
     case NORTH:
-      if (objectX + (2 * objectY) > 89 + (playerOrEnemy *(2 * currentRoomY))) return false;
+      if (objectX + (2 * objectY) > 89 + (playerOrEnemy * (2 * currentRoomY))) return false;
       break;
     case EAST:
-      if (objectX - (2 * objectY) < 15 - (playerOrEnemy *(2 * currentRoomY))) return false;
+      if (objectX - (2 * objectY) < 15 - (playerOrEnemy * (2 * currentRoomY))) return false;
       break;
     case SOUTH:
-      if (objectX + (2 * objectY) < 183 + (playerOrEnemy *(2 * currentRoomY))) return false;
+      if (objectX + (2 * objectY) < 183 + (playerOrEnemy * (2 * currentRoomY))) return false;
       break;
     case WEST:
-      if (objectX - (2 * objectY) > -81 - (playerOrEnemy *(2 * currentRoomY))) return false;
+      if (objectX - (2 * objectY) > -81 - (playerOrEnemy * (2 * currentRoomY))) return false;
       break;
   }
   return true;
@@ -85,47 +87,58 @@ boolean checkborderHit(int objectX, int objectY, byte directionFacing)
 }
 
 
-boolean tileIsOccupied(byte tileTesting)
+byte tileIsOccupied(byte tileTesting, bool playerOrEnemy, bool enemyTwo)
 {
-  currentlyOnTestingTile = itemsOrder[tileTesting + ITEMS_ORDER_TILES_START];
-  //Serial.print("tile ");
-  //Serial.print(tileTesting);
-  //Serial.print(" has ");
-  //Serial.println(currentlyOnTestingTile);
-  if ((currentlyOnTestingTile == PLAYER_DROID) || (currentlyOnTestingTile == EMPTY_PLACE)) return false;
-  else return true;
+  if (tileTesting < 25)
+  {
+    currentlyOnTestingTile = itemsOrder[tileTesting + ITEMS_ORDER_TILES_START];
+    if (currentlyOnTestingTile == EMPTY_PLACE) return false;
+    if (playerOrEnemy)
+    {
+      if (currentlyOnTestingTile == PLAYER_DROID) return false;
+    }
+    else
+    {
+      //Serial.print(tileTesting);
+      //Serial.print(" : ");
+      //Serial.println(currentlyOnTestingTile);
+      if (!enemyTwo && currentlyOnTestingTile == ENEMY_ONE) return false;
+      else if (enemyTwo && currentlyOnTestingTile == ENEMY_TWO) return false;
+      else if (currentlyOnTestingTile == PLAYER_DROID) return PLAYER_DROID;
+    }
+    return true;
+  }
+  else return false;
 }
 
 
-boolean hitObjects (int objectX, int objectY, byte directionFacing)
+boolean hitObjects (int objectX, int objectY, int directionFacing, bool playerOrEnemy, bool enemy)
 {
+  if (directionFacing < 0) directionFacing = 3;
+  if (directionFacing > 3) directionFacing = 0;
   switch (directionFacing)
   {
     case NORTH:
       testingTile = tileFromXY(objectX - 8, objectY - 4);
-      //Serial.println(testingTile);
-      if (tileIsOccupied(testingTile)) return true;
-      else return false;
       break;
     case EAST:
       testingTile = tileFromXY(objectX + 8, objectY - 4);
-      //Serial.println(testingTile);
-      if (tileIsOccupied(testingTile)) return true;
-      else return false;
       break;
     case SOUTH:
       testingTile = tileFromXY(objectX + 6, objectY + 3);
-      //Serial.println(testingTile);
-      if (tileIsOccupied(testingTile)) return true;
-      else return false;
       break;
     case WEST:
       testingTile = tileFromXY(objectX - 6, objectY + 3);
-      //Serial.println(testingTile);
-      if (tileIsOccupied(testingTile)) return true;
-      else return false;
       break;
   }
+  //Serial.println(testingTile);
+  byte test = tileIsOccupied(testingTile, playerOrEnemy, enemy);
+  if (test > 0)
+  {
+    if (test == PLAYER_DROID) playerLosesLife();
+    return true;
+  }
+  else return false;
 }
 
 void clearElement()

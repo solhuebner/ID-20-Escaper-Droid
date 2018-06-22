@@ -29,7 +29,6 @@
 #define EMPTY_PLACE                   27
 
 
-
 //define how collision works
 #define DIFF(A, B) (((A) > (B)) ? ((A) - (B)) : ((B) - (A)))
 
@@ -113,6 +112,22 @@ int translateTileToY (byte currentTile)
   return (18 + (currentTile * 6) - ((currentTile / 5) * 24));
 }
 
+bool checkIfOnCenterTile (byte coX, byte coY)
+{
+  for (byte y = 0; y < 5; y++)
+  {
+    for (byte x = 0; x < 5; x++)
+    {
+      if (coX == 3 + (48 - (12 * x) + (12 * y)) && (coY == (27 + (6 * x) + (6 * y)) - 9))
+      {
+        Serial.println("on middle tile");
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 
 
 void enterRoom(byte roomNumber, byte currentLevel)
@@ -136,9 +151,8 @@ void enterRoom(byte roomNumber, byte currentLevel)
       elements[i].characteristics = ((pgm_read_byte(&levels[currentLevel - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * roomNumber)])) & 0b00000111);
       //Serial.println(elements[i].characteristics, BIN);
 
-      // we will always set the current direction to SOUTH (0b00010000)
-      bitSet (elements[i].characteristics, 3);
-      //bitSet (elements[i].characteristics, 4);
+      // we will always set the current direction to EAST (0b00001000)
+      //bitSet (elements[i].characteristics, 3);
 
       //set the elements hurt/movable/pickup
 
@@ -380,7 +394,7 @@ void drawEnemies(bool enemyOneOrTwo)
 
 void drawEnemyOne()
 {
- drawEnemies(0);
+  drawEnemies(0);
 }
 
 void drawEnemyTwo()
@@ -477,15 +491,13 @@ const FunctionPointer PROGMEM  updateElementsInRoom[] =
 };
 
 
-void updateRoom()
+void drawRoom()
 {
   drawWalls();
   drawFloor();
-  byte itemsOrderCounter = 0;
-  while ( itemsOrderCounter < SIZE_OF_ITEMSORDER)
+  for (byte i = 0; i < SIZE_OF_ITEMSORDER; i++)
   {
-    ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[itemsOrderCounter]]))();
-    itemsOrderCounter++;
+    ((FunctionPointer) pgm_read_word (&updateElementsInRoom[itemsOrder[i]]))();
   }
 }
 

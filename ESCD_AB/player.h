@@ -76,6 +76,11 @@ void walkThroughDoor()
   }
 }
 
+void playerLosesLife()
+{
+  player.life -= 1;
+}
+
 
 void drawPlayer()
 {

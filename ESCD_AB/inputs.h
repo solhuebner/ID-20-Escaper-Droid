@@ -17,7 +17,7 @@ void checkInputs()
       bitClear(player.characteristics, 1);
       if (!checkborderHit(player.x, player.y, NORTH))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, NORTH))
+        if (hitObjects(player.x, player.y - currentRoomY, NORTH, PLAYER, 0))
         {
           decideOnCollision();
         }
@@ -32,7 +32,7 @@ void checkInputs()
       bitClear(player.characteristics, 1);
       if (!checkborderHit(player.x, player.y, EAST))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, EAST))
+        if (hitObjects(player.x, player.y - currentRoomY, EAST, PLAYER, 0))
         {
           decideOnCollision();
         }
@@ -46,7 +46,7 @@ void checkInputs()
       bitSet(player.characteristics, 1);
       if (!checkborderHit(player.x, player.y, SOUTH))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, SOUTH))
+        if (hitObjects(player.x, player.y - currentRoomY, SOUTH, PLAYER, 0))
         {
           decideOnCollision();
         }
@@ -60,7 +60,7 @@ void checkInputs()
       bitSet(player.characteristics, 1);
       if (!checkborderHit(player.x, player.y, WEST))
       {
-        if (hitObjects(player.x, player.y - currentRoomY, WEST))
+        if (hitObjects(player.x, player.y - currentRoomY, WEST, PLAYER, 0))
         {
           decideOnCollision();
         }
@@ -82,84 +82,83 @@ void checkInputs()
 ////////////////////////////
 void moveEnemies(int enemyX, int enemyY, byte directionFacing, bool enemy)
 {
-  if (arduboy.everyXFrames(4))
+  switch (directionFacing)
   {
-    switch (directionFacing)
-    {
-      case NORTH:
-        elements[enemy].y -= 1;
-        elements[enemy].x -= 2;
-        break;
-      case EAST:
-        elements[enemy].y -= 1;
-        elements[enemy].x += 2;
-        break;
-      case SOUTH:
-        elements[enemy].y += 1;
-        elements[enemy].x += 2;
-        break;
-      case WEST:
-        elements[enemy].y += 1;
-        elements[enemy].x -= 2;
-        break;
-    }
+    case NORTH:
+      elements[enemy].y -= 1;
+      elements[enemy].x -= 2;
+      break;
+    case EAST:
+      elements[enemy].y -= 1;
+      elements[enemy].x += 2;
+      break;
+    case SOUTH:
+      elements[enemy].y += 1;
+      elements[enemy].x += 2;
+      break;
+    case WEST:
+      elements[enemy].y += 1;
+      elements[enemy].x -= 2;
+      break;
   }
+}
+
+void enemyTurnRight(bool enemy)
+{
+  byte test = ((elements[enemy].characteristics & 0b00011000) >> 3) + 1;
+  if (test > 3) test = 0;
+  Serial.println("turnRight: ");
+  elements[enemy].characteristics = (elements[enemy].characteristics & 0b11100111) + (test << 3);
+}
+
+void enemyTurnLeft(bool enemy)
+{
+  int test = ((elements[enemy].characteristics & 0b00011000) >> 3) - 1;
+  if (test < 0) test = 3;
+  Serial.println("turnLeft: ");
+  elements[enemy].characteristics = (elements[enemy].characteristics & 0b11100111) + (test << 3);
 }
 
 
 void updateEnemies()
 {
-  byte i = 0;
-  while (i < 2)
+  if (arduboy.everyXFrames(4))
   {
-    switch (elements[i].characteristics & 0b00000111)
+    for (byte i = 0; i < 2; i++)
     {
-      case ENEMY_BOX:
-        if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY))
+      if (pgm_read_byte(&levels[level - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * currentRoom)]))
+      {
+        switch (elements[i].characteristics & 0b00000111)
         {
-          moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
-        }
-        else
-        {
-          byte test = ((elements[i].characteristics & 0b00011000) >> 3) + 1;
-          if (test > 3) test = 0;
-          elements[i].characteristics = (elements[i].characteristics & 0b11100111) + (test << 3);
-          /*
-            switch ((elements[i].characteristics & 0b00011000) >> 3)
+          case ENEMY_BOX:
+            if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY, i)))
             {
-            case NORTH:
-              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00010000; // 2
-              break;
-            case EAST:
-              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00011000; // 3
-              break;
-            case SOUTH:
-              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00000000; // 0
-              break;
-            case WEST:
-              elements[i].characteristics = (elements[i].characteristics & 0b11100111) + 0b00001000; // 1
-              break;
+              moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
             }
-            /*
-            byte test = (elements[i].characteristics & 0b00011000) >> 3;
-            for (byte i = 0; i< 2; i++)
+            else enemyTurnRight(i);
+            break;
+          case ENEMY_SPHERE:
+            if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY, i)))
             {
-            test++;
-            if (test > 3)
-            test = 0;
+              moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
+              if (checkIfOnCenterTile (elements[i].x, elements[i].y))
+              {
+                // check if left is an empty tile
+                if (!hitBorders(elements[i].x, elements[i].y, ((elements[i].characteristics & 0b00011000) >> 3) - 1, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, ((elements[i].characteristics & 0b00011000) >> 3) - 1, ENEMY, i)))
+                {
+                  enemyTurnLeft(i);
+                }
+              }
             }
-            elements[i].characteristics = (elements[i].characteristics & 0b11100111) + (test << 3);
-          */
+            else enemyTurnRight(i);
+            break;
+          case ENEMY_JUMPER:
+            break;
+          case ENEMY_MOVER:
+            break;
         }
-        break;
-      case ENEMY_SPHERE:
-        break;
-      case ENEMY_JUMPER:
-        break;
-      case ENEMY_MOVER:
-        break;
+      }
     }
-    i++;
   }
 }
 

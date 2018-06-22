@@ -13,10 +13,15 @@ void stateMenuPlay()
 
 void stateGamePlaying()
 {
+  checkOrderOfObjects(currentRoom, level);
+  drawRoom();
   if (!bitRead(player.characteristics, 5))checkInputs();
-  else if (arduboy.everyXFrames(2))
+  else
   {
-    if (player.steps < 5)  walkThroughDoor();
+    if (player.steps < 5) 
+    {
+      if (arduboy.everyXFrames(2)) walkThroughDoor();
+    }
     else
     {
       currentTile = goToTile(currentRoom, level);
@@ -29,22 +34,26 @@ void stateGamePlaying()
       bitClear (player.characteristics, 5);
       bitSet (player.characteristics, 6);
       gameState = STATE_GAME_NEXT_ROOM;
+      return; //don't update the enemies yet, first go through the door
     }
   }
   updateEnemies();
-  checkOrderOfObjects(currentRoom, level);
-  updateRoom();
   drawHUD();
   //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
-  
+
 }
 
 
 void stateGameNextRoom()
 {
-  if (arduboy.everyXFrames(2))
+  checkOrderOfObjects(currentRoom, level);
+  drawRoom();
+  
   {
-    if (player.steps < 5)  walkThroughDoor();
+    if (player.steps < 5) 
+    {
+      if (arduboy.everyXFrames(2)) walkThroughDoor();
+    }
     else
     {
       player.steps = 0;
@@ -52,8 +61,6 @@ void stateGameNextRoom()
       gameState = STATE_GAME_PLAYING;
     }
   }
-  checkOrderOfObjects(currentRoom, level);
-  updateRoom();
   drawHUD();
 }
 
@@ -74,14 +81,14 @@ void stateGameNextLevel()
 void stateGamePause()
 {
   sprites.drawSelfMasked(0, 0, pauseScreen, 0);
-  drawNumbers(43,54,scorePlayer, BIG_FONT);
+  drawNumbers(43, 54, scorePlayer, BIG_FONT);
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_GAME_PLAYING;
 }
 
 void stateGameOver()
 {
   sprites.drawSelfMasked(0, 0, gameOverScreen, 0);
-  drawNumbers(43,54,scorePlayer, BIG_FONT);
+  drawNumbers(43, 54, scorePlayer, BIG_FONT);
   if (arduboy.justPressed(A_BUTTON | B_BUTTON)) gameState = STATE_MENU_MAIN;
 }
 
