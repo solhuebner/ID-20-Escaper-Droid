@@ -29,7 +29,8 @@
 #define PICKUP_BULLET             3     // 1 shot
 #define PICKUP_CHIP               4     // extra points
 #define TELEPORT                  5     // TELEPORT
-#define SWITCH                    6     // TOGGLE ELEMENTS
+#define SWITCH_OFF                6     // TOGGLE ELEMENTS IS OFF
+#define SWITCH_ON                 7     // TOGGLE ELEMENTS IS OFF
 
 #define FLOOR_TILE                0
 #define FLOOR_BOX                 1
