@@ -10,6 +10,9 @@ void checkInputs()
 {
   if (arduboy.everyXFrames(2))
   {
+    //byte testingTile = tileFromXY(player.x, player.y - currentRoomY);
+    //if (testingTile < 25) currentTile = tileFromXY(player.x, player.y - currentRoomY);
+    //Serial.println(currentTile);
     if (arduboy.pressed(UP_BUTTON))
     {
       bitClear(player.characteristics, 0);
@@ -104,7 +107,7 @@ void enemyTurnRight(bool enemy)
 {
   byte test = ((elements[enemy].characteristics & 0b00011000) >> 3) + 1;
   if (test > 3) test = 0;
-  Serial.println("turnRight: ");
+  //Serial.println("turnRight: ");
   elements[enemy].characteristics = (elements[enemy].characteristics & 0b11100111) + (test << 3);
 }
 
@@ -112,14 +115,14 @@ void enemyTurnLeft(bool enemy)
 {
   int test = ((elements[enemy].characteristics & 0b00011000) >> 3) - 1;
   if (test < 0) test = 3;
-  Serial.println("turnLeft: ");
+  //Serial.println("turnLeft: ");
   elements[enemy].characteristics = (elements[enemy].characteristics & 0b11100111) + (test << 3);
 }
 
 
 void updateEnemies()
 {
-  if (arduboy.everyXFrames(4))
+  if (arduboy.everyXFrames(6))
   {
     for (byte i = 0; i < 2; i++)
     {
@@ -135,7 +138,7 @@ void updateEnemies()
             }
             else enemyTurnRight(i);
             break;
-          case ENEMY_SPHERE:
+          case ENEMY_JUMPER:
             if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY, i)))
             {
               moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
@@ -150,9 +153,14 @@ void updateEnemies()
             }
             else enemyTurnRight(i);
             break;
-          case ENEMY_JUMPER:
-            break;
           case ENEMY_MOVER:
+            if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY, i)))
+            {
+              moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
+            }
+            else enemyTurnLeft(i);
+            break;
+          case ENEMY_SHOOTER:
             break;
         }
       }

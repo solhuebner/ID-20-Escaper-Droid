@@ -19,9 +19,9 @@
 #define ENEMY_SHOTING             1
 
 #define ENEMY_BOX                 0
-#define ENEMY_SPHERE              1
-#define ENEMY_JUMPER              2
-#define ENEMY_MOVER               3
+#define ENEMY_JUMPER              1
+#define ENEMY_MOVER               2
+#define ENEMY_SHOOTER             3
 
 #define PICKUP_BLACK_CARD         0     // opens level door
 #define PICKUP_WHITE_CARD         1     // opens normal door
@@ -71,14 +71,15 @@ void drawEnemies(bool enemyOneOrTwo)
   switch (elements[enemyOneOrTwo].characteristics & 0b00000111)
   {
     case ENEMY_BOX:
-      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, ((elements[enemyOneOrTwo].characteristics & 0b00011000) >> 3) + (4 * (elements[enemyOneOrTwo].characteristics & 0b00000111)));
-      break;
-    case ENEMY_SPHERE:
-      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, 4 + (elements[enemyOneOrTwo].frame));
+      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, ((elements[enemyOneOrTwo].characteristics & 0b00011000) >> 3));
       break;
     case ENEMY_JUMPER:
+      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, 4 + (elements[enemyOneOrTwo].frame));
       break;
     case ENEMY_MOVER:
+      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, 8 + ((elements[enemyOneOrTwo].characteristics & 0b00011000) >> 3));
+      break;
+    case ENEMY_SHOOTER:
       break;
   }
 }
@@ -102,6 +103,9 @@ void drawObjectChangeable()
   if (arduboy.everyXFrames(8)) elements[2].frame = (++elements[2].frame) % 6;
   sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, elements[2].frame + (6 * ((elements[2].characteristics & 0b00000111))));
 }
+
+///////////////// DRAW SPECIAL FLOOR ////////
+/////////////////////////////////////////////
 
 void drawObjectFixedOne()
 {

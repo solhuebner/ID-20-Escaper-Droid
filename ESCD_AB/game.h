@@ -23,7 +23,7 @@ void stateGamePlaying()
   }
   else
   {
-    if (player.steps < 5) 
+    if (player.steps < 5)
     {
       if (arduboy.everyXFrames(2)) walkThroughDoor();
     }
@@ -54,9 +54,9 @@ void stateGameNextRoom()
 {
   checkOrderOfObjects(currentRoom, level);
   drawRoom();
-  
+
   {
-    if (player.steps < 5) 
+    if (player.steps < 5)
     {
       if (arduboy.everyXFrames(2)) walkThroughDoor();
     }
