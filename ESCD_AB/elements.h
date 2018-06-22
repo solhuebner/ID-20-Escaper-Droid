@@ -43,6 +43,8 @@
 #define SCORE_CHIP                200
 
 
+byte objectFrame = 0;
+
 struct Element
 {
   public:
@@ -61,6 +63,76 @@ struct Element
 };
 
 Element elements[8];
+
+///////////////// DRAW ENEMIES //////////////
+/////////////////////////////////////////////
+void drawEnemies(bool enemyOneOrTwo)
+{
+  switch (elements[enemyOneOrTwo].characteristics & 0b00000111)
+  {
+    case ENEMY_BOX:
+      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, ((elements[enemyOneOrTwo].characteristics & 0b00011000) >> 3) + (4 * (elements[enemyOneOrTwo].characteristics & 0b00000111)));
+      break;
+    case ENEMY_SPHERE:
+      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, 4 + (elements[enemyOneOrTwo].frame));
+      break;
+    case ENEMY_JUMPER:
+      break;
+    case ENEMY_MOVER:
+      break;
+  }
+}
+
+void drawEnemyOne()
+{
+  drawEnemies(0);
+}
+
+void drawEnemyTwo()
+{
+  drawEnemies(1);
+}
+
+
+
+///////////////// DRAW ELEMENTS /////////////
+/////////////////////////////////////////////
+void drawObjectChangeable()
+{
+  if (arduboy.everyXFrames(8)) elements[2].frame = (++elements[2].frame) % 6;
+  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, elements[2].frame + (6 * ((elements[2].characteristics & 0b00000111))));
+}
+
+void drawObjectFixedOne()
+{
+  sprites.drawPlusMask(elements[3].x - 3, elements[3].y + currentRoomY + 9, floorTile_plus_mask, ((elements[3].characteristics & 0b00000111)));
+}
+
+void drawObjectFixedTwo()
+{
+  sprites.drawPlusMask(elements[4].x - 3, elements[4].y + currentRoomY + 9, floorTile_plus_mask, ((elements[4].characteristics & 0b00000111)));
+}
+
+void drawObjectFixedThree()
+{
+  sprites.drawPlusMask(elements[5].x - 3, elements[5].y + currentRoomY + 9, floorTile_plus_mask, ((elements[5].characteristics & 0b00000111)));
+}
+
+void drawObjectFixedFour()
+{
+  sprites.drawPlusMask(elements[6].x - 3, elements[6].y + currentRoomY + 9, floorTile_plus_mask, ((elements[6].characteristics & 0b00000111)));
+}
+
+void drawObjectFixedFive()
+{
+  sprites.drawPlusMask(elements[7].x - 3, elements[7].y + currentRoomY + 9, floorTile_plus_mask, ((elements[7].characteristics & 0b00000111)));
+}
+
+
+void drawBulletEnemy()
+{
+
+}
 
 
 #endif

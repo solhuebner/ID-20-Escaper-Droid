@@ -8,6 +8,8 @@ void stateMenuPlay()
 {
   scorePlayer = 0;
   player.set();
+  globalCounter = 0;
+  level = LEVEL_TO_START_WITH - 1;
   gameState = STATE_GAME_NEXT_LEVEL;
 }
 
@@ -15,7 +17,10 @@ void stateGamePlaying()
 {
   checkOrderOfObjects(currentRoom, level);
   drawRoom();
-  if (!bitRead(player.characteristics, 5))checkInputs();
+  if (!bitRead(player.characteristics, 5))
+  {
+    if (!bitRead(player.characteristics, 4)) checkInputs();
+  }
   else
   {
     if (player.steps < 5) 
@@ -37,7 +42,8 @@ void stateGamePlaying()
       return; //don't update the enemies yet, first go through the door
     }
   }
-  updateEnemies();
+  updatePlayer();
+  if (!bitRead(player.characteristics, 4)) updateEnemies();
   drawHUD();
   //Serial.println(tileFromXY(player.x, player.y - currentRoomY));
 

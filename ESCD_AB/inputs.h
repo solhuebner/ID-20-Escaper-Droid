@@ -4,7 +4,6 @@
 #include "globals.h"
 #include "player.h"
 #include "collision.h"
-#include "elements.h"
 
 
 void checkInputs()
@@ -76,8 +75,6 @@ void checkInputs()
   }
 }
 
-
-
 ////Moving the Enemies /////
 ////////////////////////////
 void moveEnemies(int enemyX, int enemyY, byte directionFacing, bool enemy)
@@ -126,6 +123,7 @@ void updateEnemies()
   {
     for (byte i = 0; i < 2; i++)
     {
+      elements[i].frame = ((++elements[i].frame) % 4);
       if (pgm_read_byte(&levels[level - 1][ELEMENTS_DATA_START_AT_BYTE + i + (BYTES_USED_FOR_EVERY_ROOM * currentRoom)]))
       {
         switch (elements[i].characteristics & 0b00000111)
@@ -161,5 +159,6 @@ void updateEnemies()
     }
   }
 }
+
 
 #endif

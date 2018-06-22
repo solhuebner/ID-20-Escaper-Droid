@@ -120,7 +120,7 @@ bool checkIfOnCenterTile (byte coX, byte coY)
     {
       if (coX == 3 + (48 - (12 * x) + (12 * y)) && (coY == (27 + (6 * x) + (6 * y)) - 9))
       {
-        Serial.println("on middle tile");
+        //Serial.println("on middle tile");
         return true;
       }
     }
@@ -372,83 +372,7 @@ void drawDoorClossedWest()
 
 
 
-///////////////// DRAW ENEMIES //////////////
-/////////////////////////////////////////////
-void drawEnemies(bool enemyOneOrTwo)
-{
-  if (arduboy.everyXFrames(8)) elements[enemyOneOrTwo].frame = (++elements[enemyOneOrTwo].frame) % 4;
-  switch (elements[enemyOneOrTwo].characteristics & 0b00000111)
-  {
-    case ENEMY_BOX:
-      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, ((elements[enemyOneOrTwo].characteristics & 0b00011000) >> 3) + (4 * (elements[enemyOneOrTwo].characteristics & 0b00000111)));
-      break;
-    case ENEMY_SPHERE:
-      sprites.drawPlusMask(elements[enemyOneOrTwo].x, elements[enemyOneOrTwo].y + currentRoomY, enemies_plus_mask, 4 + elements[enemyOneOrTwo].frame);
-      break;
-    case ENEMY_JUMPER:
-      break;
-    case ENEMY_MOVER:
-      break;
-  }
-}
 
-void drawEnemyOne()
-{
-  drawEnemies(0);
-}
-
-void drawEnemyTwo()
-{
-  drawEnemies(1);
-}
-
-
-
-///////////////// DRAW ELEMENTS /////////////
-/////////////////////////////////////////////
-void drawObjectChangeable()
-{
-  if (arduboy.everyXFrames(8)) elements[2].frame = (++elements[2].frame) % 6;
-  sprites.drawPlusMask(elements[2].x + 4, elements[2].y + currentRoomY + 6, elements_plus_mask, elements[2].frame + (6 * ((elements[2].characteristics & 0b00000111))));
-}
-
-///////////////// DRAW SPECIAL FLOOR ////////
-/////////////////////////////////////////////
-
-void drawObjectFixedOne()
-{
-  sprites.drawPlusMask(elements[3].x - 3, elements[3].y + currentRoomY + 9, floorTile_plus_mask, ((elements[3].characteristics & 0b00000111)));
-}
-
-void drawObjectFixedTwo()
-{
-  sprites.drawPlusMask(elements[4].x - 3, elements[4].y + currentRoomY + 9, floorTile_plus_mask, ((elements[4].characteristics & 0b00000111)));
-}
-
-void drawObjectFixedThree()
-{
-  sprites.drawPlusMask(elements[5].x - 3, elements[5].y + currentRoomY + 9, floorTile_plus_mask, ((elements[5].characteristics & 0b00000111)));
-}
-
-void drawObjectFixedFour()
-{
-  sprites.drawPlusMask(elements[6].x - 3, elements[6].y + currentRoomY + 9, floorTile_plus_mask, ((elements[6].characteristics & 0b00000111)));
-}
-
-void drawObjectFixedFive()
-{
-  sprites.drawPlusMask(elements[7].x - 3, elements[7].y + currentRoomY + 9, floorTile_plus_mask, ((elements[7].characteristics & 0b00000111)));
-}
-
-void drawBulletPlayer()
-{
-
-}
-
-void drawBulletEnemy()
-{
-
-}
 
 
 typedef void (*FunctionPointer) ();
@@ -655,8 +579,8 @@ void drawHUD()
   sprites.drawSelfMasked(121, 59, hudBlackCard, 0);
 
   //draw life
-  if (arduboy.everyXFrames(20) && (player.life - 1 < 1)) player.characteristics ^= 0b10000000;
-  if (bitRead(player.characteristics, 7)) sprites.drawSelfMasked(122, 11, hudLife, player.life - 1);
+  if (arduboy.everyXFrames(20) && (player.life < 2)) player.characteristics ^= 0b10000000;
+  if (bitRead(player.characteristics, 7)) sprites.drawSelfMasked(122, 11, hudLife, player.life);
 }
 
 

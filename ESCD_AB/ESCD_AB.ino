@@ -1,7 +1,7 @@
 /*
   Escaper Droid: http://www.team-arg.org/escd-manual.html
 
-  Arduboy version 0.4d:  http://www.team-arg.org/escd-downloads.html
+  Arduboy version 0.5:  http://www.team-arg.org/escd-downloads.html
 
   MADE by TEAM a.r.g. : http://www.team-arg.org/About.html
 

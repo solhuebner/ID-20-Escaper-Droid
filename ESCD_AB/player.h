@@ -5,6 +5,7 @@
 
 #define PLAYER_DROID            9
 #define PLAYER_BULLET           10
+#define PLAYER_IMUNE_TIME       30
 
 #define PLAYER                  1
 
@@ -12,8 +13,8 @@ struct EscaperDroid
 {
   public:
     int x, y;
-    byte life;
-    byte characteristics;      
+    int life;
+    byte characteristics;
     byte imuneTimer;
     byte steps;
     byte assets;
@@ -30,7 +31,7 @@ struct EscaperDroid
       //                  ||└------>  5  The droid is going through a door      (0 = false / 1 = true)
       //                  |└------->  6  The droid is coming out a door         (0 = false / 1 = true)
       //                  └-------->  7  the droid's battery meter is visible   (0 = false / 1 = true)
-      imuneTimer = 60;
+      imuneTimer = PLAYER_IMUNE_TIME;
       steps = 0;
       life = 2;
       assets = 0b00000000;
@@ -78,7 +79,33 @@ void walkThroughDoor()
 
 void playerLosesLife()
 {
-  player.life -= 1;
+  if (!bitRead(player.characteristics, 3))
+  {
+    player.life -= 1;
+    bitSet(player.characteristics, 3);
+    if(player.life < 1) bitSet(player.characteristics, 4);
+  }
+}
+
+void updatePlayer()
+{
+  if (bitRead(player.characteristics, 3))
+  {
+    if (arduboy.everyXFrames(4))
+    {
+      player.imuneTimer--;
+      player.characteristics ^= 0b00000100;
+    }
+    if (player.imuneTimer < 1)
+    {
+      player.imuneTimer = PLAYER_IMUNE_TIME;
+      bitClear(player.characteristics, 3);
+    }
+  }
+  else if (player.life < 1)
+  {
+    gameState = STATE_GAME_OVER;
+  }
 }
 
 
@@ -88,6 +115,11 @@ void drawPlayer()
   {
     sprites.drawPlusMask(player.x, player.y, droid_plus_mask, player.characteristics & 0b00000011);
   }
+}
+
+void drawBulletPlayer()
+{
+
 }
 
 #endif
