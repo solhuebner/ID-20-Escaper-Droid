@@ -45,7 +45,7 @@ struct EscaperDroid
       //         ||└------>  5  \
       //         |└------->  6   | this 2 bites are used for the amount of black cards
       //         └-------->  7   reserved
-      isOnTile =TILE_GAME_STARTS_ON;
+      isOnTile = TILE_GAME_STARTS_ON;
     }
 };
 
@@ -85,7 +85,7 @@ void playerLosesLife()
   {
     player.life -= 1;
     bitSet(player.characteristics, 3);
-    if(player.life < 1) bitSet(player.characteristics, 4);
+    if (player.life < 1) bitSet(player.characteristics, 4);
   }
 }
 
@@ -108,6 +108,13 @@ void updatePlayer()
   {
     gameState = STATE_GAME_OVER;
   }
+}
+
+void playerTurnAround()
+{
+  byte test = ((player.characteristics & 0b00000011) + 2) & 0b00000011;
+  Serial.println(test,BIN);
+  player.characteristics = (player.characteristics & 0b00000011) + (test);
 }
 
 

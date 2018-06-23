@@ -187,11 +187,13 @@ void checkObjectTypeAndAct()
       scorePlayer += SCORE_CHIP;
       break;
     case TELEPORT:          // TELEPORT
-      
       gameState = STATE_GAME_TRANSPORTING;
       break;
+    case SWITCH_OFF:        // SWITCH OFF
+      break;
+    case SWITCH_ON          // SWITCH ON
+      break;
   }
-
 }
 
 

@@ -103,19 +103,9 @@ void moveEnemies(int enemyX, int enemyY, byte directionFacing, bool enemy)
   }
 }
 
-void enemyTurnRight(bool enemy)
+void enemyTurn(bool enemy, bool leftOrRight)
 {
-  byte test = ((elements[enemy].characteristics & 0b00011000) >> 3) + 1;
-  if (test > 3) test = 0;
-  //Serial.println("turnRight: ");
-  elements[enemy].characteristics = (elements[enemy].characteristics & 0b11100111) + (test << 3);
-}
-
-void enemyTurnLeft(bool enemy)
-{
-  int test = ((elements[enemy].characteristics & 0b00011000) >> 3) - 1;
-  if (test < 0) test = 3;
-  //Serial.println("turnLeft: ");
+  byte test = (((elements[enemy].characteristics & 0b00011000) >> 3) - 1 + (leftOrRight * 2)) & 0b00000011;;
   elements[enemy].characteristics = (elements[enemy].characteristics & 0b11100111) + (test << 3);
 }
 
@@ -136,7 +126,7 @@ void updateEnemies()
             {
               moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
             }
-            else enemyTurnRight(i);
+            else enemyTurn(i, TURN_RIGHT);
             break;
           case ENEMY_JUMPER:
             if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY, i)))
@@ -147,18 +137,18 @@ void updateEnemies()
                 // check if left is an empty tile
                 if (!hitBorders(elements[i].x, elements[i].y, ((elements[i].characteristics & 0b00011000) >> 3) - 1, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, ((elements[i].characteristics & 0b00011000) >> 3) - 1, ENEMY, i)))
                 {
-                  enemyTurnLeft(i);
+                  enemyTurn(i, TURN_LEFT);
                 }
               }
             }
-            else enemyTurnRight(i);
+            else enemyTurn(i, TURN_RIGHT);
             break;
           case ENEMY_MOVER:
             if (!hitBorders(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY) && (!hitObjects(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, ENEMY, i)))
             {
               moveEnemies(elements[i].x, elements[i].y, (elements[i].characteristics & 0b00011000) >> 3, i);
             }
-            else enemyTurnLeft(i);
+            else enemyTurn(i, TURN_LEFT);
             break;
           case ENEMY_SHOOTER:
             break;

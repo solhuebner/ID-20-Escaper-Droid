@@ -100,11 +100,13 @@ void stateGameOver()
 
 void stateGameTransporting()
 {
+  //playerTurnAround();
   currentRoom = transportToRoom(currentRoom);
   player.x = translateTileToX (player.isOnTile) ;
   player.y = translateTileToY (player.isOnTile) + currentRoomY ;
   player.steps = 0;
-  checkOrderOfObjects(currentRoom, level);
+  enterRoom(currentRoom, level);
+  //checkOrderOfObjects(currentRoom, level);
   gameState = STATE_GAME_PLAYING;
 }
 

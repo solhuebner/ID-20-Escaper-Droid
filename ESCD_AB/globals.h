@@ -34,6 +34,9 @@
 #define NORTH_SOUTH                  0
 #define EAST_WEST                    1
 
+#define TURN_LEFT                    0
+#define TURN_RIGHT                   1
+
 #define BIG_FONT                     0
 #define THIN_FONT                    1
 #define SMALL_FONT                   2
