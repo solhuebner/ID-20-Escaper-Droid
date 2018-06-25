@@ -191,7 +191,7 @@ void checkObjectTypeAndAct()
       break;
     case SWITCH_OFF:        // SWITCH OFF
       break;
-    case SWITCH_ON          // SWITCH ON
+    case SWITCH_ON:          // SWITCH ON
       break;
   }
 }

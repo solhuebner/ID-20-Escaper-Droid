@@ -1018,7 +1018,7 @@
         for(var i = 1; i <= $('.box').length; i++){
         if(i != $('#roomnumber').val()){
             //byte1  DOORS
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['doorNorthTo'] !== ''){temp += '1';}else{temp += '0';}
             if(rooms[i]['doorEastTo'] !== ''){temp += '1';}else{temp += '0';}
             if(rooms[i]['doorSouthTo'] !== ''){temp += '1';}else{temp += '0';}
@@ -1027,127 +1027,145 @@
             if(rooms[i]['doorEastStatus'] === 'closed'){temp += '1';}else{temp += '0';}
             if(rooms[i]['doorSouthStatus'] === 'closed'){temp += '1';}else{temp += '0';}
             if(rooms[i]['doorWestStatus'] === 'closed'){temp += '1';}else{temp += '0';}
-            txt.value += binToHex(temp)['result'];
-            txt.value += ', ';
+            txt.value += temp;
+            txt.value += ',   ';
             temp = '';
 
             //byte2  NORTH
-            txt.value += '0x';
-            if(rooms[i]['doorNorthTo'] === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt(rooms[i]['doorNorthTo']).toString(2)).slice(-6)+'10')['result'];}
+            txt.value += '0b';
+            if(rooms[i]['doorNorthTo'] === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt(rooms[i]['doorNorthTo']).toString(2)).slice(-6);
+                temp += '10';
+                txt.value += temp;
+            }
             txt.value += ', ';
+            temp = '';
 
             //byte3  EAST
-            txt.value += '0x';
-            if(rooms[i]['doorEastTo'] === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt(rooms[i]['doorEastTo']).toString(2)).slice(-6)+'11')['result'];}
+            txt.value += '0b';
+            if(rooms[i]['doorEastTo'] === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt(rooms[i]['doorEastTo']).toString(2)).slice(-6);
+                temp += '11'
+                txt.value += temp;}
             txt.value += ', ';
+            temp = '';
 
             //byte4  SOUTH
-            txt.value += '0x';
-            if(rooms[i]['doorSouthTo'] === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt(rooms[i]['doorSouthTo']).toString(2)).slice(-6)+'00')['result'];}
+            txt.value += '0b';
+            if(rooms[i]['doorSouthTo'] === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt(rooms[i]['doorSouthTo']).toString(2)).slice(-6);
+                temp += '00';
+                txt.value += temp;}
             txt.value += ', ';
+            temp = '';
 
             //byte5  WEST
-            txt.value += '0x';
-            if(rooms[i]['doorWestTo'] === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt(rooms[i]['doorWestTo']).toString(2)).slice(-6)+'01')['result'];}
-            txt.value += ', ';
+            txt.value += '0b';
+            if(rooms[i]['doorWestTo'] === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt(rooms[i]['doorWestTo']).toString(2)).slice(-6);
+                temp += '01';
+                txt.value += temp;
+            }
+            txt.value += ',   ';
+            temp = '';
 
             //byte6  ENEMY1
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status1'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos1']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type1'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte7  ENEMY2
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status2'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos2']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type2'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
-            txt.value += ', ';
+            else{txt.value += '00000000';}
+            txt.value += ',   ';
             temp = '';
 
             //byte8  OBJECT1
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status3'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos3']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type3'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
-            txt.value += ', ';
+            else{txt.value += '00000000';}
+            txt.value += ',   ';
             temp = '';
 
             //byte9  FLOOR1
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status4'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos4']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type4'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte10 FLOOR2
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status5'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos5']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type5'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte11 FLOOR3
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status6'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos6']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type6'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte12 FLOOR4
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status7'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos7']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type7'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte13 FLOOR5
-            txt.value += '0x';
+            txt.value += '0b';
             if(rooms[i]['status8'] === 'on'){
                 temp += ('00000'+parseInt(rooms[i]['pos8']).toString(2)).slice(-5);
                 temp += ('000'+(parseInt(rooms[i]['type8'])-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
-            txt.value += ', //room'+i;
+            else{txt.value += '00000000';}
+            txt.value += ', // room'+i;
             temp = '';
 
             txt.value += '\n';
         }
         else{
             //byte1  DOORS
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#newnorth').val() !== ''){temp += '1';}else{temp += '0';}
             if($('#neweast').val() !== ''){temp += '1';}else{temp += '0';}
             if($('#newsouth').val() !== ''){temp += '1';}else{temp += '0';}
@@ -1156,120 +1174,136 @@
             if($('#closedeast').is(':checked')){temp += '1';}else{temp += '0';}
             if($('#closedsouth').is(':checked')){temp += '1';}else{temp += '0';}
             if($('#closedwest').is(':checked')){temp += '1';}else{temp += '0';}
-            txt.value += binToHex(temp)['result'];
-            txt.value += ', ';
+            txt.value += temp;
+            txt.value += ',   ';
             temp = '';
 
             //byte2  NORTH
-            txt.value += '0x';
-            if($('#newnorth').val() === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt($('#newnorth').val()).toString(2)).slice(-6)+'10')['result'];}
+            txt.value += '0b';
+            if($('#newnorth').val() === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt($('#newnorth').val()).toString(2)).slice(-6);
+                temp += '10'
+                txt.value += temp;}
             txt.value += ', ';
+            temp = '';
 
             //byte3  EAST
-            txt.value += '0x';
-            if($('#neweast').val() === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt($('#neweast').val()).toString(2)).slice(-6)+'11')['result'];}
+            txt.value += '0b';
+            if($('#neweast').val() === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt($('#neweast').val()).toString(2)).slice(-6);
+                temp += '11';
+                txt.value += temp;}
             txt.value += ', ';
+            temp = '';
 
             //byte4  SOUTH
-            txt.value += '0x';
-            if($('#newsouth').val() === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt($('#newsouth').val()).toString(2)).slice(-6)+'00')['result'];}
+            txt.value += '0b';
+            if($('#newsouth').val() === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt($('#newsouth').val()).toString(2)).slice(-6);
+                temp += '00';
+                txt.value += temp;}
             txt.value += ', ';
+            temp = '';
 
             //byte5  WEST
-            txt.value += '0x';
-            if($('#newwest').val() === ''){txt.value += binToHex('00000000')['result'];}  
-            else{txt.value += binToHex(('000000'+parseInt($('#newwest').val()).toString(2)).slice(-6)+'01')['result'];}
-            txt.value += ', ';
+            txt.value += '0b';
+            if($('#newwest').val() === ''){txt.value += '00000000';}  
+            else{
+                temp += ('000000'+parseInt($('#newwest').val()).toString(2)).slice(-6);
+                temp += '01';
+                txt.value += temp;}
+            txt.value += ',   ';
+            temp = '';
 
             //byte6  ENEMY1
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status1').is(':checked')){
                 if($('#pos1').val()!==null){temp+=('00000'+parseInt($('#pos1').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type1').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte7  ENEMY2
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status2').is(':checked')){
                 if($('#pos2').val()!==null){temp+=('00000'+parseInt($('#pos2').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type2').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
-            txt.value += ', ';
+            else{txt.value += '00000000';}
+            txt.value += ',   ';
             temp = '';
 
             //byte8  OBJECT1
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status3').is(':checked')){
                 if($('#pos3').val()!==null){temp+=('00000'+parseInt($('#pos3').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type3').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
-            txt.value += ', ';
+            else{txt.value += '00000000';}
+            txt.value += ',   ';
             temp = '';
 
             //byte9  FLOOR1
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status4').is(':checked')){
                 if($('#pos4').val()!==null){temp+=('00000'+parseInt($('#pos4').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type4').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte10 FLOOR2
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status5').is(':checked')){
                 if($('#pos5').val()!==null){temp+=('00000'+parseInt($('#pos5').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type5').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte11 FLOOR3
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status6').is(':checked')){
                 if($('#pos6').val()!==null){temp+=('00000'+parseInt($('#pos6').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type6').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte12 FLOOR4
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status7').is(':checked')){
                 if($('#pos7').val()!==null){temp+=('00000'+parseInt($('#pos7').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type7').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
+            else{txt.value += '00000000';}
             txt.value += ', ';
             temp = '';
 
             //byte13 FLOOR5
-            txt.value += '0x';
+            txt.value += '0b';
             if($('#status8').is(':checked')){
                 if($('#pos8').val()!==null){temp+=('00000'+parseInt($('#pos8').val()).toString(2)).slice(-5);}else{temp+='00000';}
                 temp += ('000'+(parseInt($('#type8').val().slice(-1))-1).toString(2)).slice(-3);
-                txt.value += binToHex(temp)['result'];
+                txt.value += temp;
             }
-            else{txt.value += binToHex('00000000')['result'];}
-            txt.value += ', //room'+$('#roomnumber').val();
+            else{txt.value += '00000000';}
+            txt.value += ', // room'+$('#roomnumber').val();
             temp = '';
 
             txt.value += '\n';
